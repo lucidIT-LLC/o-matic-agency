@@ -1,0 +1,14 @@
+{
+  "name": "o-matic-agency",
+  "description": "o-MATIC Agency \u2014 where an O-Matic factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and the server operating guide.",
+  "plugins": [
+    {
+      "name": "agency",
+      "source": {
+        "type": "local",
+        "path": "./agency"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
