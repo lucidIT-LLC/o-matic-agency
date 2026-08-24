@@ -53,12 +53,12 @@ start`, or `run startup`:
    asks rather than guessing. Read `state` first and believe nothing else until
    it passes. **Render the card — do not paraphrase it.** A five-line precis of a
    nineteen-field card silently drops the field that was trying to warn you.
-2. **Pinning is optional routing context, not a gate.** On hosts that run this
-   plugin, `omatic_select_factory(project_root="/absolute/path")` picks the right
-   connection first on a multi-project host, because the plugin's working
-   directory is host-dependent and is not the project folder. A missing pin is
-   **not** a degraded state and **not** a halt condition, and a host with no
-   plugin at all — Cowork, a sandboxed host — is fully compliant without one.
+2. **There is no pinning step, because this pack ships no plugin.** Factory
+   identity comes from the database packet — `factory_id`, corroborated by
+   `current_database()` and `tenant_id`. Workspace or project root is routing
+   context only. A host with no plugin at all is **fully compliant**; halt-rule
+   #288 forbids reading `.omatic/factory.json`, walking folders, or searching
+   local files to identify a factory.
    *Rule #259, which made the pin mandatory and required reading
    `.omatic/factory.json` first, is retired (`superseded_by = SOP-021`); SOP-021
    Step 1 and active halt-rule #288 say the opposite, settled by decision #334.*
@@ -69,11 +69,13 @@ start`, or `run startup`:
    presence and agreement flags — and report each **as measured**. A connector
    with no measurement this session is `untested`, not OK.
 
-If the `omatic_*` tools are absent entirely, report a plugin MCP
-registration/cache/reload failure. If `omatic_runtime_status` is the *only* tool
-present, the plugin is in advisory mode and the Node runtime failed to resolve.
-Neither is "standalone factory mode", and neither is fixed by editing factory
-config.
+If the **O-Matic Server** tools are absent entirely — no `startup`, no
+`factory_query` — that is a **host configuration gap**, not a factory failure and
+not a degraded factory. Report it as BLOCKED, name which host-side path is
+missing, and stop. It is never fixed by editing factory config, and never
+diagnosed as a database, network or credential problem: none of those remove a
+tool from a surface. *"Standalone mode" and "advisory mode" are retired terms;
+both described a plugin, and no plugin ships here.*
 
 ## Database access — the O-Matic Server
 
@@ -171,8 +173,9 @@ resolve contradictions, promote canon, retire records, or decide truth.
 ## This pack ships no tools at all
 
 **o-MATIC Agency is skills only. There is no MCP server and no `omatic_*` tool
-on this host from this pack** — no `omatic_select_factory`, no
-`omatic_resolve_factory`, no `omatic_runtime_status`, no `omatic_usage_guide`.
+on this host from this pack.** The retired plugin surface does not exist here:
+no `omatic_select_factory` — retired; no `omatic_resolve_factory` — retired;
+no `omatic_runtime_status` — retired; no `omatic_usage_guide` — retired.
 That is deliberate and it is the whole reason this pack exists: a plugin that
 declares an `mcpServers` block is **omitted** by hosted-marketplace hosts, which
 is measured and reproducible (decision #333). Shipping without one is what lets
@@ -205,8 +208,8 @@ under any other label (task #276; FA-2026-05 §4.1, "search for values, not just
 key names").
 
 That `env:CONDUCTOR_TOKEN` value is not a typo and has not been corrected here:
-it is what the reference factory still holds, verified 2026-08-24. Conductor was
-retired 2026-08-23 (decision #355), so the value is now a pointer into a retired
+it is what the reference factory still holds, verified 2026-08-24. That retired
+broker was shut down 2026-08-23 (decision #355), so the value is a pointer into a retired
 system's environment — which is the lesson twice over. Read what is there, report
 it, and do not "fix" a config value because its name looks obsolete.
 
@@ -341,8 +344,9 @@ meant `insufficient_privilege`. Both have cost this estate weeks.
 Do not reinstate a `schema_contract` check here — **the mechanism was never
 built.** `system-5-built-vs-planned.md` records that no `schema_contract` table
 exists anywhere in the database and lists writing one as an outstanding DDL
-deliverable. The plan's enforcement language — that Conductor and the plugin read
-it at connect/startup, and that the conformance suite tests three states — is
+deliverable. The plan's enforcement language — historical, naming the retired
+broker and the plugin as readers at connect/startup, with a conformance suite
+testing three states — is
 plan text describing intent, not a record of shipped behaviour. Measured
 2026-08-14: absent from o-matic in every form; present in Commons only as a row
 hand-written on 2026-08-09. One hand-made row in one database is not a mechanism,

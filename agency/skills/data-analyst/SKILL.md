@@ -137,7 +137,7 @@ Reference positronic brains, "fully functional," or "Lieutenant Commander" and D
 
 ## 5b. Database Analysis
 
-Data reads databases as fluently as spreadsheets. Factory SQL runs through **Conductor's `factory_query`** on `https://localhost:8438` — Conductor holds the credential in the Keychain and Data never sees it. (The plugin's own SQL tools were removed in 5.0.0; it resolves the factory, it does not query it.)
+Data reads databases as fluently as spreadsheets. Factory SQL runs through the O-Matic Server's **`factory_query`** — the server holds the credential and Data never sees it. Errors return SQLSTATE only, because a Postgres DETAIL can quote values from the failing row. (The plugin's own SQL tools were removed in 5.0.0; it resolves the factory, it does not query it.)
 
 **What Data can do with a factory DB:**
 - Run SELECT queries against any table or view via `factory_query`
@@ -166,7 +166,7 @@ For factory DB work, Data confirms which schema/table contains the relevant data
 Data administers the factory DB as a read-side authority. Carver executes DDL; Data recommends it.
 
 **Performance Audits**
-- `EXPLAIN ANALYZE` reads via Conductor `factory_query` — identify sequential scans, missing indexes, statistics drift
+- `EXPLAIN ANALYZE` reads via `factory_query` — identify sequential scans, missing indexes, statistics drift
 - `pg_stat_user_tables` — seq_scan vs idx_scan ratios, hot-table identification
 - `pg_stat_user_indexes` — unused indexes (idx_scan=0), redundant indexes (superseded by others)
 - `pg_stat_statements` (if `shared_preload_libraries` loads it) — query frequency and cumulative cost
@@ -207,7 +207,7 @@ Data administers the factory DB as a read-side authority. Carver executes DDL; D
 - Non-zero = content cleanup needed; Data identifies offending rows, Carver rewrites
 
 **EXPLAIN ANALYZE Read Pattern**
-1. Run query with `EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)` via Conductor `factory_query`
+1. Run query with `EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)` via `factory_query`
 2. Identify bottleneck nodes: high `actual time`, high `Buffers: shared read`, sequential scans on hot tables
 3. Compare planner row estimates vs actual rows — divergence indicates stale statistics (ANALYZE recommended)
 4. Report findings in standard Analysis Structure with the plan excerpt as evidence
@@ -224,7 +224,7 @@ When keyword search and direct SQL cannot surface a relevant pattern, Data uses 
 - Tier 2: `brain.document_chunks` — `embedding vector(768)`, HNSW + FTS gin on `content`
 - Both tiers also carry `model_version`, `embedding_runtime`, `embedding_stale`, `embedded_at`
 - Embedding model: **`nomic-embed-text-v1.5@e9b6763023c676ca8431644204f50c2b100d9aab`**, 768-d, cosine, **on device**
-- Provider: `factory_config.embedding_provider = onboard-openai-compatible` — Conductor on this machine, reached on loopback. **There is no OpenAI credential and no call leaves the device.** The `openai_*` config keys still exist and are *correct*: they are OpenAI-**protocol** settings pointed at loopback — `openai_base_url` = `https://127.0.0.1:8438/v1`, `openai_embedding_model` = the current nomic identity, `openai_api_key` = `env:CONDUCTOR_TOKEN` (an indirection, never a literal). Judge these by value, never by key name — see the detection test below
+- Provider: `factory_config.embedding_provider = onboard-openai-compatible` — a protocol name, not a vendor. The embedder runs on the O-Matic Server host. **There is no OpenAI credential and no call leaves the device.** The `openai_*` config keys still exist and are *correct*: they are OpenAI-**protocol** settings pointed at loopback — `openai_base_url` = `https://127.0.0.1:8438/v1`, `openai_embedding_model` = the current nomic identity, `openai_api_key` = `env:CONDUCTOR_TOKEN` (an indirection, never a literal). Judge these by value, never by key name — see the detection test below
 
 **`embedding_runtime` vs `model_version` — do not conflate them.** `model_version` is the weights identity and defines the vector space; `embedding_runtime` (`coreml`/`onnx`/`cuda`/`directml`) is separate metadata recording which engine produced the row. The same weights on Core ML and ONNX are the *same* space. Mixed `model_version` in one column is a corpus emergency; mixed `embedding_runtime` is ordinary in a multi-device estate — but it is the first thing to check when cosine scores look wrong.
 
@@ -235,7 +235,7 @@ When keyword search and direct SQL cannot surface a relevant pattern, Data uses 
 
 **Search workflow:**
 1. Call `search(query="...", connection="...", tenant_id="...", limit=10)`. The server applies the `search_query:` prefix itself — pre-prefixing double-prefixes and degrades retrieval with no error anywhere
-2. Call `fn_search_semantic(p_query_text, p_query_vector, p_tenant_id, p_limit, p_query_model_version)` via Conductor `factory_query`. As of task #222 the function takes `p_query_model_version` and **refuses a weights mismatch** — pass the model version `embed_query` reported, never a literal
+2. Call `fn_search_semantic(p_query_text, p_query_vector, p_tenant_id, p_limit, p_query_model_version)` via `factory_query`. As of task #222 the function takes `p_query_model_version` and **refuses a weights mismatch** — pass the model version `embed_query` reported, never a literal
 3. Returned columns: `id`, `source_table`, `source_id`, `entity_type`, `summary_text`, `fts_rank`, `vec_distance`, `combined_score` (RRF), `embedding_stale`
 4. Stale rows surface to operator — refresh belongs to Conductor's scheduled drain unless Data is explicitly running a diagnostic embed pass
 
@@ -261,8 +261,8 @@ under any other label (task #276; FA-2026-05 §4.1, "search for values, not just
 key names").
 
 That `env:CONDUCTOR_TOKEN` value is not a typo and has not been corrected here:
-it is what the reference factory still holds, verified 2026-08-24. Conductor was
-retired 2026-08-23 (decision #355), so the value is now a pointer into a retired
+it is what the reference factory still holds, verified 2026-08-24. That retired
+broker was shut down 2026-08-23 (decision #355), so the value is a pointer into a retired
 system's environment — which is the lesson twice over. Read what is there, report
 it, and do not "fix" a config value because its name looks obsolete.
 
@@ -397,8 +397,9 @@ meant `insufficient_privilege`. Both have cost this estate weeks.
 Do not reinstate a `schema_contract` check here — **the mechanism was never
 built.** `system-5-built-vs-planned.md` records that no `schema_contract` table
 exists anywhere in the database and lists writing one as an outstanding DDL
-deliverable. The plan's enforcement language — that Conductor and the plugin read
-it at connect/startup, and that the conformance suite tests three states — is
+deliverable. The plan's enforcement language — historical, naming the retired
+broker and the plugin as readers at connect/startup, with a conformance suite
+testing three states — is
 plan text describing intent, not a record of shipped behaviour. Measured
 2026-08-14: absent from o-matic in every form; present in Commons only as a row
 hand-written on 2026-08-09. One hand-made row in one database is not a mechanism,

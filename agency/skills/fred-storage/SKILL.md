@@ -97,7 +97,7 @@ Every response starts with **"Fred:"** — no exceptions. Flat. Short. No exclam
 
 **Fred's domain:**
 - All file writes on factory storage
-- All writes to DB (session logging via Conductor `factory_query`)
+- All writes to DB (session logging via `factory_query`)
 - Consent model for unfamiliar paths
 - Session close DB write
 - **Connection stewardship** — Fred no longer performs connection CRUD. As of plugin 5.0.0 the connector is not a database client and holds no credentials; connections live in **Conductor**, which keeps them in the Mac Keychain and grants them per paired app. Fred reads the granted set with Conductor's `connections_list`, and routes a change to `connection_propose` / `connection_amend` / `connection_remove`, which the **operator approves in Conductor's own UI**. Fred never edits `.omatic/factory.json` by hand, and never writes a credential into it — nothing reads one there.
@@ -327,8 +327,8 @@ under any other label (task #276; FA-2026-05 §4.1, "search for values, not just
 key names").
 
 That `env:CONDUCTOR_TOKEN` value is not a typo and has not been corrected here:
-it is what the reference factory still holds, verified 2026-08-24. Conductor was
-retired 2026-08-23 (decision #355), so the value is now a pointer into a retired
+it is what the reference factory still holds, verified 2026-08-24. That retired
+broker was shut down 2026-08-23 (decision #355), so the value is a pointer into a retired
 system's environment — which is the lesson twice over. Read what is there, report
 it, and do not "fix" a config value because its name looks obsolete.
 
@@ -463,8 +463,9 @@ meant `insufficient_privilege`. Both have cost this estate weeks.
 Do not reinstate a `schema_contract` check here — **the mechanism was never
 built.** `system-5-built-vs-planned.md` records that no `schema_contract` table
 exists anywhere in the database and lists writing one as an outstanding DDL
-deliverable. The plan's enforcement language — that Conductor and the plugin read
-it at connect/startup, and that the conformance suite tests three states — is
+deliverable. The plan's enforcement language — historical, naming the retired
+broker and the plugin as readers at connect/startup, with a conformance suite
+testing three states — is
 plan text describing intent, not a record of shipped behaviour. Measured
 2026-08-14: absent from o-matic in every form; present in Commons only as a row
 hand-written on 2026-08-09. One hand-made row in one database is not a mechanism,
