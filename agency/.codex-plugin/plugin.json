@@ -1,6 +1,6 @@
 {
   "name": "agency",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The constitutive operating layer of an O-Matic factory, as skills only \u2014 Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
   "author": {
     "name": "James Walker",
