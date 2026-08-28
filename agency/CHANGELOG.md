@@ -7,6 +7,12 @@ History extracted from the SKILL.md files on 2026-08-24 during the marketplace r
 Conductor, the `omatic_*` plugin tools, loopback brokers on port 8438. They are a record of
 what was true when written, not instructions. The SKILL.md files are the operating contract.**
 
+## factory-staleness-audit
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-08-28 | **New skill.** Audits a factory for stale doctrine served as current. Five phases: (1) does the corpus have a re-ingestion pipeline — Commons has seven triggers including a version gate and auto-rechunk, lucidIT's `brain.document_chunks` has zero; (2) is non-current content being served — measured 329 chunks, 41% of the Commons corpus, from documents marked `retired`/`archive`, with neither search function filtering on status; (3) has anyone fed the decommissioned-terms detector — Conductor was retired 2026-08-23 and on that same day `System 6` was added to o-MATIC's term list while `Conductor`, `postgres-cabinet` and `localhost:8438` were not; (4) run the detectors and triage prescription vs prohibition vs history — 3 of 4 lucidIT rule hits were false positives, and the one real defect was a startup policy still naming `omatic_select_factory` and `omatic_resolve_factory`, deleted in plugin 5.0.0 and forbidden by halt-rule #288; (5) sweep the estate. Documents the three different `decommissioned_terms` schemas and two schema locations measured across four factories. Written after a session in which seven separate instances of "the work happened, the record didn't" were found in one day. |
+
 ## data-analyst
 
 ## 10. Changelog

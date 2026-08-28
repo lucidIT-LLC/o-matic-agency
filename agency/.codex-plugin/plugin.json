@@ -1,7 +1,7 @@
 {
   "name": "agency",
-  "version": "1.0.2",
-  "description": "The constitutive operating layer of an O-Matic factory, as skills only \u2014 Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
+  "version": "1.1.0",
+  "description": "The constitutive operating layer of an O-Matic factory, as skills only — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
   "author": {
     "name": "James Walker",
     "url": "https://o-matic.ai"
@@ -20,8 +20,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "o-MATIC Agency",
-    "shortDescription": "Staff an O-Matic factory \u2014 orchestrator, storage, and data.",
-    "longDescription": "The constitutive operating layer of an O-Matic factory, as skills only \u2014 Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
+    "shortDescription": "Staff an O-Matic factory — orchestrator, storage, and data.",
+    "longDescription": "The constitutive operating layer of an O-Matic factory, as skills only — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
     "developerName": "lucidIT-LLC",
     "category": "Productivity",
     "capabilities": [

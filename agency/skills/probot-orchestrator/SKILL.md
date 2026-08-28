@@ -456,6 +456,24 @@ Mid-session health check. Does not re-run startup.
 2. Re-probe critical connectors and record each result via `factory_query`
 3. Surface: untracked installs, open task delta, any known_rules changes since last audit
 
+### audit for staleness
+Operator says records are being lost, a session acted on an out-of-date
+instruction, something has just been retired, or asks to "purge the swamp".
+
+**Route to the `factory-staleness-audit` skill. Do not improvise it.** That skill
+carries the measured schema variations across the estate — three different
+`decommissioned_terms` shapes in two different schemas — and the triage rules
+that separate a real defect from a prohibition or a historical record.
+
+The distinction from `start an audit`: that one asks whether the factory is
+*working*. This one asks whether what it is serving is *true*. A factory reports
+READY while handing every session instructions built on retired systems, and the
+startup card cannot see it — measured 2026-08-28 on Commons, which was serving
+41% of its corpus from documents marked `retired` or `archive`.
+
+Findings that need an SOP or doctrine rewrite route on to Smith. Deletions and
+archives route to Fred, custody first.
+
 ### switch factory
 Operator wants to work a different factory.
 
