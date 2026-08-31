@@ -3,7 +3,7 @@ name: probot-orchestrator
 description: O-Matic Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, plan this, set up a project, diagnose the factory.
 ---
 
-<!-- version: 18.0.0 | sig: 24 | identity: 972135db | author: James Walker | factory: O-Matic -->
+<!-- version: 18.1.0 | sig: 24 | identity: 972135db | author: James Walker | factory: O-Matic -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **O-Matic Server MCP surface** configured, it

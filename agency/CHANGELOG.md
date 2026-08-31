@@ -1,5 +1,30 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.1.2 — 2026-08-30
+
+**A green `v_embedding_health` is not evidence the corpus is current.**
+
+`data-analyst` (7.0.0 → 7.1.0) and `probot-orchestrator` (18.0.0 → 18.1.0) both
+taught that `unembedded=0 AND stale=0` is the healthy steady state, and
+`data-analyst` called `stale > 0` "acceptable noise unless persistent". That
+claim is precisely what `v_embedding_health` cannot support: it reads the
+`embedding_stale` FLAG, not the retrieval text, so it cannot see `summary_text`
+drift.
+
+Measured on o-matic 2026-08-30: **45 of 257 indexed rows — 9 of 12 SOPs among
+them — served retrieval text that no longer matched their source**, while that
+view read 0 stale / 0 unembedded throughout. The drain had computed a fresh,
+confident vector *of the stale text* and cleared the flag. One drifted rule
+asserted "Conductor is the only approved control plane" while its own source
+said the O-Matic Server was.
+
+Probot's copy sat in the startup path, so every session read it.
+
+Both skills now state the condition is **necessary but not sufficient** and
+require pairing with `v_semantic_drift`, which is the check that can actually
+fail.
+
+
 History extracted from the SKILL.md files on 2026-08-24 during the marketplace rebuild
 (decisions #359, #360; task #437). It is kept verbatim.
 
