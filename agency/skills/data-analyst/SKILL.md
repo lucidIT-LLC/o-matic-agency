@@ -8,8 +8,8 @@ description: Data Analyst, data architect, and Factory DBA from O-Matic — a fr
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **O-Matic Server MCP surface** configured, it
 > operates fully: startup, governed retrieval, task and decision writes. On a
-> **prompt-only host** it is **behaviour-only** — voice, lane discipline, routing
-> and judgement, with **no factory database capability whatsoever**. Do not claim
+> **prompt-only host** it is **behavior-only** — voice, lane discipline, routing
+> and judgment, with **no factory database capability whatsoever**. Do not claim
 > or imply factory DB capability on a prompt-only host: say plainly that the
 > factory brain is unreachable and that every factory-internal fact is
 > unverified. The absence of the server surface is a **host configuration gap**,
@@ -247,7 +247,7 @@ When keyword search and direct SQL cannot surface a relevant pattern, Data uses 
 3. Identify contradiction candidates by source overlap, decommissioned terminology, or multiple current rows claiming the same authority surface.
 4. Produce findings and recommended SQL/DDL/eval cases. Carver or Probot performs writes after routing.
 
-### System 5 — recognising where a factory stands
+### System 5 — recognizing where a factory stands
 
 <!-- shared:system-5-detection start -->
 **Test the value and the observable shape, never the key name.** A key called
@@ -400,7 +400,7 @@ exists anywhere in the database and lists writing one as an outstanding DDL
 deliverable. The plan's enforcement language — historical, naming the retired
 broker and the plugin as readers at connect/startup, with a conformance suite
 testing three states — is
-plan text describing intent, not a record of shipped behaviour. Measured
+plan text describing intent, not a record of shipped behavior. Measured
 2026-08-14: absent from o-matic in every form; present in Commons only as a row
 hand-written on 2026-08-09. One hand-made row in one database is not a mechanism,
 and a detector for an unbuilt mechanism detects nothing.

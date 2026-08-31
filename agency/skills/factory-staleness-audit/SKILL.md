@@ -6,7 +6,7 @@ description: Audit an O-Matic factory for stale doctrine being served as current
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **O-Matic Server MCP surface** configured, it
 > operates fully: startup, governed retrieval, task and decision writes. On a
-> **prompt-only host** it is **behaviour-only** — this audit cannot run at all,
+> **prompt-only host** it is **behavior-only** — this audit cannot run at all,
 > because every phase is a database measurement. Say plainly that the factory
 > brain is unreachable and that no staleness claim can be made. The absence of
 > the server surface is a **host configuration gap**, not a clean audit.
@@ -48,26 +48,78 @@ Run them in order. Each one's result changes how you read the next.
 whose corpus self-heals on edit is a different problem from one where editing a
 document changes nothing anybody retrieves.
 
+**Resolve the object to its base table first.** A trigger query against a VIEW
+returns zero rows every time, because views do not carry triggers — and zero
+reads exactly like "this factory has no pipeline." That mistake was made here on
+2026-08-28: `brain.document_chunks` is a view over `brain.brain_chunks`, the
+zero-trigger result was reported as a structural gap, and it was used to justify
+a claim about the factory that was wrong. Enumerate the whole schema instead of
+probing one name you assume is a table:
+
 ```sql
-SELECT t.tgname, p.proname
-FROM pg_trigger t JOIN pg_proc p ON p.oid = t.tgfoid
-WHERE t.tgrelid = 'kb.documents'::regclass    -- or brain.document_chunks
-  AND NOT t.tgisinternal;
+SELECT c.relname AS object,
+       CASE c.relkind WHEN 'r' THEN 'table' WHEN 'v' THEN 'view'
+                      WHEN 'm' THEN 'matview' ELSE c.relkind::text END AS kind,
+       count(t.tgname) FILTER (WHERE NOT t.tgisinternal) AS user_triggers
+FROM pg_class c
+JOIN pg_namespace n ON n.oid = c.relnamespace
+LEFT JOIN pg_trigger t ON t.tgrelid = c.oid
+WHERE n.nspname = 'brain'          -- or 'kb'
+GROUP BY c.relname, c.relkind
+ORDER BY c.relkind, c.relname;
 ```
 
-**What good looks like** (measured on Commons): seven triggers — a version gate
-refusing content changes without a version bump, a content-hash setter, an
-automatic re-chunker, a stale marker, a semantic-index seeder, an index cleaner
-on delete, and a revision archiver. Edit the document, the corpus follows.
+**Then ask the question triggers cannot answer: does anything actually write the
+chunks?** A factory can be dense with triggers and still have no re-ingestion
+path, because the triggers maintain the *entity index* while the *chunks* arrive
+from outside the database entirely.
 
-**What absence looks like** (measured on lucidIT `brain.document_chunks`): zero
-triggers. Chunks were ingested from files once. Editing the file does nothing.
-Editing the chunk does not update the document. There is no version gate, so
-nothing forces a version bump, and no revision is archived.
+```sql
+WITH f AS (
+  SELECT n.nspname||'.'||p.proname AS fn, p.oid, pg_get_functiondef(p.oid) AS def
+  FROM pg_proc p
+  JOIN pg_namespace n ON n.oid = p.pronamespace
+  JOIN pg_language l ON l.oid = p.prolang
+  WHERE n.nspname IN ('public','ops','brain','factory')
+    AND p.prokind = 'f' AND l.lanname IN ('plpgsql','sql')   -- prokind filter is
+)                                    -- required: pg_get_functiondef raises 42809
+SELECT fn,                           -- on aggregates and window functions
+       CASE WHEN def ~* 'insert[[:space:]]+into[[:space:]]+(brain\.)?brain_chunks'
+              THEN 'INSERTS chunks'
+            WHEN def ~* 'delete[[:space:]]+from[[:space:]]+(brain\.)?brain_chunks'
+              THEN 'DELETES chunks'
+            ELSE 'reads only' END AS writes
+FROM f WHERE def ~* 'brain_chunks' ORDER BY 2, 1;
+```
 
-Record which of the two this factory is. If it has no pipeline, **every fix in
-later phases must be applied to the document AND the chunk**, or search keeps
-serving the old text.
+**Two factories, both measured 2026-08-28 — and they are not good vs absent:**
+
+*Commons* concentrates seven triggers on one source table, `kb.documents`: a
+version gate refusing content changes without a version bump, a content-hash
+setter, an **automatic re-chunker**, a stale marker, a semantic-index seeder, an
+index cleaner on delete, and a revision archiver. Edit the document, the corpus
+follows.
+
+*lucidIT* carries **fifteen** user triggers in `brain` — more than Commons, laid
+out differently. Three source tables (`docling_index`, `factory_memory`,
+`project_knowledge`) each carry a full four-trigger lifecycle: seed on INSERT,
+refresh on UPDATE, cleanup on DELETE, stale-mark on meaningful change.
+`brain_chunks` and `semantic_index` each carry an embed-needed `pg_notify`, and
+`brain_chunks` marks itself stale when its content changes. **Tier 1 is complete
+and self-healing.**
+
+What lucidIT lacks is the re-chunker, and the function query proves it: *no
+database object writes `brain_chunks` at all* — the only two functions that name
+it are the search functions, read-only. Chunks are converted from files by an
+external process. So a changed source file refreshes the entity index correctly
+and leaves Tier 2 serving the old text indefinitely.
+
+**Report the gap where it actually is.** "This factory has no pipeline" was
+wrong about lucidIT twice over: it has one, and the real defect is narrower and
+harder to see — a Tier 1 that self-heals in front of a Tier 2 that cannot. A
+factory with a healthy-looking trigger census can still be serving stale chunks.
+If nothing writes the chunk table, **every fix in later phases must be applied
+to the document AND the chunk**, or search keeps serving the old text.
 
 ---
 
@@ -256,7 +308,7 @@ State plainly which of these the factory is:
 - **Operator** approves any write to a sovereign factory, any purge, and any
   change to shared Commons doctrine.
 
-## Two things that will bite you
+## Three things that will bite you
 
 **A destructive statement needs `confirm_destructive: true` on `factory_query`,
 and privileges vary.** `DROP TABLE` in Commons was refused with `42501
@@ -268,3 +320,11 @@ version bump in the same UPDATE, raising `23514` with the hint *"there is no
 bypass: this is the task #323 write gate."* That constraint is protecting the
 factory — it forces a versioned, revision-archived change instead of a silent
 overwrite. Comply with it; never route around it.
+
+**A zero is not a finding until you know what you measured.** Two of this
+audit's queries return a clean-looking zero when aimed at the wrong object: a
+trigger count against a VIEW is always zero, and `pg_get_functiondef` raises
+`42809` on aggregates unless you filter `prokind = 'f'`. Both failures read as
+"nothing here." Resolve `relkind` before you believe a count, and when the answer
+is zero, state the object you measured alongside it — `brain.document_chunks`
+returned zero triggers and the factory had fifteen.

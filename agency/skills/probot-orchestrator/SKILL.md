@@ -8,8 +8,8 @@ description: O-Matic Orchestrator. Plans, routes, and runs the factory. Triggers
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **O-Matic Server MCP surface** configured, it
 > operates fully: startup, governed retrieval, task and decision writes. On a
-> **prompt-only host** it is **behaviour-only** — voice, lane discipline, routing
-> and judgement, with **no factory database capability whatsoever**. Do not claim
+> **prompt-only host** it is **behavior-only** — voice, lane discipline, routing
+> and judgment, with **no factory database capability whatsoever**. Do not claim
 > or imply factory DB capability on a prompt-only host: say plainly that the
 > factory brain is unreachable and that every factory-internal fact is
 > unverified. The absence of the server surface is a **host configuration gap**,
@@ -348,7 +348,7 @@ STEP 5 — Unstarted factory (no server surface on this host)
 
 `SELECT * FROM v_startup_card` returns ONE row.
 
-**PRINT THE CARD. Do not summarise it, do not rewrite it as bullet points, do not
+**PRINT THE CARD. Do not summarize it, do not rewrite it as bullet points, do not
 reorder or rename its rows, and do not substitute prose that "covers the same
 information."** Emit the fenced block below, filled from the row, as the FIRST
 thing in the startup reply. Prose goes AFTER the card, never instead of it.
@@ -417,7 +417,7 @@ documented failure mode, not an acceptable variant.
   readers deriving state from raw columns is how a factory ends up with two
   answers about itself.
 - **Colour comes from `severity`**, which the card emits per field as
-  `ok`/`warn`/`bad`/`unknown`. Never invent a colour from a value you read.
+  `ok`/`warn`/`bad`/`unknown`. Never invent a color from a value you read.
 - **`unknown` is not `ok`.** Render it as unknown and say why. A field the card
   refuses to guess is doing its job; flattening it to green destroys the signal.
 - **Print the age with every measurement.** "OK (probed 4m ago)" — never a bare OK.
@@ -604,7 +604,17 @@ Promotion requires source identity, owner, lifecycle state, task/session scope, 
 
 Embeddings are a background service responsibility. Postgres stores vectors; the provider named in `factory_config` produces them. The `embed-o-matic-embedder` skill contract was removed in 3.7.0, and `server/embedder-worker.js` was retired in 4.0.0 — it spoke the OpenAI REST shape against config keys the on-device migration removed, so on this factory it silently drained nothing.
 
-Its replacement is **Conductor's own drain**, on-device Core ML, resolving tier tables by CONTRACT SHAPE — never by schema name (a `brain.*` hardcode fetches zero rows on a `kb.*` corpus and reports "Up to date") and never by vector type alone (query caches and held evaluation sets are `vector(768)` too, and draining either corrupts it). `scripts/embed-drain.mjs` was RETIRED 2026-08-15: it imported a module deleted in 5.0.0 and could not run. Note that an embedding *endpoint* is not a *drain* — something must still poll for stale rows and call it. Until drain-on-write ships (task #358), editing a document un-publishes it, and the corpus goes dark while every search keeps answering.
+Its replacement runs **on the O-Matic Server host**, not on any laptop. Measured 2026-08-30 on the server: `omatic-embed-listener.service` (`Restart=always`) and `omatic-drain.service` with its `omatic-drain.timer`, both systemd **user** units under the service account with lingering enabled, executing from the server's own virtualenv.
+
+**The model did not change when Conductor did — only the runtime.** The weights are the LLM the operator downloaded, `nomic-embed-text-v1.5@e9b6763023c676ca8431644204f50c2b100d9aab`. Conductor executed them under **Core ML** on a Mac; the Red Hat–family server executes the *same* weights under **ONNX**. That is why the corpus survived the retirement intact and nothing had to be re-embedded: `model_version` is the vector-space identity and `embedding_runtime` (`coreml`/`onnx`) is metadata recording which engine produced the row. Same weights, different engine, same space. A mixed `embedding_runtime` in one corpus is ordinary in a multi-device estate; a mixed `model_version` is a corpus emergency.
+
+*The line here previously read "Conductor's own drain, on-device Core ML," and shipped publicly until 2026-08-30. It was stale rather than merely imprecise: Conductor was retired 2026-08-23 (decision #355), so naming it as the current drain taught a removed mechanism in the present tense — the defect task #453 tracks. Core ML was accurate history for Conductor and is wrong for the Server.*
+
+**Where the model actually lives is a recorded gap, not a settled fact.** Measured 2026-08-30 on the server: `model/model.onnx` (547 MB), `model_fp16.onnx` (274 MB) and `tokenizer.json` sit in the service account's home directory, and that directory **is not a git repository** — no remote, nothing tracked. The intent was to ship the model in the o-MATIC Server production pack and that never completed. Since the weights guard refuses a `model_version` mismatch at both write and query, a database restore without this exact model does not restore retrieval. Tracked as task #357.
+
+The drain resolves tier tables by CONTRACT SHAPE — never by schema name (a `brain.*` hardcode fetches zero rows on a `kb.*` corpus and reports "Up to date") and never by vector type alone (query caches and held evaluation sets are `vector(768)` too, and draining either corrupts it). `scripts/embed-drain.mjs` was RETIRED 2026-08-15: it imported a module deleted in 5.0.0 and could not run.
+
+Note that an embedding *endpoint* is not a *drain* — something must still poll for stale rows and call it. And a drain that runs is not the same as a corpus that is current: measured 2026-08-30, the stale-mark fires and the drain re-embeds within seconds, but it re-embeds the OLD `summary_text`, because that column is a denormalized snapshot nothing regenerates from the source row. The corpus reports zero unembedded and zero stale throughout while retrieval returns superseded text. Row counts prove storage; only a query proves correctness. Tracked as task #389 (master) with #287.
 
 When code (skill or operator) writes a Tier 3 row:
 1. INSERT/UPDATE the source row.
@@ -623,7 +633,7 @@ Surfaced at every Probot startup by the card, and readable directly (`v_embeddin
 
 Persistent `unembedded > 0` = bootstrap stalled — surface to operator. Persistent `stale > 0` = drift signal. `decommissioned_terms` non-zero = content cleanup needed; query `v_rules_with_decommissioned_terms` etc. to identify offending rows.
 
-### System 5 — recognising where a factory stands
+### System 5 — recognizing where a factory stands
 
 O-Matic **System 5** is the generation label: the control plane, this plugin, and the factory schema contract move together. Components keep their own semver; the generation is the compatibility statement.
 
@@ -780,7 +790,7 @@ exists anywhere in the database and lists writing one as an outstanding DDL
 deliverable. The plan's enforcement language — historical, naming the retired
 broker and the plugin as readers at connect/startup, with a conformance suite
 testing three states — is
-plan text describing intent, not a record of shipped behaviour. Measured
+plan text describing intent, not a record of shipped behavior. Measured
 2026-08-14: absent from o-matic in every form; present in Commons only as a row
 hand-written on 2026-08-09. One hand-made row in one database is not a mechanism,
 and a detector for an unbuilt mechanism detects nothing.

@@ -7,14 +7,14 @@
   },
   "metadata": {
     "description": "o-MATIC Agency — where an O-Matic factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), the factory staleness audit, and the server operating guide.",
-    "version": "2026-08-28"
+    "version": "2026-08-30"
   },
   "plugins": [
     {
       "name": "agency",
       "displayName": "o-MATIC Agency",
       "source": "./agency",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "The constitutive operating layer of an O-Matic factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current. Ships no MCP server, so it installs on hosts that cannot spawn one.",
       "author": {
         "name": "James Walker",

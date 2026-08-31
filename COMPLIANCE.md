@@ -23,7 +23,7 @@ short and checkable:
   system can reach.
 
 If your review needs a boundary statement: **the trust boundary is the O-Matic
-Server**, not this repository. Everything that authenticates, authorises, audits,
+Server**, not this repository. Everything that authenticates, authorizes, audits,
 encrypts or refuses happens there.
 
 ## Where the real claims live, and their ceiling
