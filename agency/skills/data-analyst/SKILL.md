@@ -194,8 +194,9 @@ Data administers the factory DB as a read-side authority. Carver executes DDL; D
 
 **Embedding Health Monitoring**
 - `v_embedding_health` — per-tier rollup (`total`, `embedded`, `unembedded`, `stale`, `distinct_models`)
-- Healthy steady state: `unembedded=0` AND `stale=0` per tier
-- `stale > 0` = recent direct-SQL edit pending Embedder refresh — acceptable noise unless persistent
+- **`unembedded=0` AND `stale=0` is NECESSARY BUT NOT SUFFICIENT, and treating it as sufficient is how a corpus rots in plain sight.** This view reads the `embedding_stale` FLAG. It cannot see whether `summary_text` still matches its source. Measured on o-matic 2026-08-30: **45 of 257 indexed rows — 9 of 12 SOPs among them — served retrieval text that no longer matched their source row, while this view read 0 stale / 0 unembedded the entire time.** The drain had computed a fresh, confident vector OF THE STALE TEXT and cleared the flag. One drifted rule (#288) asserted "Conductor is the only approved control plane" while its own source said the O-Matic Server was.
+- **ALWAYS pair it with `v_semantic_drift`.** Healthy = 0 rows. That is the check that can actually fail. A green `v_embedding_health` alone is not evidence of anything.
+- `stale > 0` = a write pending re-embed. **Never call this acceptable noise.** That is what this line used to say, and it taught a reader to look away from the one signal still telling the truth. Check `v_semantic_drift` first.
 - `unembedded > 0` extended = bootstrap stalled — surface to operator
 - `distinct_models > 1` = mixed embeddings — re-embed needed for older rows
 - Lifecycle audit checks: rows with current-canon retrieval should have a source table/source id, authority tier, lifecycle state where available, tenant scope, and no unresolved supersession/contradiction marker

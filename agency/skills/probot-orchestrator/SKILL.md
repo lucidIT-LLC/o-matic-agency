@@ -628,10 +628,10 @@ Embedder never decides truth, admission, promotion, retirement, contradiction re
 
 Surfaced at every Probot startup by the card, and readable directly (`v_embedding_health` via `factory_query`):
 
-- `embedding_health` — per-tier rollup. Healthy: `unembedded=0` AND `stale=0`.
+- `embedding_health` — per-tier rollup. `unembedded=0` AND `stale=0` is **necessary but NOT sufficient**: it reads the `embedding_stale` flag, not the retrieval text, so it cannot see `summary_text` drift. On 2026-08-30 it read fully green on o-matic while 45 of 257 rows — 9 of 12 SOPs among them — served text that no longer matched their source. **Pair it with `v_semantic_drift` (healthy = 0 rows), the check that can actually fail.**
 - `decommissioned_terms` (inside summary) — audit hit counts for `rules`, `knowledge`, `sops`. Healthy: all zero.
 
-Persistent `unembedded > 0` = bootstrap stalled — surface to operator. Persistent `stale > 0` = drift signal. `decommissioned_terms` non-zero = content cleanup needed; query `v_rules_with_decommissioned_terms` etc. to identify offending rows.
+Persistent `unembedded > 0` = bootstrap stalled — surface to operator. Any `stale > 0` = a write pending re-embed; never report it as acceptable without checking `v_semantic_drift`. `decommissioned_terms` non-zero = content cleanup needed; query `v_rules_with_decommissioned_terms` etc. to identify offending rows.
 
 ### System 5 — recognizing where a factory stands
 
