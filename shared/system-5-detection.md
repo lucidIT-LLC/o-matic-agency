@@ -123,8 +123,16 @@ factory migrated *away* from. Provenance is not exposure.
 
 - **PASS — System 5** only when `verdict` reads `PASS — System 5`, i.e. all four
   booleans are `true` in the one returned row.
-- **NOT-A-FACTORY** when the error is `42P01` (undefined_table) on
-  `factory.factory_config` — the database has no `factory` schema. This is a
+- **NOT-A-FACTORY** only after `42P01` (undefined_table) on **every** config
+  location — `factory.factory_config`, `ops.factory_config` AND
+  `public.factory_config`, checked with `to_regclass()` before running the
+  detector. **A factory does not have to keep its config under `factory.`** —
+  Benecard keeps its factory tables under `ops` and its tiers under `docs`, and
+  the previous text mislabeled it NOT-A-FACTORY for exactly that (task #410,
+  found by running the detector on a FOURTH factory hours after a two-factory
+  bar was published — two was not enough). When the config lives elsewhere,
+  substitute that schema in the `cfg` CTE and run the detector as written.
+  Only when no config table exists anywhere is the verdict NOT-A-FACTORY — a
   *distinct verdict*, not a FAIL. Reporting it as FAIL invites a conversion of
   something that was never a factory and must never become one.
 - **FAIL — pre-System-5 or unproven** on anything else, specifically:
