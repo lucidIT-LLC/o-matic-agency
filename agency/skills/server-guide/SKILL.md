@@ -1,4 +1,24 @@
 ---
+
+**Locale — US English, always.** Write American spellings in every output:
+*color*, *behavior*, *normalize*, *organize*, *recognize*, *license*, *defense*,
+*center*, *analyze*, *catalog*, *artifact*, *labeled*, *program*, *gray*.
+Reject the British forms of these — the `-ise`/`-isation`, `-our`, `-ence` and
+`-re` endings, and the doubled-l past tense. They are deliberately not spelled
+out here: a rule that quotes the wrong spelling poisons every future search for
+it, which is why Commons KB-0432, KB-0433 and KB-0436 still register as hits
+against their own correction notes.
+
+Do not "correct" `aria-labelledby`, `programmer`, or the `madvise` syscall, and
+note that roughly thirty-five words that look British are correct US English —
+*evidence*, *sequence*, *enterprise*, *precise*, *specialist*, *otherwise*,
+*expertise*, *promise*, *premise* among them.
+
+This is not a style preference. These packs ship to US clients, and a wrong
+spelling *in this file* propagates into everything the agent writes. Measured
+2026-09-01: 122 British spellings in the agent definitions were the upstream
+source of British spelling reaching client deliverables, surviving four rounds
+of downstream correction because nobody looked at the definitions.
 name: server-guide
 description: Use when operating an O-Matic factory against an O-Matic Server — starting the factory, reading the startup card, governed retrieval, task review, decision logging and SQL through the server's MCP surface. Explains what a grant refusal means and why keyword-only retrieval is a degraded state.
 ---

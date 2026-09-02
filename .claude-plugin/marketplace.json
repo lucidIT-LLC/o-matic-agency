@@ -32,7 +32,7 @@
         "skill-only"
       ],
       "metadata": {
-        "compatibilityTier": "prompt-only-behaviour-only; MCP-host-full-operation when the host provides the O-Matic Server surface",
+        "compatibilityTier": "prompt-only-behavior-only; MCP-host-full-operation when the host provides the O-Matic Server surface",
         "shipsMcpServer": false,
         "requiresForFullOperation": "O-Matic Server MCP surface, configured by the host",
         "declaredUnder": "known_rules #284 (compatibility gate, halt)"
