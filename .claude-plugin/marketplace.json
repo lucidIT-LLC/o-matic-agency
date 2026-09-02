@@ -14,7 +14,7 @@
       "name": "agency",
       "displayName": "o-MATIC Agency",
       "source": "./agency",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "description": "The constitutive operating layer of an O-Matic factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current. Ships no MCP server, so it installs on hosts that cannot spawn one.",
       "author": {
         "name": "James Walker",
