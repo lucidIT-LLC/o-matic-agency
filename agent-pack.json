@@ -5,7 +5,7 @@
   "generated_from": "O-Matic factory gold record (factory.persona*, agent_identity, factory_agreements)",
   "generated_note": "GENERATED FILE \u2014 do not hand-edit. Regenerate with build-agent-pack.py.",
   "canonical_format": "SKILL.md with YAML frontmatter (Agent Skills specification)",
-  "compatibility_tier": "prompt-only-behaviour-only; MCP-host-full-operation when the host provides the O-Matic Server surface",
+  "compatibility_tier": "prompt-only-behavior-only; MCP-host-full-operation when the host provides the O-Matic Server surface",
   "adapters": [
     "claude",
     "codex",
