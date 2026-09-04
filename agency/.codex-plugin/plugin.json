@@ -1,6 +1,6 @@
 {
   "name": "agency",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "The portable core-role layer of an O-Matic factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, and tool-discovery skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the O-Matic Server's MCP surface configured by the host.",
   "author": {
     "name": "James Walker",

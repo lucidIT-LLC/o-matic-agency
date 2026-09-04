@@ -1,5 +1,24 @@
 # o-MATIC Agency — skill changelogs
 
+## Unreleased — 2026-09-01
+
+**probot-orchestrator 18.2.0 → 18.3.0 — System 5.6: identity is carried.**
+Startup STEP 3 gains a THIRD QUERY, `SELECT * FROM v_startup_identity`, issued
+in the same round trip as the card and the connector rollup. The card render
+gains an Identity row (`identity_state · identity_bytes of
+identity_ceiling_bytes · identity_brand_tokens`, or `not carried` on a pre-5.6
+factory, which is a conversion finding and not a halt). Once carried, identity
+is not re-queried. Doctrine: Commons KB-0463/0464/0465, Blueprint KB-0051
+v3.5.0, o-matic decision #382. Two British spellings in this file were
+corrected by a verified re-read (KB-0466: the skill files are the generator).
+
+## Unreleased — 2026-08-31
+
+Added **factory-governance-repair**. The skill requires Commons Blueprint
+retrieval before governance mutation, defines normal-role behavior tests for
+session lifecycle, tenant isolation, connector readiness, Policy/SOP coherence,
+and governed retrieval, and gives Probot an explicit repair-audit-finding route.
+
 ## 1.1.2 — 2026-08-30
 
 **A green `v_embedding_health` is not evidence the corpus is current.**
@@ -158,3 +177,6 @@ Options: ["File operations", "Folder operations", "Workspace setup", "Find a fil
 | 10.0.0 | 2026-04-12 | Two-mode architecture. Factory/standalone startup protocol. FACTORY_TENANT detection added. |
 
 ---
+
+## probot-orchestrator 18.2.0 — 2026-08-31
+- Host-factory deference (operator ruling 2026-08-31): where the connected factory's own startup SOP defines the card render contract and battery, that SOP governs alone; the fenced card and the FIRST/SECOND QUERY battery become the default for factories with no DB contract. Removes the dual-mandate adjudication tax measured on lucidIT.

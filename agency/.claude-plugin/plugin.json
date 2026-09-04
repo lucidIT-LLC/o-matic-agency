@@ -1,7 +1,7 @@
 {
   "name": "agency",
   "displayName": "o-MATIC Agency",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "The portable core roster of an O-Matic factory — Probot, Fred, and Data with their full role skills, Probot-owned audit/startup/tool-discovery lanes, governance contract, and host adapters. Ships NO MCP server; database access is the O-Matic Server MCP surface configured by the host.",
   "author": {
     "name": "James Walker",
