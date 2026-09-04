@@ -2,6 +2,8 @@
 
 Read this reference before planning, designing, converting, repairing, or
 verifying an O-Matic factory. It is shared architecture, not role personality.
+For exact live-server operating procedure, read
+`O-MATIC-SERVER-OPERATING-REFERENCE.md`.
 
 ## Closed-ecosystem authority
 
