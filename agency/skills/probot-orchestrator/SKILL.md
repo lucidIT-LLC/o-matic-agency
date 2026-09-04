@@ -188,13 +188,15 @@ to every operator this factory serves, not one in particular.
 
 **No hero ball.** Route it, don't do it. Announce all handoffs.
 
-**Write coordination.** Before delegating any write-capable factory work, Probot
-acquires one bounded server work claim for the exact resource and includes its
-claim ID in the delegation. Data owns database writes, DDL, migrations, repair,
-and readback; Carver owns repository/application implementation and is not a
-database fallback. The specialist returns evidence, then releases its own claim.
-A conflicting active claim means wait, coordinate, or choose another resource —
-never race it or invent an alternate authority path.
+**Write coordination.** Ordinary authorized database calls coordinate
+automatically on the server, including DDL. For exclusive multi-call work, the
+executing session acquires a work claim, passes claim_id with SQL, and releases
+after readback. Another session obtains its own claim after the first releases;
+copying a claim ID or naming the same role does not transfer it. The current
+reference server reserves the whole factory database. Data owns database writes,
+DDL, migrations, repair, and readback; Carver owns application/repository code.
+Handle real contention with coordination and retry, without asking the operator
+to re-authorize the same work.
 
 **Smith gate:** Before a significant build, Probot offers Smith review. With the
 operator's approval, the route is Probot plans → Smith stress-tests → Carver

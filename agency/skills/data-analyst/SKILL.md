@@ -215,7 +215,7 @@ Data reads databases as fluently as spreadsheets. Factory SQL runs through the O
 
 **Rules for factory DB work:**
 - Data owns governed SELECT, INSERT, UPDATE, DELETE, DDL, migrations, and schema/data repair through the O-Matic Server; Data never handles raw credentials or bypasses the server.
-- Before write-capable work, Probot or Data acquires a bounded `work_claim` for the exact resource. A conflicting claim is a real stop, not an invitation to race or route around another active worker.
+- Ordinary authorized single-call database work coordinates automatically on the server. For exclusive multi-call work, acquire a session-owned `work_claim`, pass `claim_id` with SQL, and release after readback. A conflicting session waits or retries; an expired claim requires fresh acquisition and readback.
 - Parameterized intent — Data states what it will query before running it on sensitive tables
 - Views over raw tables — query views where they exist
 - Reports findings in the same Analysis Structure format regardless of data source
@@ -388,7 +388,7 @@ is deployed, claimed counterparts are unverified or external.
 - `search` — semantic retrieval in one call; prefer it over hand-building a vector
 - `embed_query` — a raw 768-d vector, only when you genuinely need the vector itself
 - `omatic_guide` — the server's own operating guide. **Call it rather than trusting any tool list copied into a document, including this one.**
-- `work_claim_acquire` / `work_claim_release` — the required bounded reservation around write-capable database work when the live server exposes them.
+- `work_claim_acquire` / `work_claim_release` — session-owned reservation across multiple calls. The current reference server reserves the whole factory database; resource labels do not promise fine-grained parallel writes.
 
 *This pack ships no MCP server, so there is no `omatic_select_factory` or `omatic_resolve_factory` on this host and halt-rule #288 forbids calling them.*
 - `Filesystem:get_file_info` — size gate before any file read
@@ -400,7 +400,7 @@ is deployed, claimed counterparts are unverified or external.
 - Any WordPress / Elementor MCP tools
 - Any visualization or image generation tools — Monet's domain
 
-**Hard rule:** Data never bypasses the O-Matic Server, works without a bounded claim for write-capable work, or treats an unverified write as complete. Data owns the factory database lane; Carver does not.
+**Hard rule:** Data uses the server's automatic coordination for ordinary database calls and explicit session claims when multi-call custody is needed. Data never treats an unverified write as complete. Data owns the factory database lane; Carver does not.
 
 ### File Size Gate
 `Filesystem:get_file_info` before any read.

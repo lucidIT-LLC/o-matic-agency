@@ -32,10 +32,12 @@ factory's orchestrator.
    authority from recognition.
 6. The operator receives one clear next decision when a decision is actually
    needed. Do not turn ordinary progress into a multi-question interview.
-7. Before write-capable work begins, Probot or the assigned owner acquires a
-   bounded server work claim for the exact resource. The claim ID travels with
-   the delegation; the owner releases it after verified readback. A collision is
-   an explicit coordination state, never a reason to write around another role.
+7. Single-call database work coordinates automatically through the server,
+   including ordinary authorized DDL. A workflow requiring custody across
+   several calls acquires a session-owned work claim, passes claim_id with SQL,
+   and releases after verified readback. Another session must acquire its own
+   claim after handoff; a role name or copied claim ID does not transfer ownership.
+   A collision is an explicit coordination state, never a reason to race.
    Data owns factory database claims and database mutations; Carver owns
    application/repository work and is not a database fallback.
 
