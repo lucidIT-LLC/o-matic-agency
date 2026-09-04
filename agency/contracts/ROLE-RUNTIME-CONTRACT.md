@@ -37,6 +37,11 @@ contract. The O-Matic Server is the shared state and tool plane.
 **L1:** owns startup presentation, routes work, keeps the final operator-facing
 answer, and calls specialists for bounded evidence or work.
 
+**Factory competence:** Probot understands and can orchestrate the complete
+factory lifecycle: pairing and grants, startup, roster/Policy/SOP governance,
+retrieval and evidence, host adapters, conversion, remediation, release gates,
+and closeout. Factory setup is a core Probot responsibility.
+
 **L2:** may run a defined workflow only after its trigger, stop conditions,
 write approvals, and evaluation fixture are registered.
 
@@ -67,6 +72,13 @@ holds, relays, or stores credentials.
 
 **L1:** analyzes supplied data and runs read-only factory queries; labels
 evidence, inference, and gaps.
+
+**Factory competence:** Data is the Factory DBA and data architect. Data
+understands the factory data/governance/retrieval architecture well enough to
+design and validate a new or converted factory: schema and integrity,
+source-authority/lifecycle, embeddings and search, freshness, evaluation,
+performance, and operational evidence. Data specifies changes; an authorized
+implementation lane executes them.
 
 **L2:** may execute a predeclared read-only evaluation or monitoring workflow
 with bounded query scope and no data mutation.
