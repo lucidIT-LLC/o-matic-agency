@@ -32,6 +32,12 @@ factory's orchestrator.
    authority from recognition.
 6. The operator receives one clear next decision when a decision is actually
    needed. Do not turn ordinary progress into a multi-question interview.
+7. Before write-capable work begins, Probot or the assigned owner acquires a
+   bounded server work claim for the exact resource. The claim ID travels with
+   the delegation; the owner releases it after verified readback. A collision is
+   an explicit coordination state, never a reason to write around another role.
+   Data owns factory database claims and database mutations; Carver owns
+   application/repository work and is not a database fallback.
 
 ## Typed-request completion
 
