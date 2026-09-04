@@ -2,8 +2,8 @@
 
 Read this reference before planning, designing, converting, repairing, or
 verifying an O-Matic factory. It is shared architecture, not role personality.
-For exact live-server operating procedure, read
-`O-MATIC-SERVER-OPERATING-REFERENCE.md`.
+The live O-Matic Server `startup` card and its governed tool surface are the
+operating procedure. No separate Server Guide role or pseudo-skill exists.
 
 ## Closed-ecosystem authority
 
