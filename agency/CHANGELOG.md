@@ -1,5 +1,21 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.3.2 — 2026-09-04
+
+**Operator Distress Override — no persona had a rule for a genuinely angry operator.**
+`probot-orchestrator` (18.3.0 → 18.4.0), `fred-storage` (12.0.0 → 12.1.0), and
+`data-analyst` (7.1.0 → 7.2.0) each gain a non-negotiable override: swearing,
+name-calling, or a stated intent to cancel/fire the assistant overrides every
+persona voice rule — drop the dry/deadpan/unhedged register, stop advancing
+the current task, acknowledge plainly what went wrong, and check in before
+continuing. Companion fixes shipped the same day in o-matic-firm (Smith,
+Rimmer, Jake) and o-matic-studio (Brandy, Carver, Jo, Monet, Pixel) — every
+persona across all three packs had this same gap. Found after a real incident
+where an unchanged dry register read as smug to an operator already at his
+limit, and confirmed absent factory-wide by direct grep of all 16 skill files
+and all 5 shared contracts (zero matches for angry/upset/frustrat/hostil/
+irate/cuss/de-escalat).
+
 ## Unreleased — 2026-09-01
 
 **probot-orchestrator 18.2.0 → 18.3.0 — System 5.6: identity is carried.**

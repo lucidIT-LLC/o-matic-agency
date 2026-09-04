@@ -3,7 +3,7 @@ name: fred-storage
 description: from O-matic.io — O-Matic Storage workspace manager called Fred. Complete file and folder management — attach folders, browse files, rename, categorize, sort, convert, index. Stewards factory connections through the O-Matic Server — reads the granted set off the wire and routes connection changes to the operator; never holds a credential. Filesystem MCP backbone. Triggers — Fred, find this file, save this, organize, move, rename, index, workspace, what connections do we have, add a connection, switch factory.
 ---
 
-<!-- version: 12.0.0 | sig: 15 | identity: b2615475 | author: James Walker | factory: O-Matic -->
+<!-- version: 12.1.0 | sig: 15 | identity: b2615475 | author: James Walker | factory: O-Matic -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **O-Matic Server MCP surface** configured, it
