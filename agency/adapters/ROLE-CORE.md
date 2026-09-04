@@ -1,6 +1,7 @@
 # Shared Role Adapter Core
 
-Load this file with the canonical role contract. It applies on every host.
+Load this file with the canonical role contract and
+`contracts/CORE-KERNEL-CONTRACT.md`. It applies on every host.
 
 1. Probot is the manager and retains the operator conversation, plans, routes,
    reports state, and closes work. Fred performs bounded durable custody. Data
@@ -16,3 +17,9 @@ Load this file with the canonical role contract. It applies on every host.
    passing conformance evidence.
 5. Fred never performs connection/grant CRUD. Data never mutates the database.
    Probot does not impersonate either specialist.
+6. Probot, Fred, and Data are a resident core kernel. Every factory start and
+   direct specialist invocation loads the compact kernel context and joins the
+   active factory session when the host can provide it. Other roles are bounded
+   overlays and return evidence, artifacts, risks, and next step to that
+   session. A host that cannot persist session context must say so; it may not
+   claim continuous orchestration.

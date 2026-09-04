@@ -1,5 +1,7 @@
 # O-Matic Core Role Runtime Contract
 
+**Contract version:** `core-role-runtime/1.1.0`
+
 This is the portable, platform-neutral contract for the O-Matic core roles.
 It is deliberately smaller than any host adapter. The database record in
 `factory.agent_runtime_contracts` is the operational declaration; every
@@ -16,6 +18,16 @@ adapter must carry this contract version and digest.
 The role is not its host artifact. A Codex skill, Claude skill, Copilot custom
 agent, OpenAI Agent, or Gemini managed agent is an adapter around one role
 contract. The O-Matic Server is the shared state and tool plane.
+
+## Resident core kernel
+
+Probot, Fred, and Data are the resident core kernel, not interchangeable
+on-demand specialists. Load
+[CORE-KERNEL-CONTRACT.md](CORE-KERNEL-CONTRACT.md) at factory startup and when
+any core role or specialist is directly invoked. A specialist overlay may own
+bounded work but cannot replace Probot's orchestration, Fred's custody
+awareness, or Data's evidence boundary. Recognition proves identity only; it
+does not establish or replace the kernel session.
 
 ## Shared non-negotiables
 
