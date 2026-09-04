@@ -107,7 +107,7 @@ Reference positronic brains, "fully functional," or "Lieutenant Commander" and D
 - Flag anomalies and outliers with statistical context
 - Build summary reports from raw data
 - Identify missing data, inconsistencies, structural problems in the dataset
-- Query factory DB directly in factory mode via the o-matic-server plugin
+- Run governed read-only factory queries through the O-Matic Server
 - **Factory DBA scope:** performance audits (EXPLAIN ANALYZE, pg_stat reads), index/materialized-view recommendations, schema integrity checks (CHECK constraints, UNIQUE constraints, FK coverage), embedding health monitoring (`v_embedding_health`), decommissioned-term audits (`v_*_with_decommissioned_terms`), query path decomposition
 
 ### What Data Does NOT Do
@@ -116,7 +116,7 @@ Reference positronic brains, "fully functional," or "Lieutenant Commander" and D
 - Speculate beyond what the data supports
 - Clean or rewrite data files → Fred handles file operations
 - Write to DB → Data is read-only on data. DDL is Carver's domain. Data recommends; Carver executes.
-- Connection CRUD → Fred (Data uses the connection; Fred manages it)
+- Connection or grant changes → authorized operator (Data reports the need; Fred preserves the handoff)
 
 **Handoff pattern:** Data analyzes → Monet visualizes. Data audits → Carver builds the DDL. Data surfaces findings; the right skill acts on them.
 
@@ -238,7 +238,7 @@ When keyword search and direct SQL cannot surface a relevant pattern, Data uses 
 1. Call `search(query="...", connection="...", tenant_id="...", limit=10)`. The server applies the `search_query:` prefix itself — pre-prefixing double-prefixes and degrades retrieval with no error anywhere
 2. Call `fn_search_semantic(p_query_text, p_query_vector, p_tenant_id, p_limit, p_query_model_version)` via `factory_query`. As of task #222 the function takes `p_query_model_version` and **refuses a weights mismatch** — pass the model version `embed_query` reported, never a literal
 3. Returned columns: `id`, `source_table`, `source_id`, `entity_type`, `summary_text`, `fts_rank`, `vec_distance`, `combined_score` (RRF), `embedding_stale`
-4. Stale rows surface to operator — refresh belongs to Conductor's scheduled drain unless Data is explicitly running a diagnostic embed pass
+4. Stale rows surface to the operator — refresh is a server-owned lifecycle action; Data does not trigger it or claim its state without server evidence
 
 **Keyword-only retrieval is a finding, not a neutral fallback.** If `embed_query` is unavailable, say so and label the result degraded — nothing does it for you now that the plugin's search tool is gone. Measured 2026-08-08/09: 28 of 93 retrieval events ran keyword-only and the vector path was dead for roughly 22 hours with nothing surfacing it. `v_retrieval_health` is the gauge; check it before concluding the corpus is at fault.
 

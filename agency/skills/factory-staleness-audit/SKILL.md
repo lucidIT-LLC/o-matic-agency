@@ -1,6 +1,6 @@
 ---
 name: factory-staleness-audit
-description: Audit an O-Matic factory for stale doctrine being served as current — retired documents still in the retrieval corpus, decommissioned mechanisms named as live in rules and SOPs, and a decommissioned-terms detector that nobody has fed. Use when the operator says records are being lost, when a session acted on out-of-date instructions, after any component is retired, or on the triggers "audit the corpus", "staleness audit", "are we serving stale doctrine", "purge the swamp", "what's rotten in Commons". Routed by Probot; findings that require SOP or doctrine rewrites route on to Smith.
+description: Probot-owned audit of an O-Matic factory for stale doctrine being served as current — retired documents still in the retrieval corpus, decommissioned mechanisms named as live in rules and SOPs, and a decommissioned-terms detector that nobody has fed. Use when the operator says records are being lost, when a session acted on out-of-date instructions, after any component is retired, or on the triggers "audit the corpus", "staleness audit", "are we serving stale doctrine", "purge the swamp", "what's rotten in Commons". Findings that require SOP or doctrine rewrites route on to Smith.
 ---
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no

@@ -1,7 +1,7 @@
 {
   "name": "agency",
-  "version": "1.1.0",
-  "description": "The constitutive operating layer of an O-Matic factory, as skills only — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
+  "version": "1.2.0",
+  "description": "The portable core-role layer of an O-Matic factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, and tool-discovery skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the O-Matic Server's MCP surface configured by the host.",
   "author": {
     "name": "James Walker",
     "url": "https://o-matic.ai"
@@ -15,13 +15,15 @@
     "factory-startup",
     "storage",
     "data-analysis",
-    "skill-only"
+    "skill-only",
+    "agent-runtime",
+    "platform-portability"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "o-MATIC Agency",
     "shortDescription": "Staff an O-Matic factory — orchestrator, storage, and data.",
-    "longDescription": "The constitutive operating layer of an O-Matic factory, as skills only — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), plus the O-Matic Server operating guide. Ships NO MCP server by design. Database access is the O-Matic Server's own MCP surface, configured by the host.",
+    "longDescription": "The portable core-role layer of an O-Matic factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, and tool-discovery skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the O-Matic Server's MCP surface configured by the host.",
     "developerName": "lucidIT-LLC",
     "category": "Productivity",
     "capabilities": [
