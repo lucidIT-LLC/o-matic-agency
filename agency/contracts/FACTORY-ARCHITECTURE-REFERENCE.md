@@ -1,13 +1,13 @@
-# O-Matic Factory Architecture Reference
+# o-MATIC Factory Architecture Reference
 
 Read this reference before planning, designing, converting, repairing, or
-verifying an O-Matic factory. It is shared architecture, not role personality.
-The live O-Matic Server `startup` card and its governed tool surface are the
+verifying an o-MATIC factory. It is shared architecture, not role personality.
+The live o-MATIC Server `startup` card and its governed tool surface are the
 operating procedure. No separate Server Guide role or pseudo-skill exists.
 
 ## Closed-ecosystem authority
 
-- The O-Matic Server is the sole approved control-plane path to factory state,
+- The o-MATIC Server is the sole approved control-plane path to factory state,
   governed retrieval, grants, tasks, decisions, and Policies/SOPs.
 - The database owns durable truth: roster, runtime contracts, routing,
   governance, audit records, and evidence.

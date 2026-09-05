@@ -1,15 +1,15 @@
-/** Render a terminal-safe startup card from a native O-Matic Server packet. */
+/** Render a terminal-safe startup card from a native o-MATIC Server packet. */
 const stateMark = (state) => ({ READY: '🟢', DEGRADED: '🟠', BLOCKED: '🔴' }[state] ?? '⚪');
 const count = (value) => Number(value ?? 0).toLocaleString('en-US');
 
 export function formatStartupCard(packet) {
   const card = packet?.card ?? packet;
-  if (!card?.state) throw new TypeError('A native O-Matic Server startup card is required.');
+  if (!card?.state) throw new TypeError('A native o-MATIC Server startup card is required.');
   const connection = packet?.connection ?? card.connection_name ?? 'CLIENT_SUPPLIED';
   const grantedCount = packet?.grantedCount ?? packet?.granted?.length ?? 'UNKNOWN';
   const corpus = `${count(card.corpus_embedded)} / ${count(card.corpus_total)} embedded`;
   const lines = [
-    '╭─ 🏠 theNest · O-Matic Factory',
+    '╭─ 🏠 theNest · o-MATIC Factory',
     `│ State       ${stateMark(card.state)} ${card.state} · ${card.state_reason}`,
     `│ Connection  ${connection} · ${card.connection_database ?? 'UNKNOWN'} · ${grantedCount} granted`,
     `│ Retrieval   ${card.retrieval_state === 'vector' ? '🟢' : '🟠'} ${card.retrieval_state ?? 'UNKNOWN'} · telemetry ${card.retrieval_telemetry_state ?? 'UNMEASURED'}`,
@@ -24,7 +24,7 @@ export function formatStartupCard(packet) {
 
 export function formatFactoryFooter(packet) {
   const card = packet?.card ?? packet;
-  if (!card?.state) throw new TypeError('A native O-Matic Server startup card is required.');
+  if (!card?.state) throw new TypeError('A native o-MATIC Server startup card is required.');
   const connector = Array.isArray(card.unmeasured) && card.unmeasured.includes('connector_readiness')
     ? ' · connector readiness unmeasured' : '';
   return `⌂ ${card.factory_id ?? 'UNKNOWN'} · ${card.state} · ${card.retrieval_state ?? 'UNKNOWN'}${connector}`;

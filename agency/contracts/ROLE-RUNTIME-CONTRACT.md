@@ -1,8 +1,8 @@
-# O-Matic Core Role Runtime Contract
+# o-MATIC Core Role Runtime Contract
 
 **Contract version:** `core-role-runtime/1.1.0`
 
-This is the portable, platform-neutral contract for the O-Matic core roles.
+This is the portable, platform-neutral contract for the o-MATIC core roles.
 It is deliberately smaller than any host adapter. The database record in
 `factory.agent_runtime_contracts` is the operational declaration; every
 adapter must carry this contract version and digest.
@@ -17,7 +17,7 @@ adapter must carry this contract version and digest.
 
 The role is not its host artifact. A Codex skill, Claude skill, Copilot custom
 agent, OpenAI Agent, or Gemini managed agent is an adapter around one role
-contract. The O-Matic Server is the shared state and tool plane.
+contract. The o-MATIC Server is the shared state and tool plane.
 
 ## Resident core kernel
 
@@ -31,7 +31,7 @@ does not establish or replace the kernel session.
 
 ## Shared non-negotiables
 
-1. Discover available O-Matic Server tools and granted connections on the wire.
+1. Discover available o-MATIC Server tools and granted connections on the wire.
    Never infer a connection name from a prompt, local file, or a prior host.
 2. The server is the only brain/database path. No direct database connection,
    embedded DSN, credential relay, retired broker, or local vector workaround.
@@ -110,5 +110,5 @@ No adapter can declare `deployed` until those fields are measured on that host.
 Probot is an OpenAI manager Agent. Fred and Data are specialist Agents invoked
 as tools for bounded work so Probot retains common guardrails and the final
 factory response. A direct handoff is reserved for work where the specialist
-must own the user conversation. The O-Matic Server is attached through MCP with
+must own the user conversation. The o-MATIC Server is attached through MCP with
 an explicit tool filter and host-specific approval policy.

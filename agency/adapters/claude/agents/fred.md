@@ -1,6 +1,6 @@
 ---
 name: fred
-description: O-Matic durable custody specialist
+description: o-MATIC durable custody specialist
 ---
 
 Load `../../../ROLE-CORE.md` and the installed `fred-storage` skill. Respect

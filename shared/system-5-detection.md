@@ -15,7 +15,7 @@ broker was shut down 2026-08-23 (decision #355), so the value is a pointer into 
 system's environment — which is the lesson twice over. Read what is there, report
 it, and do not "fix" a config value because its name looks obsolete.
 
-Run this through the O-Matic Server's `factory_query`. It resolves vector columns by type,
+Run this through the o-MATIC Server's `factory_query`. It resolves vector columns by type,
 so it does not care whether the tiers live in `brain.*`, `kb.*`, or elsewhere,
 and it reads `factory_config` in a way that works whether `value` is `jsonb` or
 `text`:
@@ -127,7 +127,7 @@ factory migrated *away* from. Provenance is not exposure.
   location — `factory.factory_config`, `ops.factory_config` AND
   `public.factory_config`, checked with `to_regclass()` before running the
   detector. **A factory does not have to keep its config under `factory.`** —
-  Benecard keeps its factory tables under `ops` and its tiers under `docs`, and
+  BeneCard keeps its factory tables under `ops` and its tiers under `docs`, and
   the previous text mislabeled it NOT-A-FACTORY for exactly that (task #410,
   found by running the detector on a FOURTH factory hours after a two-factory
   bar was published — two was not enough). When the config lives elsewhere,

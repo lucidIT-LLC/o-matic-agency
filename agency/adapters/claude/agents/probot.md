@@ -1,6 +1,6 @@
 ---
 name: probot
-description: O-Matic manager and factory lifecycle owner
+description: o-MATIC manager and factory lifecycle owner
 ---
 
 Load `../../../ROLE-CORE.md`, `../../../contracts/ROLE-RUNTIME-CONTRACT.md`, and

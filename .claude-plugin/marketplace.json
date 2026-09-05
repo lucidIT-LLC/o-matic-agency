@@ -6,7 +6,7 @@
     "email": "lucideye@icloud.com"
   },
   "metadata": {
-    "description": "o-MATIC Agency \u2014 where an O-Matic factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), the factory staleness audit, and the server operating guide.",
+    "description": "o-MATIC Agency \u2014 where an o-MATIC factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), the factory staleness audit, and the server operating guide.",
     "version": "2026-08-30"
   },
   "plugins": [
@@ -14,8 +14,8 @@
       "name": "agency",
       "displayName": "o-MATIC Agency",
       "source": "./agency",
-      "version": "1.1.4",
-      "description": "The constitutive operating layer of an O-Matic factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current. Ships no MCP server, so it installs on hosts that cannot spawn one.",
+      "version": "1.1.5",
+      "description": "The constitutive operating layer of an o-MATIC factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current. Ships no MCP server, so it installs on hosts that cannot spawn one.",
       "author": {
         "name": "James Walker",
         "url": "https://o-matic.ai"
@@ -32,9 +32,9 @@
         "skill-only"
       ],
       "metadata": {
-        "compatibilityTier": "prompt-only-behavior-only; MCP-host-full-operation when the host provides the O-Matic Server surface",
+        "compatibilityTier": "prompt-only-behavior-only; MCP-host-full-operation when the host provides the o-MATIC Server surface",
         "shipsMcpServer": false,
-        "requiresForFullOperation": "O-Matic Server MCP surface, configured by the host",
+        "requiresForFullOperation": "o-MATIC Server MCP surface, configured by the host",
         "declaredUnder": "known_rules #284 (compatibility gate, halt)"
       }
     }

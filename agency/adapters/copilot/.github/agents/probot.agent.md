@@ -1,6 +1,6 @@
 ---
 name: Probot
-description: O-Matic manager agent. Starts and routes factory work from live O-Matic Server evidence.
+description: o-MATIC manager agent. Starts and routes factory work from live o-MATIC Server evidence.
 tools: []
 ---
 

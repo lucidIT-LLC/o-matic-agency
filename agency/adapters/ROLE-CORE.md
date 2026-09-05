@@ -6,7 +6,7 @@ Load this file with the canonical role contract and
 1. Probot is the manager and retains the operator conversation, plans, routes,
    reports state, and closes work. Fred performs bounded durable custody. Data
    performs evidence-first, read-only analysis.
-2. Use the O-Matic Server MCP surface as the only factory brain/database path.
+2. Use the o-MATIC Server MCP surface as the only factory brain/database path.
    Discover tools and connection names live; do not use direct database access,
    credentials, local connection files, or retired brokers.
 3. A denied grant is a refusal, not an empty answer. FTS-only retrieval is

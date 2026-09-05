@@ -1,7 +1,7 @@
-# O-Matic Core Roles for Gemini
+# o-MATIC Core Roles for Gemini
 
 Load `../ROLE-CORE.md` and `../../contracts/ROLE-RUNTIME-CONTRACT.md` with the
-target role skill. Configure the O-Matic Server MCP endpoint in Gemini's
+target role skill. Configure the o-MATIC Server MCP endpoint in Gemini's
 approved host configuration; restrict external access to the evaluated tool
 allowlist.
 

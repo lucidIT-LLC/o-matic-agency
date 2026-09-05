@@ -1,6 +1,6 @@
 ---
 name: factory-governance-repair
-description: Repair a proven O-Matic governance defect after an audit. Use for session-lifecycle, tenant-isolation, readiness, SOP/Policy conflict, or governance-retrieval repairs; not for ordinary startup or broad redesign.
+description: Repair a proven o-MATIC governance defect after an audit. Use for session-lifecycle, tenant-isolation, readiness, SOP/Policy conflict, or governance-retrieval repairs; not for ordinary startup or broad redesign.
 ---
 
 # Factory Governance Repair
@@ -11,7 +11,7 @@ execution contract, not a substitute for Smith's adversarial review.
 
 ## Authority and routing
 
-1. Start the target factory through the O-Matic Server and retain the returned
+1. Start the target factory through the o-MATIC Server and retain the returned
    connection name verbatim.
 2. Before designing a repair, start **Commons** and use governed retrieval for
    the relevant current Blueprint material. KB-0051 is the Blueprint; the
@@ -30,7 +30,7 @@ execution contract, not a substitute for Smith's adversarial review.
 Every durable governance repair must leave the current System 5.5 authority
 set aligned. This is a required control, not an optional documentation pass.
 
-1. Read back the current active versions of **KB-0051 O-Matic Factory
+1. Read back the current active versions of **KB-0051 o-MATIC Factory
    Blueprint**, **KB-0432 Stuff You Should Know**, and **KB-0433 Stuff You
    Should Forget** before mutating a durable control.
 2. Classify the finding by authority: KB-0051 states the durable factory
@@ -83,7 +83,7 @@ only when the failing behavior is tested again from the normal factory role.
 
 ## Execution boundary
 
-Use the O-Matic Server MCP surface for normal reads and writes. If the repair
+Use the o-MATIC Server MCP surface for normal reads and writes. If the repair
 requires owner-only DDL or a broken privileged path, stop at the evidence
 boundary and request named emergency owner authorization. Owner work must be a
 transactional migration stored in the workspace, followed by normal-role

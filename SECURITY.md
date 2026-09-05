@@ -25,7 +25,7 @@ The packs are instructions, so their security value is in what they forbid:
   explicitly, and route any credential entry back to the operator.
 - **Never write a host, user, password or `database_url` into `.omatic/factory.json`.**
   Nothing reads it, so it is a credential at rest serving no purpose.
-- **Reach the database only through the O-Matic Server's governed MCP surface.**
+- **Reach the database only through the o-MATIC Server's governed MCP surface.**
   Active halt-rule #288 forbids a hand-built psql or DSN connection that bypasses
   the server, and forbids deriving authority from local configuration.
 - **Treat a grant refusal as a refusal.** "This client was not granted access to
@@ -35,7 +35,7 @@ The packs are instructions, so their security value is in what they forbid:
   a Postgres error and its `DETAIL` can quote values from the row that failed.
 
 These are instructions to a model, not enforced controls. **The enforcement lives
-on the O-Matic Server**, which holds the credentials, issues one token per client,
+on the o-MATIC Server**, which holds the credentials, issues one token per client,
 and grants each client only named connections. A pack that told an agent to
 misbehave would still be refused by the server.
 

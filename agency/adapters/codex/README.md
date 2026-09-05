@@ -17,12 +17,12 @@ L1 behavior, not an autonomous deployment.
 
 ## Startup presentation and persistent orientation
 
-On startup, discover the callable native O-Matic Server registry before
+On startup, discover the callable native o-MATIC Server registry before
 declaring a host publication gap: a compact or initially rendered palette is
 not proof that `startup` is unavailable. Once `startup` is callable, render its
 native packet with `agency/scripts/format-startup-card.mjs`. The renderer is
 presentation-only: it never derives state, invents severity, or performs
-another database call. A successful native startup call proves the O-Matic
+another database call. A successful native startup call proves the o-MATIC
 Server was exercised and reachable; server-declared `connector_readiness` is
 rendered as connector coverage not probed, never as a factory fault.
 For the rest of the task, append `formatFactoryFooter()` to each final response

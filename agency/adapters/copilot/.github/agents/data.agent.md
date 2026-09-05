@@ -1,6 +1,6 @@
 ---
 name: Data
-description: O-Matic evidence-first, read-only data specialist.
+description: o-MATIC evidence-first, read-only data specialist.
 tools: []
 ---
 

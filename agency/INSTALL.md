@@ -1,4 +1,4 @@
-# Install O-Matic Agency
+# Install o-MATIC Agency
 
 Agency is one portable roster package. It always ships the canonical skills,
 personality, governance contract, evaluations, and host adapters together.
@@ -6,7 +6,7 @@ personality, governance contract, evaluations, and host adapters together.
 ## Codex
 
 Install the repository's `agency/` plugin directory. Its `.codex-plugin` manifest
-loads the full `skills/` roster. Configure the O-Matic Server MCP pairing in
+loads the full `skills/` roster. Configure the o-MATIC Server MCP pairing in
 Codex, then say: `Probot, start the factory.`
 
 ## Claude and Claude Code
@@ -19,20 +19,20 @@ wrappers in `adapters/claude/agents/` when the host supports named subagents.
 
 Copy `adapters/copilot/.github/` into the target repository's `.github/`.
 Keep Agency checked out in that workspace so the agent files can load the shared
-contract and canonical skills. Configure the O-Matic Server MCP connection in
+contract and canonical skills. Configure the o-MATIC Server MCP connection in
 the target Copilot host and enable only evaluated tools.
 
 ## Gemini
 
 Copy `adapters/gemini/GEMINI.md`, `contracts/`, and `skills/` into the target
-Gemini workspace or custom-agent source. Configure the O-Matic Server MCP
+Gemini workspace or custom-agent source. Configure the o-MATIC Server MCP
 connection in the selected Gemini host.
 
 ## ChatGPT
 
-Create an O-Matic Agency GPT or project instruction set from
+Create an o-MATIC Agency GPT or project instruction set from
 `adapters/chatgpt/GPT-INSTRUCTIONS.md`; add `contracts/` and `skills/` as its
-knowledge/source files; then connect the O-Matic Server MCP application. The
+knowledge/source files; then connect the o-MATIC Server MCP application. The
 repository contains no credential and no API key.
 
 ## Before production

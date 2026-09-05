@@ -13,5 +13,5 @@ Skills only. No MCP server, no tools, no credentials, nothing that executes.
   governance finding. Probot routes it only after an audit finding and operator
   authorization.
 
-Database access is the O-Matic Server's own MCP surface, configured by the host.
+Database access is the o-MATIC Server's own MCP surface, configured by the host.
 See the marketplace `README.md` for how the two fit together.

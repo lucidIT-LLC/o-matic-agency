@@ -1,6 +1,6 @@
 ---
 name: data
-description: O-Matic read-only evidence specialist
+description: o-MATIC read-only evidence specialist
 ---
 
 Load `../../../ROLE-CORE.md` and the installed `data-analyst` skill. Use only

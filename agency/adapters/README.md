@@ -1,6 +1,6 @@
-# O-Matic Cross-Platform Agent Adapters
+# o-MATIC Cross-Platform Agent Adapters
 
-This directory makes the same three O-Matic roles portable without turning them
+This directory makes the same three o-MATIC roles portable without turning them
 into five forks. The canonical behavior is
 [`../contracts/ROLE-RUNTIME-CONTRACT.md`](../contracts/ROLE-RUNTIME-CONTRACT.md).
 
@@ -15,7 +15,7 @@ into five forks. The canonical behavior is
 | OpenAI | `openai/agents/` | Agent instructions | Manager/specialist workflow after evaluation |
 
 Copy or import the host directory together with `contracts/`, `skills/`, and
-`evals/`. Configure the O-Matic Server MCP connection in the target host; never
+`evals/`. Configure the o-MATIC Server MCP connection in the target host; never
 copy credentials or connection names into this repository.
 
 Every adapter is intentionally **not deployed** until that host has discovered

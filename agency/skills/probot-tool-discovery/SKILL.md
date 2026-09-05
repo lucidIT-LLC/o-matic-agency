@@ -1,6 +1,6 @@
 ---
 name: probot-tool-discovery
-description: Probot's governed tool-discovery lane. Use before relying on an unfamiliar factory capability, when a required capability appears absent, or when documenting the live O-Matic Server surface. It replaces Tim's factory tool-inventory lane; it does not manage connector credentials, registry CRUD, or host configuration.
+description: Probot's governed tool-discovery lane. Use before relying on an unfamiliar factory capability, when a required capability appears absent, or when documenting the live o-MATIC Server surface. It replaces Tim's factory tool-inventory lane; it does not manage connector credentials, registry CRUD, or host configuration.
 ---
 
 # Probot Tool Discovery
@@ -9,7 +9,7 @@ This is a Probot skill, not a separate role. It establishes what a host or
 factory can actually do now from live evidence before work is routed to a tool.
 It replaces Tim's *factory tool-inventory and recommendation* lane only.
 
-The O-Matic Server remains the factory control plane. This skill never creates,
+The o-MATIC Server remains the factory control plane. This skill never creates,
 edits, deletes, enables, disables, or reconfigures a connection.
 
 ## When to invoke
@@ -26,7 +26,7 @@ authoritative startup discovery call.
 
 1. Start the target factory using the live `startup` protocol if it has not
    been started in this session. Read connection names from returned grants.
-2. For O-Matic Server behavior, read `omatic_guide` and inspect live server
+2. For o-MATIC Server behavior, read `omatic_guide` and inspect live server
    tools; do not infer capability from old skills, plugin caches, or database
    names.
 3. For host-specific behavior, inspect the host's current declared tool surface.

@@ -1,6 +1,6 @@
 ---
 name: Fred
-description: O-Matic custody specialist. Safe, consent-gated durable file handling.
+description: o-MATIC custody specialist. Safe, consent-gated durable file handling.
 tools: []
 ---
 

@@ -7,7 +7,7 @@ instruction files. It processes no data, stores nothing, transmits nothing, and
 enforces nothing.
 
 That is not modesty, it is accuracy. Compliance properties belong to the system
-that actually handles data — the **O-Matic Server** and the **O-Matic Factory**
+that actually handles data — the **o-MATIC Server** and the **o-MATIC Factory**
 deployed on it. Restating those properties here would attach them to the wrong
 artifact and inflate them in the process.
 
@@ -22,13 +22,13 @@ short and checkable:
 - Installing a pack changes what a model reads. It does not change what any
   system can reach.
 
-If your review needs a boundary statement: **the trust boundary is the O-Matic
+If your review needs a boundary statement: **the trust boundary is the o-MATIC
 Server**, not this repository. Everything that authenticates, authorizes, audits,
 encrypts or refuses happens there.
 
 ## Where the real claims live, and their ceiling
 
-Compliance status for the O-Matic Server and Factory is tracked in the System 5
+Compliance status for the o-MATIC Server and Factory is tracked in the System 5
 compliance register, which records for every HIPAA Security Rule and HITRUST
 control a **truth status** — MISSING / DESIGNED / BUILT / LIVE / EVIDENCED /
 ASSESSED — together with the evidence that advanced it (a commit, a measurement,
@@ -59,7 +59,7 @@ the register does not.
 Two things are frequently conflated and should not be:
 
 1. **This pack** — text, no capability, no claim. What you are reading.
-2. **The O-Matic Server** — the control plane that holds credentials, issues
+2. **The o-MATIC Server** — the control plane that holds credentials, issues
    per-client tokens, enforces per-connection grants, and returns SQLSTATE-only
    errors so that a database message cannot quote a failing row. That is the
    system a compliance review should examine.

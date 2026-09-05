@@ -1,6 +1,6 @@
 ---
 name: probot-startup-optimization
-description: Probot's startup-contract optimization lane. Use to measure and reduce unnecessary startup work without weakening the O-Matic Server startup card, grant resolution, retrieval reporting, or audit trail.
+description: Probot's startup-contract optimization lane. Use to measure and reduce unnecessary startup work without weakening the o-MATIC Server startup card, grant resolution, retrieval reporting, or audit trail.
 ---
 
 # Probot Startup Optimization

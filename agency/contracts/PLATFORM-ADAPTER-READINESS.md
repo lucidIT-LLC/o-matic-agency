@@ -7,11 +7,11 @@ tool discovery, the core-role conformance suite, and a retained trace.
 
 | Platform | Target artifact | Core-role design | Current status | Required deployment evidence |
 | --- | --- | --- | --- | --- |
-| OpenAI | Agents SDK Agent + O-Matic Server MCP | Probot is the manager. Fred and Data are bounded specialist Agents-as-tools; direct handoff only when the specialist must own the conversation. | design verified | MCP tool filter, approval policy, manager/specialist trace, conformance results |
+| OpenAI | Agents SDK Agent + o-MATIC Server MCP | Probot is the manager. Fred and Data are bounded specialist Agents-as-tools; direct handoff only when the specialist must own the conversation. | design verified | MCP tool filter, approval policy, manager/specialist trace, conformance results |
 | Codex | Codex plugin skills for L1; separate agent harness for L2 | The same canonical contract is loaded through a Codex adapter. Do not call a skill an autonomous deployment. | design verified | installed package digest, live tool discovery, L1 trace; L2 harness and evaluation trace |
-| Claude | Skill adapter for L1; explicit subagent or SDK harness for L2 | Skill files remain a host adapter, while MCP is the common O-Matic Server path. | design verified | project MCP approval, tool discovery, L1 trace; autonomous trigger and permission policy for L2 |
+| Claude | Skill adapter for L1; explicit subagent or SDK harness for L2 | Skill files remain a host adapter, while MCP is the common o-MATIC Server path. | design verified | project MCP approval, tool discovery, L1 trace; autonomous trigger and permission policy for L2 |
 | Copilot | Custom `.agent.md` plus focused skills | Create one custom agent per core role; select only host-verified tools because tool names differ by Copilot surface. | design verified | actual Copilot-surface tool inventory, MCP connection, skill discovery, conformance trace |
-| Gemini | Managed/custom agent with skills and O-Matic Server MCP | Use a custom Agent configuration with skills. Keep credentials least-privileged and network access allowlisted. | design verified | agent config, restricted egress, MCP/tool discovery, human-oversight check, conformance trace |
+| Gemini | Managed/custom agent with skills and o-MATIC Server MCP | Use a custom Agent configuration with skills. Keep credentials least-privileged and network access allowlisted. | design verified | agent config, restricted egress, MCP/tool discovery, human-oversight check, conformance trace |
 
 ## Documentation decisions
 
@@ -42,7 +42,7 @@ to its database runtime-contract row:
 1. canonical contract version and SHA-256 digest;
 2. exact host artifact and host version;
 3. least-privilege tool allowlist and approval policy;
-4. successful live tool discovery against O-Matic Server;
+4. successful live tool discovery against o-MATIC Server;
 5. passing `core-role-conformance.yaml` cases;
 6. trace/evaluation location, timestamp, owner, and rollback procedure.
 

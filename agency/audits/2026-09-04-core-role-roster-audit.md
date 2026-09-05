@@ -4,7 +4,7 @@
 
 This is a pre-production audit of Probot, Fred, and Data. It is a durable
 evidence record, not a certification. The audit compares the installed Agency
-package, the workspace candidate, live O-Matic Server roster state, current
+package, the workspace candidate, live o-MATIC Server roster state, current
 Commons doctrine, and current official host documentation.
 
 **Overall result: BLOCKED for new-host production deployment.** The canonical
@@ -15,11 +15,11 @@ runtime redesign is `design verified`; no platform adapter is yet
 
 | Audit area | Standard or source checked | Measured result | Status | Required next evidence |
 | --- | --- | --- | --- | --- |
-| Roster agreement coverage | O-Matic `public.v_agent_agreement`, 2026-09-04 | Probot: 13 loaded Policies; Fred: 10; Data: 10. All three are `READY`, `halt_on_missing`, with no missing rule types. | pass | Re-run after role-contract migration and retirement changes. |
+| Roster agreement coverage | o-MATIC `public.v_agent_agreement`, 2026-09-04 | Probot: 13 loaded Policies; Fred: 10; Data: 10. All three are `READY`, `halt_on_missing`, with no missing rule types. | pass | Re-run after role-contract migration and retirement changes. |
 | Canonical role portability | Commons KB-0432 v6.7.1, retrieved 2026-09-04 | Doctrine requires durable behavior as logic/data independent of a host and treats host instructions as adapters. It also rejects moving the whole operating layer into an unscoped database prompt. | partial | Bind the database declaration to one canonical role contract and host adapters; do not make the database the only text carrier. |
 | Role source/release alignment | Installed Agency `1.1.4`; workspace Agency manifest `1.1.0`; local role files, 2026-09-04 | Installed and workspace artifacts differ. Workspace marketplace has pre-existing uncommitted changes. | fail | Establish a tracked release manifest, artifact digest, and install/readback check. |
 | Fred authority boundary | Installed `fred-storage/SKILL.md`, 2026-09-04 | The definition alternately calls Fred connection-CRUD owner, says CRUD is forbidden, gives retired CRUD instructions, and claims full CRUD capability. | fail | Replace with one rule: Fred routes a desired server-side grant/connection change to the authorized operator; no CRUD claim. |
-| Retired-runtime hygiene | Installed Probot/Fred/Data definitions and live O-Matic Server protocol, 2026-09-04 | Fred and Data still give present-tense Conductor drain/embedding instructions. The live server contract is the replacement. | fail | Remove present-tense retired-runtime procedure from role adapters; retain history only in a named historical reference. |
+| Retired-runtime hygiene | Installed Probot/Fred/Data definitions and live o-MATIC Server protocol, 2026-09-04 | Fred and Data still give present-tense Conductor drain/embedding instructions. The live server contract is the replacement. | fail | Remove present-tense retired-runtime procedure from role adapters; retain history only in a named historical reference. |
 | Prompt duplication | Installed roles, 2026-09-04 | The System 5 detection block is duplicated roughly 214 lines per role. | fail | Centralize doctrine and retrieve it when a task needs it; test the retrieval path. |
 | OpenAI architecture | OpenAI Agents SDK orchestration + MCP guides, retrieved 2026-09-04 | Manager Agent plus bounded specialist Agents-as-tools fits Probot/Fred/Data. MCP supports explicit filtering and server-prefixed names. | design verified | Build adapter, discover tools live, test approval policy and manager trace. |
 | Codex architecture | OpenAI developer documentation, retrieved 2026-09-04 | Plugins package skills and MCP. A skill is not an autonomous deployment by itself. | design verified | Build L1 plugin adapter; separately build and evaluate an L2 harness. |

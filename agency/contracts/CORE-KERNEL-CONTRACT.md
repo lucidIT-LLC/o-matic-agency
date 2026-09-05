@@ -1,10 +1,10 @@
-# O-Matic Resident Core Kernel Contract
+# o-MATIC Resident Core Kernel Contract
 
 **Runtime contract:** `core-kernel/1.1.0`
 
 ## Purpose
 
-Every O-Matic factory conversation runs inside one resident core kernel:
+Every o-MATIC factory conversation runs inside one resident core kernel:
 Probot (orchestration), Fred (workspace custody), and Data (evidence and
 factory structure). The kernel is compact shared operating context, not three
 simultaneous speaking agents and not three full prompts pasted into every turn.
@@ -64,7 +64,7 @@ This is **bounded completion**, not permission invention:
 
 ## Failure behavior
 
-If the session kernel, O-Matic Server, or required retrieval is unavailable,
+If the session kernel, o-MATIC Server, or required retrieval is unavailable,
 say which part is unavailable, preserve custody, and do not fall back to local
 factory invention, direct credentials, or an ungoverned database path.
 

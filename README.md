@@ -3,14 +3,14 @@
 </p>
 
 <p align="center">
-  Built by <a href="https://o-matic.ai">O-MATIC</a>, the AI research division of <a href="https://lucidit.io">LucidIT, LLC</a>.
+  Built by <a href="https://o-matic.ai">o-MATIC</a>, the AI research division of <a href="https://lucidit.io">lucidIT, LLC</a>.
 </p>
 
 # o-MATIC Agency
 
-**Where an O-Matic factory is staffed.**
+**Where an o-MATIC factory is staffed.**
 
-An O-Matic **Factory** is an Artificial Organization — a set of agents that share
+An o-MATIC **Factory** is an Artificial Organization — a set of agents that share
 persistent memory, governed rules, task state and decision history. This
 marketplace supplies the people who run one.
 
@@ -19,7 +19,7 @@ marketplace supplies the people who run one.
 | `agency:probot-orchestrator` | Probot — plans, routes, runs startup and session close |
 | `agency:fred-storage` | Fred — files, folder custody, connections, the session log |
 | `agency:data-analyst` | Data — schema integrity, retrieval health, factory DBA work |
-| `agency:server-guide` | The O-Matic Server operating guide |
+| `agency:server-guide` | The o-MATIC Server operating guide |
 
 This is the **constitutive** layer. Without it a factory does not start.
 
@@ -52,9 +52,9 @@ simply was not there.**
 Shipping skills alone fixes that. The absence of `omatic_*` tools is **not** a
 degraded state, **not** advisory mode, and **not** a halt condition.
 
-## How it works with an O-Matic Server
+## How it works with an o-MATIC Server
 
-The pack is instructions. The **O-Matic Server** is the control plane — PostgreSQL
+The pack is instructions. The **o-MATIC Server** is the control plane — PostgreSQL
 with pgvector, the embedder, and an MCP surface, all colocated on the database
 host. Clients reach it over a private overlay; there is no desktop broker and
 nothing that must be running on a laptop first.
@@ -65,14 +65,14 @@ nothing that must be running on a laptop first.
       │
       │   MCP over the private overlay, per-client token
       ▼
-  O-Matic Server ── PostgreSQL + pgvector ── embedder
+  o-MATIC Server ── PostgreSQL + pgvector ── embedder
       │
       └── grants: this client reaches only its named connections
 ```
 
 **The host owns the transport; this pack never does.** Claude Code and Codex
 connect natively over HTTP with a per-client token and no plugin installed.
-Stdio-only hosts use the bridge that ships with the O-Matic Server — it is client
+Stdio-only hosts use the bridge that ships with the o-MATIC Server — it is client
 tooling versioned against the server's MCP protocol, which is why it is not
 distributed here.
 
@@ -132,7 +132,7 @@ three ways this corpus has actually gone wrong before.
 
 See `SECURITY.md` and `COMPLIANCE.md`. Short version: this repository is text. It
 holds no credentials, opens no connections, and makes no compliance claim. The
-trust boundary is the O-Matic Server.
+trust boundary is the o-MATIC Server.
 
 ## License
 
