@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { formatFactoryFooter, formatStartupCard } from './format-startup-card.mjs';
+const packet = { connection: 'theNest', grantedCount: 6, card: { factory_id: 'thenest', state: 'READY', state_reason: 'all measured fields ok', connection_database: 'thenest', retrieval_state: 'vector', retrieval_telemetry_state: 'OK', corpus_total: 4572, corpus_embedded: 4572, corpus_stale_total: 0, corpus_unembedded_total: 0, roster_ready: '7/7', governance_rules: 26, sop_count: 15, open_p1_count: 4, open_task_total: 17, unmeasured: ['connector_readiness'], measured_at: '2026-09-05T09:16:51-04:00' } };
+const card = formatStartupCard(packet);
+assert.match(card, /^```text\n╭─ 🏠 theNest · O-Matic Factory/m);
+assert.match(card, /🟢 READY · all measured fields ok/);
+assert.match(card, /theNest · thenest · 6 granted/);
+assert.match(card, /4,572 \/ 4,572 embedded · 0 stale · 0 unembedded/);
+assert.match(card, /◌ connector_readiness unmeasured/);
+assert.match(formatFactoryFooter(packet), /^⌂ thenest · READY · vector · connector readiness unmeasured$/);
+assert.throws(() => formatStartupCard({}), /startup card/);
+console.log('startup card smoke test passed');

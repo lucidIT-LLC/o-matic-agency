@@ -1,5 +1,16 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.3.4 — 2026-09-05
+
+**Codex startup presentation and core-skill identity repair.** Restored a
+portable, terminal-safe renderer at `scripts/format-startup-card.mjs`, with a
+smoke test. It renders only fields supplied by the native O-Matic Server packet
+and uses status symbols as the fallback where the host cannot render custom
+colors. The Codex adapter now carries a no-query reply-footer contract based on
+the startup packet. Probot, Fred, and Data now include documented Codex desktop
+skill metadata and local SVG assets. These icons identify skills in host surfaces
+that support skill metadata; they do not impersonate or create subagent threads.
+
 ## 1.3.2 — 2026-09-04
 
 **Operator Distress Override — no persona had a rule for a genuinely angry operator.**

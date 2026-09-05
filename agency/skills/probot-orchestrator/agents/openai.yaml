@@ -1,0 +1,9 @@
+interface:
+  display_name: "Probot"
+  short_description: "Start, route, and orient an O-Matic factory."
+  icon_small: "./assets/probot.svg"
+  icon_large: "./assets/probot.svg"
+  brand_color: "#00B5AD"
+  default_prompt: "Probot, start the factory."
+policy:
+  allow_implicit_invocation: true
