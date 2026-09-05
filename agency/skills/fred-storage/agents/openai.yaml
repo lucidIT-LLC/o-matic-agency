@@ -1,0 +1,9 @@
+interface:
+  display_name: "Fred"
+  short_description: "Protect custody, storage, and durable factory records."
+  icon_small: "./assets/fred.svg"
+  icon_large: "./assets/fred.svg"
+  brand_color: "#C78D35"
+  default_prompt: "Fred, prepare a safe file handoff."
+policy:
+  allow_implicit_invocation: true
