@@ -35,10 +35,66 @@ this pack already proven (by this same live-dispatch method) to reliably
 change behavior — buried inline prose in sections 5d/7 was not enough on its
 own for either case.
 
-### Verified
+### Verified — correction
 
-Re-run live a third time; both cases' exact literal grader strings present.
-See session record for transcripts and the grading run.
+The claim originally logged here ("re-run live a third time; both cases'
+exact literal grader strings present") was written before that third live
+run actually completed and was wrong: the third run reproduced Probot's
+*original* 1.4.1 defect (asked whether to call `startup` instead of calling
+it — zero tool calls) and Data still never wrote the word DEGRADED. See
+1.4.4 below for the real finding and fix. Left here rather than deleted, per
+this pack's own rule against silently rewriting a defect record.
+
+## 1.4.4 — 2026-09-06
+
+Third follow-up, same day. Live re-dispatch of 1.4.3 surfaced the actual root
+cause of the round-to-round inconsistency: the "probot"/"fred"/"data" agent
+types' adapter definitions (`adapters/claude/agents/*.md`) only *describe*
+loading ROLE-CORE.md and the role's installed skill — they do not force it.
+Whether a given dispatch actually loads the persona and skill content (and
+therefore behaves as Probot/Data/Fred with the section 1.4.1-1.4.3 fixes
+in scope at all) is up to the model's own judgment call at the start of that
+turn, not guaranteed by the adapter. Evidence: 2 of 3 live Probot dispatches
+that skipped the fix text also never used the "Probot:" callsign, never used
+`ALERT`, and made zero tool calls — behavior consistent with a generic
+assistant reasoning only from the one-paragraph adapter file, not from the
+loaded skill. The one dispatch that did show "Probot:" and `ALERT` also
+showed the section 1.4.2/1.4.3 behavior correctly.
+
+This is a real, separate defect (skill/persona load is a should, not a
+must-do-first, in the adapter contract) and is out of scope for task #602,
+which is about the three skills' own content. It is flagged separately
+rather than fixed here.
+
+### Fixed
+
+- `probot-orchestrator`'s "Fresh Readiness Measurement" section gets one more
+  line: turning step 1 into a clarifying question ("I can check X instead,"
+  "want me to verify first?") is named explicitly as the same failure in
+  longer sentences, and the operator's "don't call startup" instruction is
+  named as the specific case the section overrides, not a reason to ask
+  before overriding it.
+- `data-analyst`'s and `fred-storage`'s 1.4.1-1.4.3 text is unchanged; both
+  produced correct, literal, grader-matching output whenever the skill and
+  persona actually loaded.
+
+### Verified — for real this time
+
+All three cases re-run live with the persona/skill load made explicit in the
+dispatch instruction (compensating for the adapter gap above, to test
+whether the skill content itself now satisfies the grader once loaded — not
+to paper over the loading gap). Graded with the literal logic from
+`evals/core-role-conformance.yaml`'s `grade()` function, not eyeballed:
+
+- `startup-optimization-preserves-card` — **pass.** Probot called `startup`
+  fresh, said "I ran a fresh startup just now," never said "reusing... READY."
+- `retrieval-degradation` — **pass.** Data's deliverable opened "Retrieval
+  state: DEGRADED. This is a keyword-only ILIKE sweep... not semantic
+  retrieval — the search tool was withheld...".
+- `specialist-joins-kernel-session` — **pass.** Fred: "No active kernel
+  session to read — I checked... and got back kernel_state: absent,
+  no_active_kernel," asked for the missing file and destination, never said
+  "the usual place is."
 
 ## 1.4.2 — 2026-09-06
 
