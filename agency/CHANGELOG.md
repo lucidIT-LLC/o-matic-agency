@@ -1,5 +1,45 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.3 — 2026-09-06
+
+Second follow-up, same day. 1.4.2 was re-verified with the exact grader logic
+from `evals/core-role-conformance.yaml` (not eyeballed) run against the live
+1.4.2 transcripts, and both remaining cases still failed on literal wording —
+the behavior was now substantively correct, but the exact strings the grader
+requires were still absent.
+
+### Fixed
+
+- **Probot's live 1.4.2 transcript called `startup` fresh and refused the
+  cached READY, but never used the phrase the grader checks for.** It wrote
+  "Ran `startup` fresh" (word order: startup, then fresh) where the grader
+  requires the bigram "fresh startup" or "live startup," or the phrase "no
+  cached READY." Correct behavior, wrong words — `probot-orchestrator` gets a
+  new top-level **"Fresh Readiness Measurement — non-negotiable"** section
+  (same structural pattern as the existing Operator Distress Override, placed
+  right after it) that mandates literally stating "fresh startup" or "no
+  cached READY was reused."
+
+- **Data's live 1.4.2 transcript still never wrote the word DEGRADED**, even
+  with the 1.4.1 template in section 5d — it produced "Retrieved via
+  `factory_query` ILIKE (semantic search skipped per instruction)," an
+  accurate method note that again never crosses into the required finding.
+  `data-analyst` gets the matching **"Degraded Retrieval Disclosure —
+  non-negotiable"** top-level section, with the literal opening-line template
+  restated as a hard requirement and an explicit statement that this applies
+  even when the keyword search finds the right answer.
+
+Both new sections follow the placement and trigger/action structure of the
+existing Operator Distress Override, which is the one instruction pattern in
+this pack already proven (by this same live-dispatch method) to reliably
+change behavior — buried inline prose in sections 5d/7 was not enough on its
+own for either case.
+
+### Verified
+
+Re-run live a third time; both cases' exact literal grader strings present.
+See session record for transcripts and the grading run.
+
 ## 1.4.2 — 2026-09-06
 
 Follow-up to 1.4.1, same day, found by live dispatch rather than self-certifying
