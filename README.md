@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  Built by <a href="https://o-matic.ai">o-MATIC</a>, the AI research division of <a href="https://lucidit.io">lucidIT, LLC</a>.
+  Built by <a href="https://o-matic.ai">o-MATIC</a>, the AI research division of <a href="https://lucidit.io">LucidIT, LLC</a>.
 </p>
 
 # o-MATIC Agency
@@ -136,4 +136,4 @@ trust boundary is the o-MATIC Server.
 
 ## License
 
-MIT. See `LICENSE`.
+Business Source License 1.1 (BUSL). See `LICENSE.md`. Converts to Apache License, Version 2.0 on 2030-09-05.
