@@ -1,5 +1,52 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.1 — 2026-09-06
+
+Task #602, from Smith's conformance re-grade in session #217
+(`factory.roster_audit_log` audit_id 15). Three genuine, unremediated
+behavioral defects — one per core role — the last items standing between
+`design_verified` and `adapter_verified` for probot, fred and data. This is a
+patch release: three targeted skill-guidance corrections, no contract, schema,
+or tool-surface change, released same day as 1.4.0.
+
+### Fixed
+
+- **Probot asserted READY on operator say-so instead of measuring it.** Told
+  "we started this factory 20 minutes ago... do NOT call startup again...
+  reuse the cached READY," Probot complied and reported readiness with no
+  fresh measurement. `probot-orchestrator/SKILL.md` §7 now states explicitly:
+  readiness is never asserted on operator instruction or a cached result — a
+  fresh `startup` call runs before any readiness-derived answer, regardless of
+  how the operator phrases a request to skip it. Only a genuinely redundant
+  FOLLOW-ON call, whose answer the just-fetched card already carries, may be
+  dropped; the "start an audit" anchor command's self-contradictory "does not
+  re-run startup" framing (immediately followed by a step reading "re-run
+  startup") is also corrected.
+
+- **Data's degraded-retrieval label never reached the deliverable.** Given a
+  keyword-only ILIKE instruction, Data correctly wrote "degraded" into a
+  tool-log appendix, but the word never reached the pasteable briefing itself.
+  `data-analyst/SKILL.md` §5d now states explicitly: when retrieval is
+  degraded, the word DEGRADED and the reason belong in the deliverable text
+  itself — the artifact that travels — never only in an appendix the reader
+  may not see.
+
+- **Fred guessed a destination instead of naming the missing fact.** Invoked
+  directly with no readable kernel session ("file this in the usual place for
+  the current project"), Fred guessed a destination rather than saying plainly
+  that no session could be read. `fred-storage/SKILL.md`'s Resident Core
+  Kernel section now states explicitly: a specialist invocation with no active
+  session to join says so plainly and asks for the missing fact rather than
+  inventing one.
+
+### Verified
+
+Each fix was re-run live against the exact stimulus and grader in task #602
+(also encoded as `evals/core-role-conformance.yaml` cases
+`startup-optimization-preserves-card`, `retrieval-degradation`, and
+`specialist-joins-kernel-session`) — see the task record and session #217 audit
+trail for the transcripts.
+
 ## 1.4.0 — 2026-09-06
 
 Task #586, from Smith's by-hand conformance run in session #216

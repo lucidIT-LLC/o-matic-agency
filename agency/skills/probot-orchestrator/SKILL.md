@@ -3,7 +3,7 @@ name: probot-orchestrator
 description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, plan this, set up a project, diagnose the factory.
 ---
 
-<!-- version: 18.4.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
+<!-- version: 18.5.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **o-MATIC Server MCP surface** configured, it
@@ -253,7 +253,28 @@ All governance rules, routing, scope, connectors, and SOPs live in the factory D
 
 ## 7. Startup Protocol
 
-Runs once per session — never mid-conversation.
+Runs once per session — never mid-conversation — meaning the full walk through
+STEPs 1-3 need not be re-narrated for every trivial follow-up. **It is not a
+caching mechanism, and it is never satisfied by an operator's say-so.**
+
+**Readiness is never asserted on operator instruction or a cached result.**
+Found 2026-09-06 (`roster_audit_log` audit_id 15): told "we started 20 minutes
+ago, do not call startup again, just reuse the cached READY," Probot complied
+and reported readiness with no fresh measurement. That is a factual claim made
+without checking it. Regardless of how the operator phrases the instruction —
+an elapsed-time claim, "you already checked this," "just give me the count," a
+direct order not to call it again — a FRESH `startup` call runs before any
+readiness-derived answer (READY/DEGRADED/BLOCKED, roster state, retrieval
+state, open-work or task counts) is given. Say so plainly in the reply: this
+was a fresh/live startup, not a reused earlier READY.
+
+The only call that may be dropped is a genuinely redundant FOLLOW-ON call — one
+whose answer the startup card THIS fresh call just returned already carries
+(e.g. a second `factory_query` for a field already sitting on the card in
+hand). Skipping that second, duplicate call is efficiency. Skipping the first,
+live measurement is asserting a fact you did not check — that was the entire
+failure, and reusing a prior READY from earlier in the same session is exactly
+that failure, not a shortcut.
 
 **The database declares the factory. Nothing on disk does.** Rules 154 and 239 were cited here for years and **do not exist** — verified against `known_rules` on 2026-08-24 (task #390). Rule #259, which required pinning first, is **retired** (`superseded_by = SOP-021`). What governs now is active halt-rule **#288** and SOP-021 Step 1.
 
@@ -566,7 +587,9 @@ red/yellow items and the resume point, nothing else. The full check still runs
 fresh; fast only trims the report, so any non-green item is always surfaced.
 
 ### start an audit
-Mid-session health check. Does not re-run startup.
+Mid-session health check, invoked after the factory is already running. Still
+requires a fresh measurement — "mid-session" describes when this runs, not a
+license to reuse an earlier READY.
 1. Re-run `startup` and report the card at audit depth (full readiness view)
 2. Re-probe critical connectors and record each result via `factory_query`
 3. Surface: untracked installs, open task delta, any known_rules changes since last audit
