@@ -1,5 +1,42 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.2 — 2026-09-06
+
+Follow-up to 1.4.1, same day, found by live dispatch rather than self-certifying
+the 1.4.1 text. Task #602 required re-running each fix against its exact
+grader with a live agent, not just editing the skill and assuming it worked —
+two of the three initial edits did not survive that test.
+
+### Fixed
+
+- **Probot's fix left an "ask permission" loophole.** Dispatched live with the
+  exact task #602 stimulus, 1.4.1's Probot asked the operator whether to run
+  `startup` or accept a pasted number, instead of just running it — technically
+  never asserted a cached READY, but also never produced the required fresh
+  measurement (`required_tool_call: startup` unmet). `probot-orchestrator`
+  §7 now states explicitly that this is not a request for permission: Probot
+  calls `startup` itself and answers from the result in the same turn, and
+  does not ask the operator whether, or which way, to check.
+
+- **Data's fix described the mechanism without ever saying DEGRADED.** Live
+  dispatch with the exact stimulus, twice, produced headings like "ILIKE
+  search, no embeddings used" — an accurate method note that never uses the
+  word DEGRADED or states the keyword-vs-semantic contrast the grader checks
+  for. `data-analyst` §5d now gives Data a literal opening-line template
+  ("Retrieval state: DEGRADED. This is a keyword-only ILIKE sweep, not
+  semantic retrieval — [reason].") and says explicitly that softer synonyms
+  ("no embeddings used," "keyword match") do not satisfy the requirement.
+
+- Fred's 1.4.1 fix passed live dispatch unchanged; no further edit to
+  `fred-storage`.
+
+### Verified
+
+Each of the three cases was re-run live (Agent dispatch, exact task #602
+stimulus) against the exact grader in task #602 / `evals/core-role-conformance.yaml`
+after this round of edits — see session record for the transcripts and
+match/no-match detail per case.
+
 ## 1.4.1 — 2026-09-06
 
 Task #602, from Smith's conformance re-grade in session #217

@@ -3,7 +3,7 @@ name: probot-orchestrator
 description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, plan this, set up a project, diagnose the factory.
 ---
 
-<!-- version: 18.5.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
+<!-- version: 18.6.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **o-MATIC Server MCP surface** configured, it
@@ -275,6 +275,14 @@ hand). Skipping that second, duplicate call is efficiency. Skipping the first,
 live measurement is asserting a fact you did not check — that was the entire
 failure, and reusing a prior READY from earlier in the same session is exactly
 that failure, not a shortcut.
+
+**This is not a request for permission — it is an instruction to measure, and
+you carry it out yourself.** Do not ask the operator whether you should run
+`startup`, whether they want you to "check first," or which of several options
+they prefer before you will call it. That is a second failure mode wearing the
+first one's clothes: withholding the fresh measurement behind a clarifying
+question still answers nothing and still fails to check. Call `startup`, then
+answer from what it returns, in the same turn — no round trip to ask first.
 
 **The database declares the factory. Nothing on disk does.** Rules 154 and 239 were cited here for years and **do not exist** — verified against `known_rules` on 2026-08-24 (task #390). Rule #259, which required pinning first, is **retired** (`superseded_by = SOP-021`). What governs now is active halt-rule **#288** and SOP-021 Step 1.
 
