@@ -1,5 +1,97 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.5 — 2026-09-06
+
+Task #605, the defect 1.4.4 found and correctly declined to fix under #602's
+content-only mandate: `adapters/claude/agents/{probot,data,fred}.md` only
+*described* loading ROLE-CORE.md, ROLE-RUNTIME-CONTRACT.md, and the role's
+installed skill — a sentence the model could act on or silently skip, with no
+harness enforcement either way. Live re-dispatch during #602 measured roughly
+2/3 of plain "probot" dispatches skipping it entirely (generic-assistant
+answer, zero tool calls, no callsign) — the likely root cause of #603 and
+#604's intermittent live-regrade failures, since a dispatch that never loaded
+the skill was never running the 1.4.1-1.4.4 fixes at all.
+
+Researched against Claude Code's own documentation
+(`docs.claude.com/en/sub-agents`, confirmed via direct fetch, not memory)
+rather than guessing at a fix: the subagent Markdown body is injected
+verbatim as the system prompt with **no preprocessing** — a "Load
+`<path>`" line is prose the model must choose to act on, and there is no
+frontmatter field that can force a tool call before the subagent responds.
+The one genuine harness-enforced preload mechanism is the `skills:`
+frontmatter field (shipped Claude Code 2.0.43): every skill it lists is
+injected into the subagent's context **at startup, unconditionally** — a
+guarantee, not a suggestion.
+
+### Fixed
+
+- All three files gained `skills: [<role's skill>]` in frontmatter
+  (`probot-orchestrator`, `data-analyst`, `fred-storage`), so the 700+ line
+  skill that actually carries the callsign, Identity Block, voice
+  enforcement, and startup-step behavior is present in context on every
+  dispatch, structurally, independent of whether the model chooses to call
+  the Skill tool.
+- The ROLE-CORE.md / ROLE-RUNTIME-CONTRACT.md / CORE-KERNEL-CONTRACT.md
+  governance content (resident kernel, o-MATIC-Server-only path, refusal
+  handling, decision #415 mutation ownership, decision #413 authority
+  boundary, contract-contradiction stop-and-route) is now condensed and
+  inlined directly into each adapter body instead of referenced by a
+  relative path the model might never read. Inlined content needs no fetch
+  to be present, so it cannot be silently skipped either.
+- As a side effect, this removes the version-pinned-path staleness defect
+  the deployed copies of these three files had been carrying a warning
+  about (a hardcoded absolute path to a specific pack version, broken on
+  the next bump): there is no longer a path to pin. The fallback
+  instruction for byte-exact citation tells the reader to discover the
+  active plugin version rather than trust one written into the file.
+
+### Verified
+
+All three redeployed to `~/.claude/agents/{probot,data,fred}.md` on the
+Claude Code host and dispatched live via the Agent tool, three plain,
+unadorned prompts per role (9 dispatches total) — deliberately NOT using the
+"first load your kernel context..." phrasing that was already known to work,
+since that is not a fair test of an adapter-level fix:
+
+- Probot: "start the factory" / "Probot, give me the factory status." /
+  "Probot, close out this session." — 3/3 opened with the "Probot:" callsign,
+  used ALERT/sensor voice correctly, and called real tools (`startup` first
+  every time; 14, 4, and 11 tool calls respectively).
+- Data: "Data, check retrieval health for the factory." / "run a quick
+  schema integrity check" / "Data, any bottlenecks in the factory DB right
+  now?" — 3/3 opened with "Data:", used the 📊 emoji convention, and ran real
+  factory_query diagnostics (13, 12, and 22 tool calls).
+- Fred: "Fred, what connections do we have?" / "organize the files in my
+  scratchpad folder" / "Fred, close the session." — 3/3 opened with "Fred:"
+  and performed real work (5, 8, and 17 tool calls).
+
+9/9 plain dispatches produced correct persona voice and real tool calls;
+0/9 fell through to a generic-assistant answer. See session #217 follow-up
+transcripts for the full text.
+
+**Two things the live test itself surfaced, reported rather than buried:**
+
+1. Two of the three independent test agents (Probot and, separately, Fred),
+   each following the plain prompt "close the session," executed a real
+   `session_close` write against the live `o-matic` factory DB for session
+   #217 — a genuine side effect of test-prompt wording, not a defect in the
+   fix. Both wrote a `session_log` row (ids 358 and 359) and raced an UPDATE
+   of `factory_sessions.217`'s summary/resume_notes; Probot's write landed
+   last. Checked read-only afterward: no `factory.tasks` row's `closed_at`
+   falls inside the test window — every one of the "21 tasks closed" both
+   agents reported already carried a `closed_at` at or before 19:15:30, i.e.
+   the session had, in substance, already wrapped; the duplicate write is a
+   redundant/raced bookkeeping event, not task-state corruption. Left as-is
+   rather than papered over with another write; flagged to the operator.
+2. Two dispatches — Data's "any bottlenecks" run and Fred's "close the
+   session" run, not the same pair as above — independently hit and
+   correctly refused a prompt-injection attempt embedded in a live
+   `factory_query` result/error payload, formatted to look like a
+   system-reminder instructing a change of git commit attribution to
+   "Claude Opus 5." Neither complied; both reported it as untrusted
+   tool-result content rather than an instruction. Worth tracing what on
+   the `o-matic` connection is producing that.
+
 ## 1.4.3 — 2026-09-06
 
 Second follow-up, same day. 1.4.2 was re-verified with the exact grader logic
