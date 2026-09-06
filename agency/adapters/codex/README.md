@@ -1,7 +1,7 @@
 # Codex Adapter
 
 Install the Agency plugin at `../../.codex-plugin` so Codex discovers the L1
-skills in `../../skills/`. Each core skill carries `agents/openai.yaml` and a
+skills in `../../skills/`. Each core skill carries `../../skills/<role>/agents/openai.yaml` and a
 local SVG asset so supported Codex desktop surfaces can display its name, color,
 and icon. This metadata identifies a skill; it does not turn a skill into a
 subagent or guarantee a host-owned avatar outside the skill UI. Load the compact resident core kernel contract before

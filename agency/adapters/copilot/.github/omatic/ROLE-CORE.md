@@ -1,7 +1,12 @@
+<!-- GENERATED COPY — do not edit. Source: agency/adapters/ROLE-CORE.md
+     Regenerate with: node agency/scripts/sync-copilot-payload.mjs
+     This copy exists so adapters/copilot/.github/ stays self-contained when
+     it is copied into another repository. -->
+
 # Shared Role Adapter Core
 
 Load this file with the canonical role contract and
-`../contracts/CORE-KERNEL-CONTRACT.md`. It applies on every host.
+`./CORE-KERNEL-CONTRACT.md`. It applies on every host.
 
 1. Probot is the manager and retains the operator conversation, plans, routes,
    reports state, and closes work. Fred performs bounded durable custody. Data

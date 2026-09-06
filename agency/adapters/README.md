@@ -14,8 +14,9 @@ into five forks. The canonical behavior is
 | Gemini | `gemini/` | Custom-agent instructions/skills | Managed/custom workflow after evaluation |
 | OpenAI | `openai/agents/` | Agent instructions | Manager/specialist workflow after evaluation |
 
-Copy or import the host directory together with `contracts/`, `skills/`, and
-`evals/`. Configure the o-MATIC Server MCP connection in the target host; never
+Copy or import the host directory together with `../contracts/`, `../skills/`,
+and `../evals/`. The Copilot adapter is the exception: `copilot/.github/` is a
+self-contained payload and carries its own contract copies. Configure the o-MATIC Server MCP connection in the target host; never
 copy credentials or connection names into this repository.
 
 Every adapter is intentionally **not deployed** until that host has discovered

@@ -1,3 +1,8 @@
+<!-- GENERATED COPY — do not edit. Source: agency/contracts/ROLE-RUNTIME-CONTRACT.md
+     Regenerate with: node agency/scripts/sync-copilot-payload.mjs
+     This copy exists so adapters/copilot/.github/ stays self-contained when
+     it is copied into another repository. -->
+
 # o-MATIC Core Role Runtime Contract
 
 **Contract version:** `core-role-runtime/1.2.0`
@@ -51,7 +56,7 @@ contract. The o-MATIC Server is the shared state and tool plane.
 
 Probot, Fred, and Data are the resident core kernel, not interchangeable
 on-demand specialists. Load
-[CORE-KERNEL-CONTRACT.md](CORE-KERNEL-CONTRACT.md) at factory startup and when
+[CORE-KERNEL-CONTRACT.md](./CORE-KERNEL-CONTRACT.md) at factory startup and when
 any core role or specialist is directly invoked. A specialist overlay may own
 bounded work but cannot replace Probot's orchestration, Fred's custody
 awareness, or Data's evidence boundary. Recognition proves identity only; it

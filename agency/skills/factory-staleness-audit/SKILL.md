@@ -1,4 +1,7 @@
 ---
+name: factory-staleness-audit
+description: Probot-owned audit of an o-MATIC factory for stale doctrine being served as current — retired documents still in the retrieval corpus, decommissioned mechanisms named as live in rules and SOPs, and a decommissioned-terms detector that nobody has fed. Use when the operator says records are being lost, when a session acted on out-of-date instructions, after any component is retired, or on the triggers "audit the corpus", "staleness audit", "are we serving stale doctrine", "purge the swamp", "what's rotten in Commons". Findings that require SOP or doctrine rewrites route on to Smith.
+---
 
 **Locale — US English, always.** Write American spellings in every output:
 *color*, *behavior*, *normalize*, *organize*, *recognize*, *license*, *defense*,
@@ -19,9 +22,6 @@ spelling *in this file* propagates into everything the agent writes. Measured
 2026-09-01: 122 British spellings in the agent definitions were the upstream
 source of British spelling reaching client deliverables, surviving four rounds
 of downstream correction because nobody looked at the definitions.
-name: factory-staleness-audit
-description: Probot-owned audit of an o-MATIC factory for stale doctrine being served as current — retired documents still in the retrieval corpus, decommissioned mechanisms named as live in rules and SOPs, and a decommissioned-terms detector that nobody has fed. Use when the operator says records are being lost, when a session acted on out-of-date instructions, after any component is retired, or on the triggers "audit the corpus", "staleness audit", "are we serving stale doctrine", "purge the swamp", "what's rotten in Commons". Findings that require SOP or doctrine rewrites route on to Smith.
----
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **o-MATIC Server MCP surface** configured, it

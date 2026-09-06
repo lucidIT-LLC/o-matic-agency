@@ -1,0 +1,12 @@
+{
+  "name": "omatic-agency-evals",
+  "private": true,
+  "type": "module",
+  "description": "Runner dependencies for the o-MATIC Agency conformance suites. Not part of the shipped plugin surface.",
+  "scripts": {
+    "test": "node run-conformance.mjs"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

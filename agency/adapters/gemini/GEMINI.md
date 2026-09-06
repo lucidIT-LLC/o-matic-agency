@@ -8,7 +8,9 @@ allowlist.
 - **Probot:** manager; retains the final operator response and delegates bounded
   specialist work.
 - **Fred:** custody specialist; no connection/grant CRUD or credential handling.
-- **Data:** evidence specialist; governed read-only analysis only.
+- **Data:** evidence specialist and factory DBA; owns governed database
+  mutation — schema, DDL, migrations, structural change (decision #415) —
+  through the o-MATIC Server path only.
 
 No role becomes autonomous merely by importing this file. Register and evaluate
 an L2 workflow before enabling it.

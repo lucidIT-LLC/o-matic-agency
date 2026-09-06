@@ -29,7 +29,8 @@ operating procedure. No separate Server Guide role or pseudo-skill exists.
 ## Setup responsibilities
 
 - Probot plans, routes, and owns readiness.
-- Data designs/validates data and retrieval; recommends but never executes DDL.
+- Data designs/validates data and retrieval, and owns and executes DDL,
+  migrations, and database mutation through the governed server path (#415).
 - Fred owns durable source custody.
 - Carver implements approved technical changes.
 - Smith stress-tests; Rimmer evaluates evidence.
