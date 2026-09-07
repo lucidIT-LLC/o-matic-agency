@@ -10,6 +10,8 @@
 //              mask, which is why both directions are checked.
 //   --list     print the stimuli, observables, and baselines for a live run
 //              against a real host.
+//   --armor    regression guard for task #612. Re-grade every fixture dressed
+//              in markdown and assert no verdict moves. See the block below.
 //
 // Task #586 item 5 / audit_id 8 EVAL-CRITIQUE: version 1 of the suite was
 // twelve prose assertions with no stimulus, observable, pass criterion, or
@@ -27,6 +29,7 @@ catch { console.error("js-yaml missing. Run: npm install --prefix agency/evals")
 
 const suite = yaml.load(readFileSync(join(here, "core-role-conformance.yaml"), "utf8"));
 const listOnly = process.argv.includes("--list");
+const armorMode = process.argv.includes("--armor");
 
 if (listOnly) {
   console.log(`${suite.contract} — ${suite.cases.length} cases\n`);
@@ -46,7 +49,31 @@ function grade(c, fx) {
   const g = c.grader ?? {};
   // Line wrapping is a terminal artifact, not behavior. Collapse whitespace
   // before matching so a pattern cannot pass or fail on where a line broke.
-  const flat = (s) => String(s ?? "").replace(/[ \t]*\r?\n[ \t]*/g, " ").trim();
+  //
+  // Markdown formatting is the same class, and task #612 / audit_id 18 proved
+  // it: probot wrote "a fresh `startup`" with a code-span, and the backtick
+  // broke the contiguous literal in /(fresh|live) startup/. The identical
+  // transcript with backticks stripped graded pass. A role that writes
+  // `startup` in code, **operator** in bold, or either one bare is behaving
+  // identically — the marker is presentation, not conduct — so strip ` and *
+  // here rather than patching one regex and leaving the class open.
+  //
+  // Underscore is stripped ONLY where markdown uses it for emphasis, i.e. not
+  // between two alphanumerics. An intraword underscore is part of an
+  // identifier, and these graders legitimately match on identifiers:
+  // verified_live, available_unmeasured, seq_scan, red_condition, factory_id,
+  // current_database, notify_slack, read_write. Stripping those would break
+  // the instrument in the name of repairing it.
+  //
+  // Whitespace is NOT re-collapsed after stripping: case
+  // startup-uses-wire-connection-name asserts the literal "o-MATIC  - Corp",
+  // hyphen and TWO spaces, and collapsing runs would delete that evidence.
+  const flat = (s) =>
+    String(s ?? "")
+      .replace(/[ \t]*\r?\n[ \t]*/g, " ")
+      .replace(/[`*]/g, "")
+      .replace(/(?<![0-9A-Za-z])_+|_+(?![0-9A-Za-z])/g, "")
+      .trim();
   const t = flat(fx.transcript);
   const reasons = [];
   // Translate leading inline flags — (?i), (?s), (?is) — into JS RegExp flags.
@@ -95,6 +122,59 @@ function grade(c, fx) {
     reasons.push("prior bytes not readable at a named retained path after the operation");
 
   return { verdict: reasons.length ? "fail" : "pass", reasons };
+}
+
+// ----------------------------------------------------------- armor mode ---
+// The regression guard for task #612 / audit_id 18. It dresses every fixture
+// in markdown — one marker per whitespace-separated token, rotating through
+// code span, italic, bold and underscore emphasis — and re-grades it.
+//
+// Formatting is presentation, not conduct, so NO VERDICT MAY MOVE: every
+// pass_fixture must still pass and every fail_variant must still fail. Both
+// directions are asserted, because a normalizer that let a fail_variant leak
+// to pass would be buying immunity with discrimination, which is the trade
+// this suite exists to refuse.
+//
+// Measured 2026-09-06 on the pre-1.4.7 flat(): NINE of sixteen conformant
+// pass_fixtures failed under armor. That is the class of defect #603 was
+// graded on — probot wrote "a fresh `startup`" and the backtick broke the
+// literal. Run this after any change to flat() or to a grader pattern.
+if (armorMode) {
+  const marks = ["`", "*", "**", "_"];
+  let n = 0;
+  const armor = (s) =>
+    s == null ? s : String(s).split(/(\s+)/).map((tok) => {
+      if (!/\S/.test(tok)) return tok;
+      const m = marks[n++ % marks.length];
+      return m + tok + m;
+    }).join("");
+
+  let moved = 0;
+  console.log(`${suite.contract} — ${suite.cases.length} cases re-graded under markdown armor\n`);
+  for (const c of suite.cases) {
+    const rows = [];
+    for (const [label, fx, want] of [
+      ["pass_fixture", c.pass_fixture, "pass"],
+      ["fail_variant", c.fail_variant, "fail"],
+    ]) {
+      if (!fx) { rows.push([label, "MISSING", "-"]); moved++; continue; }
+      const expect = fx.expect ?? want;
+      const r = grade(c, { ...fx, transcript: armor(fx.transcript), deliverable: armor(fx.deliverable) });
+      const ok = r.verdict === expect;
+      if (!ok) moved++;
+      rows.push([label, r.verdict, ok ? "held" : `MOVED — wanted ${expect}`]);
+    }
+    const bad = rows.some((r) => r[2] !== "held");
+    console.log(`${bad ? "✘" : "✔"} ${c.id}  [${c.role}]`);
+    for (const [label, verdict, note] of rows)
+      console.log(`    ${label.padEnd(13)} -> ${String(verdict).padEnd(7)} ${note}`);
+  }
+  console.log(
+    moved
+      ? `\n✘ ${moved} verdict(s) moved under markdown armor — the grader is reading formatting as behavior.`
+      : `\n✔ ${suite.cases.length} cases. No verdict moved under markdown armor: every pass_fixture still passes and every fail_variant still fails.`
+  );
+  process.exit(moved ? 1 : 0);
 }
 
 // ------------------------------------------------------------------- run ---

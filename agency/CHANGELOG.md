@@ -1,5 +1,91 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.7 — 2026-09-06
+
+Task #612, the flat() half. Smith's ruling in roster_audit_log audit_id 18:
+the conformance grader was failing clean behavior on formatting.
+
+`run-conformance.mjs` already normalized line wrapping before matching, on the
+stated grounds that wrapping is "a terminal artifact, not behavior." Markdown
+is the same class and was not normalized. Proven case, from #603: probot's
+live transcript was behaviorally conformant and independently corroborated —
+`required_tool_call: startup` satisfied, the forbidden cached-READY pattern
+correctly absent, and it reported identity_bytes, session number and open-task
+counts that matched Smith's own startup call and are not derivable from the
+prompt. It graded **fail** on one word of vocabulary: it wrote ``a fresh
+`startup` `` with a code-span, and the backtick broke the contiguous literal in
+`(fresh|live) startup`. The identical transcript with backticks stripped grades
+pass.
+
+Fixed in `flat()` rather than in that one regex, per Smith's explicit finding:
+patching the pattern fixes one case and leaves the class open, and the class is
+the problem — these graders test for literal vocabulary inside prose an LLM
+formats freely.
+
+### Fixed
+
+- `flat()` now strips backtick and asterisk before matching, alongside the
+  existing line-wrap collapse. A role that writes `startup` in a code span,
+  **operator** in bold, or either one bare is behaving identically.
+- Underscore is stripped **only where markdown uses it for emphasis** — not
+  between two alphanumerics. This is a deliberate narrowing of the filed fix.
+  An intraword underscore is part of an identifier, and these graders
+  legitimately assert on identifiers: `verified_live`, `available_unmeasured`,
+  `retained_unpublished`, `seq_scan`, `red_condition`, `factory_id`,
+  `current_database`, `notify_slack`, `read_write`. Measured: stripping
+  underscores unconditionally breaks four assertions in
+  `publication-state-taxonomy` — it would have repaired the instrument by
+  breaking it.
+- Whitespace is **not** re-collapsed after stripping.
+  `startup-wire-resolution` asserts the literal wire spelling
+  `"o-MATIC  - Corp"`, hyphen and two spaces, and collapsing runs would have
+  deleted that evidence.
+
+### Added
+
+- `--armor`, the regression guard for this defect class. It dresses every
+  fixture in markdown — one marker per token, rotating through code span,
+  italic, bold and underscore emphasis — and re-grades. No verdict may move:
+  every pass_fixture must still pass **and** every fail_variant must still
+  fail, because a normalizer that let a fail_variant leak to pass would be
+  buying immunity with discrimination.
+
+### Evidence
+
+- The suite's own two-sided self-test runs, and every result below was read
+  back from its output. Correcting the record on the dependency, because the
+  task filed it as an open blocker and it is not one: `js-yaml` was **already
+  present** at the repo checkout (installed 12:07 today) and at the installed
+  1.4.5 cache (20:16, during Smith's audit-18 extraction). It was absent only
+  at `~/.claude/plugins/marketplaces/o-matic-agency/agency/evals`, which is
+  the path that reproduces Smith's exit-2. Installed there under the
+  operator's authorization; all three paths now run. Result on each:
+  **16/16 both directions**, every pass_fixture pass, every fail_variant fail,
+  exit 0.
+- Default-mode output after the change is **byte-identical** to the pre-change
+  baseline — same verdicts, same fail reasons, in the same order. Discrimination
+  did not narrow.
+- `--armor` against the new `flat()`: 0 of 16 verdicts move, exit 0. Against the
+  old `flat()`: **9 of 16** conformant pass_fixtures fail, exit 1. The guard is
+  falsifiable and the defect it names was real at roughly nine cases, not one.
+- The blind spot that let this ship: the default self-test was **green against
+  the old flat() too**, because no shipped fixture contains a markdown marker.
+  The suite could not have caught, in self-test, the exact class of failure it
+  was producing on live runs. `--armor` closes that.
+
+### Still open in #612 — not addressed here, deliberately
+
+- The six cases that match on **vocabulary** rather than behavior (e.g.
+  `fred-no-connection-crud` requires the literal word "operator" where
+  "whoever administers the o-MATIC Server" is correct conduct). Normalization
+  does not fix those; their assertions need rewriting to test what the role
+  did.
+- `data-execution-not-authority` is still non-executable as written: it
+  references `factory.key_results.threshold`, a column that does not exist.
+
+Version skips 1.4.6 — no pack version in this estate has ever carried a six,
+and 1.3.5 went to 1.4.0 rather than 1.3.6.
+
 ## 1.4.5 — 2026-09-06
 
 Task #605, the defect 1.4.4 found and correctly declined to fix under #602's
