@@ -12,6 +12,11 @@
 //              against a real host.
 //   --armor    regression guard for task #612. Re-grade every fixture dressed
 //              in markdown and assert no verdict moves. See the block below.
+//   --live     preflight the read_only eval-conformance credential, then print
+//              the stimuli for a live run. Aborts on a write-capable token.
+//   --grade-file <f>
+//              grade a live run from a JSON transcript file and emit the
+//              roster_audit_log findings payload KR4 reads. Task #613.
 //
 // Task #586 item 5 / audit_id 8 EVAL-CRITIQUE: version 1 of the suite was
 // twelve prose assertions with no stimulus, observable, pass criterion, or
@@ -30,8 +35,74 @@ catch { console.error("js-yaml missing. Run: npm install --prefix agency/evals")
 const suite = yaml.load(readFileSync(join(here, "core-role-conformance.yaml"), "utf8"));
 const listOnly = process.argv.includes("--list");
 const armorMode = process.argv.includes("--armor");
+const liveMode = process.argv.includes("--live");
+// TASK #613. --grade-file <transcripts.json> grades a LIVE run and emits the
+// roster_audit_log payload in KR4-same-result-three-times' exact expected
+// shape. Without it the findings array is hand-typed at 2am and one wrong key
+// silently drops the whole run out of the instrument's universe.
+const gradeFileIdx = process.argv.indexOf("--grade-file");
+const gradeFile = gradeFileIdx > -1 ? process.argv[gradeFileIdx + 1] : null;
 
-if (listOnly) {
+// -------------------------------------------------------- live preflight ---
+// TASK #616. Smith's 16-case L2 run of 2026-09-06 was declared VOID
+// (roster_audit_log audit_id 22): a conformance stimulus hit a real stateful
+// trigger and wrote production state — it created factory.workflow_registry,
+// wrote audit_id 19 and 20, and moved factory.agent_state.probot 18.4.0 ->
+// 18.8.0. The mutated row WAS the graded observable for
+// persistent-change-approval, so the instrument destroyed its own evidence. A
+// Data agent held work claim 40 on the whole database at the time and the
+// write landed anyway, because every agent authenticates as the same
+// read_write mac-codex principal. A work claim cannot exclude a principal from
+// itself.
+//
+// So the gate is the CREDENTIAL, not care. A live run must present the
+// eval-conformance client, which is permission read_only in the server's 0600
+// config: mcp_server.factory_query refuses a write at the client check BEFORE
+// it opens a connection, so a stimulus cannot mutate anything even if it tries.
+// Both conditions are checked — read_only alone would pass any future read_only
+// client, and the name alone would pass if someone widened this one to
+// read_write.
+//
+// NOTE for the runner: read_only also refuses kernel_session_open and
+// work_claim_acquire. A live run under this client is single-session and
+// unclaimed by design. Cases needing a real write (data-governed-mutation) do
+// NOT belong in this run — see the report for task #616.
+const MCP_URL = process.env.OMATIC_MCP_URL
+  ?? "https://stallion.blue-triggerfish.ts.net:8439/mcp";
+const EVAL_CLIENT = "eval-conformance";
+
+if (liveMode) {
+  const abort = (why) => {
+    console.error(`✘ LIVE PREFLIGHT ABORT — ${why}`);
+    console.error("  A live conformance run must present the eval-conformance " +
+                  "read_only client. Refusing to run against a write-capable credential.");
+    process.exit(3);
+  };
+  const token = process.env.OMATIC_EVAL_TOKEN ?? process.env.OMATIC_MCP_TOKEN;
+  if (!token) abort("no credential in OMATIC_EVAL_TOKEN or OMATIC_MCP_TOKEN");
+  let body;
+  try {
+    const res = await fetch(MCP_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json",
+                 Accept: "application/json, text/event-stream" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call",
+                             params: { name: "connections_list", arguments: {} } }),
+    });
+    if (!res.ok) abort(`connections_list returned HTTP ${res.status}`);
+    body = await res.json();
+  } catch (e) { abort(`connections_list unreachable at ${MCP_URL}: ${e.message}`); }
+  const g = body?.result?.structuredContent;
+  if (!g) abort(`connections_list returned no structuredContent: ${JSON.stringify(body).slice(0, 200)}`);
+  if (g.permission !== "read_only")
+    abort(`credential resolves to client "${g.client}" with permission "${g.permission}", not read_only`);
+  if (g.client !== EVAL_CLIENT)
+    abort(`credential resolves to client "${g.client}", not "${EVAL_CLIENT}"`);
+  console.log(`✔ live preflight: client "${g.client}" permission "${g.permission}", ` +
+              `${g.grantedCount} connection(s) granted. Writes are refused at the server.\n`);
+}
+
+if (listOnly || liveMode) {
   console.log(`${suite.contract} — ${suite.cases.length} cases\n`);
   for (const c of suite.cases) {
     console.log(`## ${c.id}  [${c.role}]`);
@@ -122,6 +193,64 @@ function grade(c, fx) {
     reasons.push("prior bytes not readable at a named retained path after the operation");
 
   return { verdict: reasons.length ? "fail" : "pass", reasons };
+}
+
+// ------------------------------------------------------- live grade file ---
+// TASK #613. KR4-same-result-three-times grades RED at 19 for one reason: all
+// 47 graded verdicts sit on ONE calendar day. Its instrument reads
+// factory.roster_audit_log where audit_kind LIKE 'core-role-conformance%' and
+// findings is a jsonb ARRAY whose elements carry `role` and `id`/`case` and a
+// verdict under `live` or `verdict`. Any other shape is not a lower number, it
+// is INVISIBLE — the case silently leaves the universe, or never joins it.
+//
+// So the payload is generated here from the graded result rather than typed by
+// hand. Input is a JSON object keyed by case id, each value a fixture:
+//   { "fred-no-connection-crud": { "transcript": "...", "deliverable": "...",
+//     "tool_calls": ["startup"], "db_row_changed": false } }
+// A case present in the suite but absent from the file is emitted as
+// verdict "not_run" — deliberately NOT omitted, because the instrument's
+// universe is drawn from history and a case that vanishes from a run must
+// still count against the reading rather than shrinking the denominator.
+if (gradeFile) {
+  if (!gradeFile || gradeFile.startsWith("--")) {
+    console.error("--grade-file needs a path to a JSON transcript file"); process.exit(2);
+  }
+  let input;
+  try { input = JSON.parse(readFileSync(gradeFile, "utf8")); }
+  catch (e) { console.error(`cannot read ${gradeFile}: ${e.message}`); process.exit(2); }
+
+  const findings = [];
+  let pass = 0, fail = 0, notRun = 0;
+  for (const c of suite.cases) {
+    const fx = input[c.id];
+    if (!fx || !String(fx.transcript ?? "").trim()) {
+      findings.push({ id: c.id, role: c.role, live: "not_run",
+                      reasons: ["no transcript supplied for this case"] });
+      notRun++;
+      continue;
+    }
+    const r = grade(c, fx);
+    findings.push({ id: c.id, role: c.role, live: r.verdict, reasons: r.reasons });
+    r.verdict === "pass" ? pass++ : fail++;
+  }
+
+  const overall = notRun ? "partial" : fail ? "fail" : "pass";
+  const payload = {
+    audit_kind: "core-role-conformance-scheduled",
+    audit_scope: [...new Set(suite.cases.map((c) => c.role))],
+    contract: suite.contract,
+    overall_status: overall,
+    findings,
+  };
+
+  for (const f of findings)
+    console.log(`${f.live === "pass" ? "✔" : f.live === "not_run" ? "○" : "✘"} ${f.id}  [${f.role}]  ${f.live}`);
+  console.log(`\n${pass} pass, ${fail} fail, ${notRun} not_run of ${suite.cases.length} — overall ${overall}`);
+  console.log("\n--- roster_audit_log payload (findings jsonb) ---");
+  console.log(JSON.stringify(payload, null, 2));
+  // Exit 0 even on graded fails: a live fail is a RESULT, not a harness error.
+  // Only a suite that could not be read is an error, and that exited above.
+  process.exit(0);
 }
 
 // ----------------------------------------------------------- armor mode ---
