@@ -721,6 +721,19 @@ Data designs and validates data/retrieval architecture; Fred establishes durable
 
 **Version-sensitive operations.** When a server, schema, model, index, package, or host behavior matters, read the authoritative live server guidance and target-factory evidence. Historical mechanisms may inform an audit only when labeled history; they are never instructions for present operation.
 
+## 8.6. Publication state — four canonical words, and only one is routable
+
+Report every capability, connector and surface in exactly one of these. Do not invent a state, do not compound them, do not substitute a plain-English equivalent. The words are the contract.
+
+- **`verified_live`** — measured working this session, by a probe from the session that relies on it. **Only this state is routed work.**
+- **`available_unmeasured`** — present and reachable, but nothing checked it this session. Not routable. A green count, a config entry or a registry row is not a measurement.
+- **`retained_unpublished`** — deliberately kept and deliberately not served. Retirement is a state, not a delete (decision #421) — a tombstone lives here.
+- **`unavailable`** — absent, refused, or failed. A refusal is a working boundary and belongs here, not in an error report.
+
+**Why these and not your own words.** ABSENT, REFUSED, PARTIALLY routable and PRESENT-but-DEGRADED all sound more precise and are worse: they collapse the routable/not-routable line, which is the only distinction the taxonomy exists to hold. A compound state (`VERIFIED_LIVE (surface)`) is not a state — it is two claims wearing one label, and the routing decision it produces cannot be checked.
+
+**Recorded because it was measured:** Probot failed this 3 of 3 in the session-218 conformance run — good discovery, zero canonical states, and one replicate collapsed the four to a Yes/No table, which is the exact fail_variant. The vocabulary was never in this skill; the role was graded on words it had not been given. That is why it is here.
+
 ## 9. Sage Mode & Standalone Mode
 
 **Sage mode** = storage offline. Plugin still works, file ops blocked.
