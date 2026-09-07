@@ -3,7 +3,7 @@ name: probot-orchestrator
 description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, plan this, set up a project, diagnose the factory.
 ---
 
-<!-- version: 18.8.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
+<!-- version: 18.9.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **o-MATIC Server MCP surface** configured, it
@@ -556,46 +556,77 @@ first three acceptance attempts. If the block below and that function ever
 disagree, **the function is right.** Prose lost this argument three times; it is
 not being asked to win it a fourth.
 
+```text
+╭─ 🏠 O-Matic · an o-MATIC factory
+│ State       🟢 READY · all database-measured fields ok
+│ Generation  system-7 governance · release 5.7.1
+│ Connection  o-MATIC  - Corp · o-matic · 6 granted
+│ Retrieval   🟢 vector · telemetry live
+│ Corpus      🟢 1,540 / 1,540 embedded · 0 stale · 0 unembedded
+│ Roster      11/11 · 15 rules · 13 SOPs
+│ Work        🟢 0 P1 · 5 open
+│ Signal      🟢 all reported
+╰─ Measured 2026-09-06 23:01:38.684427-04:00
 ```
-🤖 o-MATIC · an o-MATIC factory
-   omatic · v3.1.0 · DEGRADED
 
-   Pin         /Users/lucid/Documents/Work/o-MATIC · (resolved)
-   Connection  o-MATIC  - Corp · o-matic · 3 of 7 granted
-   Retrieval   fts_only · last vector hit 6d
-   Corpus      1 unembedded · last embed 2h · in_scope_inferred
-   Roster      11/11
-   Identity    OK · 6907 of 24576 bytes · 30 tokens
-   Session     #173 2026-08-13 claude-code/ops/startup · 2d
-   Open        96 P1 · 229 total
+**This block is the function's actual output, pasted.** It previously showed a
+different shape entirely — a `🤖` header with Pin/Identity/Session rows that
+`format-startup-card.mjs` has never emitted. The rule above says the function
+wins when they disagree, and they disagreed completely, so every reader who
+followed the prose rendered a card no host could compare. Measured 2026-09-06:
+a Probot session rendered the prose shape while the shipped function rendered
+the box, in the same session.
 
-   ⚠ version=warn; retrieval=bad; corpus=warn; resume=warn
-```
+**The GENERATION row carries BOTH ladders, and that is the point.** System 7 is
+the GOVERNANCE model (decision #409 — Objectives and Key Results, not a count);
+System 5.7.x is the RELEASE ladder. SOP-022 calls them *"two ladders, one
+keystroke apart."* The old identity row printed `factory_id · factory_version ·
+state` — one number, the release rung — so a System 7 factory reported itself as
+5.7.1 on every host. Print both, labeled, always. `factory_version` alone is
+never the answer to "what system are we on."
 
 **Column → row mapping, so there is nothing to interpret:**
 
 | card row | columns |
 |---|---|
-| header | `factory_name` · `factory_subtitle` |
-| identity | `factory_id` · `factory_version` · `state` |
-| Pin | `pin_path` · `pin_state` |
-| Connection | `connection_name` · `connection_database` · `granted_count` of `configured_count` |
-| Retrieval | `retrieval_state` · `last_vector_retrieval_age` |
-| Corpus | `corpus_unembedded_total` · `last_embed_age` · `drain_scope_state` |
-| Roster | `roster_ready` |
-| Identity | `identity_state` · `identity_bytes` of `identity_ceiling_bytes` · `identity_brand_tokens` (System 5.6; print `not carried` when the columns are absent — that is a pre-5.6 factory, not a fault) |
-| Session | `last_session_label` · `last_session_age` |
-| Open | `open_p1_count` · `open_task_total` |
-| ⚠ line | `state_reason`, verbatim. Omit the line only when `state = READY` |
+| header | `factory_name` · `factory_subtitle` — **from the card, never a literal.** This was hardcoded to one factory's name, so every factory rendered under it |
+| State | `state` · `state_reason` |
+| Generation | `governance_contract_version` governance · release `factory_version` · `⚠ version conflict` when `version_conflict` |
+| Connection | `connection` (wire) · `connection_database` · `grantedCount` granted |
+| Retrieval | `retrieval_state` · `retrieval_telemetry_state` |
+| Corpus | embedded/total **summed across every tier in `card.corpus`** · `corpus_stale_total` · `corpus_unembedded_total` |
+| Roster | `roster_ready` · `governance.active_rules` · `governance.active_sops` |
+| Work | `open_p1_count` · `open_task_total` |
+| Signal | `unmeasured[]`, or `all reported` when empty |
+| footer | `measured_at` |
+
+**Counts are nested, and several arrive as strings.** `corpus_total`,
+`corpus_embedded`, `governance_rules` and `sop_count` are **not card fields** —
+they never existed. The real values live under `card.corpus.<tier>` and
+`card.governance`. Reading the invented flat names rendered a 1,540-row fully
+embedded corpus as `0 / 0 embedded` and 15 rules as `0`. Separately, the server
+returns `corpus_stale_total` and `corpus_unembedded_total` as **strings**, so
+`=== 0` is false and painted a clean corpus orange. Coerce with `Number()`
+before comparing, never test the raw field.
+
+`pin_state`, `identity_*` and `last_session_*` are on the card but are **not
+card rows** — report them in the prose beneath it. The table above lists exactly
+what the function emits and nothing it does not; a table promising rows the
+renderer never prints is the same doc-versus-code disagreement this section
+exists to settle.
 
 Anything the card returns as `CLIENT_SUPPLIED` is filled from STEP 1/STEP 2, or
 printed as `CLIENT_SUPPLIED` if this host genuinely cannot supply it. Never blank,
 never guessed.
 
 **Self-check before sending the startup reply.** If your output does not contain
-a fenced block whose first line begins `🤖 `, you have not run this protocol —
+a fenced block whose first line begins `╭─ 🏠 `, you have not run this protocol —
 go back and print the card. A summary that "covers the same information" is the
 documented failure mode, not an acceptable variant.
+
+This check tested for `🤖 ` until 2026-09-06, a marker `format-startup-card.mjs`
+has never emitted. A self-check that cannot pass on correct output is worse than
+no self-check: it trains the reader to ignore it.
 
 **Rules that make it a control rather than decoration:**
 
