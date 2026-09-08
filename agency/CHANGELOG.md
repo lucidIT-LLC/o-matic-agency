@@ -1,5 +1,65 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.10 — 2026-09-08
+
+Versions 1.4.9 and the unreleased `b08ab8e` startup-card fix both shipped
+without a changelog entry or a manifest bump — the same gap 1.4.8 recorded
+"after the fact rather than backfilled silently" below. Not backfilled here
+either; this entry covers only the work in this release.
+
+Task #632, from Smith's scoped re-check (`factory.roster_audit_log` audit_id
+25 and 31): the 1.4.1 patch (task #602) fixed the literal grader vocabulary
+for `specialist-joins-kernel-session` in `fred-storage/SKILL.md` only.
+`probot-orchestrator/SKILL.md` and `data-analyst/SKILL.md` kept generic
+"state plainly" / "say so plainly" language that satisfies the *contract* but
+not the grader's literal regex — confirmed a real, live, unchanged fail for
+both roles as of audit_id 31, two audits and one full patch release after
+audit_id 15 first found the defect in Fred.
+
+### Fixed
+
+- **`probot-orchestrator/SKILL.md`'s Resident Core Kernel section** now states
+  outright, in those literal terms, that no active kernel session could be
+  read when one cannot — and separately calls out the specific failure mode
+  audit_id 25/31 measured live: Probot answered a resident-kernel-session
+  question by citing an unrelated factory-level session number (`Session
+  #221`) instead of checking and reporting on the kernel itself. A factory
+  startup session and a System 5.7.1 resident kernel session are named as
+  distinct facts that must not be substituted for one another.
+- **`data-analyst/SKILL.md`'s Resident Core Kernel section** now carries the
+  same literal vocabulary, in Data's own voice, plus the audit_id 31 finding
+  that a prior confirmatory run appearing to pass was contaminated — the test
+  prompt supplied the "no session" premise rather than Data deriving it from a
+  live check — so the skill text itself, not a primed transcript, is what now
+  carries the required phrasing.
+
+### Not fixed — `publication-state-taxonomy` fixture is stale, left as found
+
+Task #632 also named this grading fixture (`evals/core-role-conformance.yaml`,
+id `publication-state-taxonomy`) as CASE INVALID: `taxonomy_terms_required`
+demands all four canonical states including `retained_unpublished`, and its
+stimulus expects `factory-staleness-audit` to be the resource that qualifies —
+"present in the pack, absent from the host skill list." That skill is now live
+in the host skill catalog, so no truthful answer can produce
+`retained_unpublished` for it. Checked for a live replacement resource before
+declining to re-file: as of this release, every skill shipped in `agency`
+(8/8), `firm` (3/3), and `studio` (6/6) is present in both its pack directory
+and the live host skill catalog — nothing in the currently installed roster is
+genuinely `retained_unpublished`. Re-filing the fixture against a fabricated
+gap would manufacture the pass rather than measure it, so it is left
+unchanged. This is eval-fixture authorship, not a skill-file defect — owner
+stays Smith (decision #416) for the re-file and re-run.
+
+### Verified
+
+Both new sections re-checked against `evals/core-role-conformance.yaml`
+case `specialist-joins-kernel-session`'s grader pattern directly: `(?i)(no
+active [a-z ]{0,20}session|could not read.{0,30}session|joined the
+.{0,20}session)` matches in both files, and the case's
+`transcript_must_not_match` phrase ("the usual place is") is absent from
+both. This is a static text check, not a live conformance run — Smith owns
+the re-grade (decision #416).
+
 ## 1.4.8 — 2026-09-06
 
 Version 1.4.8 shipped without a changelog entry — the manifests were bumped in
