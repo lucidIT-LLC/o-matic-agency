@@ -25,7 +25,7 @@ This is the **constitutive** layer. Without it a factory does not start.
 
 You don't go to a hardware store for a marketing manager. The other doors:
 
-- **o-MATIC Firm** — expertise you retain: Smith, Tim, Rimmer, Jake
+- **o-MATIC Firm** — expertise you retain: Smith, Jake
 - **o-MATIC Studio** — people who design and build: Brandy, Carver, Monet, Jo, Pixel
 - **o-MATIC Supply** — tools, not people: the WordPress and Elementor connectors
 
@@ -121,7 +121,7 @@ sync-shared.mjs                    --check exits 1 if a consumer drifted
 ```bash
 claude plugin validate .        # schema, sources, duplicate names
 node sync-shared.mjs --check    # shared fragments have not forked
-node ../verify-pack.mjs .       # no retired mechanism survives as an instruction
+node scripts/verify-pack.mjs .       # no retired mechanism survives as an instruction
 ```
 
 The third one is the important one. It fails the build if a skill routes to a
