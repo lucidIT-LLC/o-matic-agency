@@ -1,5 +1,55 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.11 — 2026-09-14
+
+The resident kernel's continuity defect was fixed server-side on 2026-09-13
+(o-MATIC Server 1.6.0, commit `4ded1c2`) and the client side was the remaining
+half. Measured before the fix: **19 kernel sessions in two days, 17 carrying
+nothing but the opened-at default plan text; one operator conversation produced
+three kernels seven minutes apart; sessions showed 8 delegations and 0
+returns.** The kernel had been keyed on `sha256(Mcp-Session-Id)`, and the MCP
+Streamable HTTP spec (2025-06-18, Session Management clause 4) requires a
+reconnecting client to start a new session with no session id — so the
+continuity layer was keyed on guaranteed churn.
+
+The server now accepts an optional `conversation_key` on every `kernel_*` tool
+and adds `kernel_plan_update`. No skill in this pack passed the key, so the
+whole estate ran on the server's adoption fallback: correct across a reconnect,
+ambiguous between two conversations running in parallel from one host.
+
+### Fixed
+
+- `probot-orchestrator`: publishes all five kernel tools with their live
+  argument shapes, including `kernel_plan_update`, which previously appeared
+  nowhere. New STEP 1b mints the conversation key, prints it, opens the kernel
+  and reads back `continuity` — a second `opened` in one conversation is named
+  as the defect signature. New §7a states the stable-and-distinct requirement,
+  prefers a host value that can be RE-READ over one carried in memory, and says
+  plainly that a key minted per turn is worse than passing none, because it
+  reproduces the churn from the client side and does not look like a failure.
+- `probot-orchestrator` §10: record the plan with `kernel_plan_update` as the
+  work changes, not once at open; and close every delegation with
+  `kernel_return` rather than by hand in raw SQL, as one session was forced to
+  do for 4 of its 5 delegations before admission was widened.
+- `CORE-KERNEL-CONTRACT.md` (`core-kernel/1.2.0`), clause 3: joining a kernel
+  means using the conversation's printed key, never minting one. A specialist
+  that mints its own key opens a second kernel rather than joining the first,
+  and both would look healthy in isolation. With no key printed, pass none —
+  the server's adoption path reaches the right kernel and an invented key would
+  guarantee the wrong one. The plan stays Probot's to write.
+- `data-analyst`: the same rule at its `kernel_session_get` call site. An
+  invented key there would open an empty kernel and then truthfully report it
+  absent — a wrong answer indistinguishable from a right one, which is not a
+  claim the evidence role may make.
+
+### Deliberately unchanged
+
+`fred-storage` and the Claude/Copilot role adapters describe the kernel but
+name no kernel tool, so they have no call site to carry a key; clause 3 of the
+contract they already load covers them. The firm, studio and supply packs
+contain no reference to any `kernel_*` tool at all. Fewer callers is a better
+answer than more correct callers.
+
 ## 1.4.10 — 2026-09-08
 
 Versions 1.4.9 and the unreleased `b08ab8e` startup-card fix both shipped

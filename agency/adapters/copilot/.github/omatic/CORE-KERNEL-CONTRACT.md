@@ -28,6 +28,30 @@ factory's orchestrator.
 3. A direct specialist invocation first joins the active kernel session. If no
    active session can be read, it says so plainly and performs only the bounded
    request; it never invents plan, grant, or factory facts.
+
+   **Joining means using the conversation's key, never minting one.** Every
+   `kernel_*` tool takes an optional `conversation_key`, and it is the value
+   that decides WHICH kernel you reach. Probot mints it once and prints it in
+   the startup report (see the orchestrator skill, §7a). Every other role reads
+   that printed key out of the transcript and passes it verbatim.
+
+   A specialist that mints its own key does not join the kernel — it opens a
+   second one, and the conversation now has two: Probot's plan in one, the
+   specialist's delegations in the other. That is the 2026-09-13 kernel-split
+   defect wearing different clothes, and it would be harder to see, because
+   both kernels would look healthy on their own.
+
+   **If no key is printed in this conversation, pass none.** Do not supply a
+   key of your own invention to fill the gap. With no key the server rejoins
+   the most recently updated live kernel of this authenticated client inside a
+   4-hour window — which, for a specialist invoked in a conversation Probot
+   already started, is the right kernel. A minted key would guarantee the wrong
+   one. Say in the reply that no conversation key was available and the join
+   used the server's adoption path.
+
+   **The plan belongs to Probot.** `kernel_plan_update` is the orchestrator's
+   call. A specialist returns its outcome through `kernel_return` and lets
+   Probot record what it means; it does not rewrite the kernel plan itself.
 4. A specialist overlay receives only its task, relevant evidence, applicable
    Policies/SOPs, and required artifact or decision context. It returns its
    outcome, evidence, changed artifacts, open risk, and next step to the
