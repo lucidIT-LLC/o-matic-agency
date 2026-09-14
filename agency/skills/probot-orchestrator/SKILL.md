@@ -308,7 +308,7 @@ All governance rules, routing, scope, connectors, and SOPs live in the factory D
 **Probot uses — nothing else.** o-MATIC Agency ships **no MCP server and no tools**. There is no `omatic_select_factory`, `omatic_resolve_factory`, `omatic_runtime_status` or `omatic_usage_guide` on this host from this pack, and you must not call them. Active halt-rule **#288** forbids it in terms: *"Do not use legacy `omatic_*` tools, a cached plugin runner, a hand-built psql or DSN connection that bypasses the server, `.omatic/factory.json`, folder walking, or Read Files/Search tools to locate startup instructions."* Their absence is **not** a degraded state and **not** a halt condition.
 
 **Probot uses — the o-MATIC Server (the database, MCP over the private overlay):**
-- `startup` — **START HERE, every session.** Grants AND the startup card in ONE round trip. It replaces calling `connections_list` and then a hand-run battery, which cost two round trips at ~4.5 s each.
+- `startup` — **START HERE, every session.** Grants AND the startup card in ONE round trip. It replaces calling `connections_list` and then a hand-run battery, which cost two round trips at ~4.5 s each. Optional `conversation_key`, and **you always pass it** (task #785): startup is what opens this conversation's resident kernel, so without a key it cannot address one — it will still rejoin an existing kernel by principal-scoped guessing, but it will NOT mint a new one and the card reports DEGRADED. Read `kernel.addressing` on the way back: `conversation_key` is correct, `transport_hash` means your key did not arrive.
 - `factory_query` — every read and write against the brain: views, agreements, readiness, embedding health, tasks, decisions, session events. The server holds the credential; Probot never sees it. Destructive statements require `confirm_destructive`. Errors return **SQLSTATE only** — the message is withheld because a Postgres DETAIL can quote values from the failing row.
 - `search` — semantic retrieval in ONE call. Text in, rows out. See Retrieval below.
 - `connections_list` — which connections this client was granted.
@@ -371,7 +371,11 @@ answer from what it returns, in the same turn — no round trip to ask first.
 
 ```
 STEP 1 — Identify the factory from the database packet
-|- Call startup(connection=<the connection for this factory>)
+|- MINT THE CONVERSATION KEY FIRST, by the rule in §7a. startup itself opens
+|    this conversation's kernel, so the key has to exist before the call, not
+|    after it (task #785).
+|- Call startup(connection=<the connection for this factory>,
+|    conversation_key=<that key>)
 |    ONE round trip. It returns the connections this client was granted AND the
 |    factory's startup card. Omit `connection` when exactly one is granted; with
 |    several it returns the list and ASKS rather than guessing which factory you
@@ -389,13 +393,23 @@ STEP 1 — Identify the factory from the database packet
 |    factory. Do not try alternate spellings.
 +- IF the card returned -> STEP 1b
 
-STEP 1b — Mint the conversation key, then open the kernel
-|- Mint the conversation key ONCE, by the rule in §7a, and PRINT IT in the
-|    startup report. Printing is not decoration: the printed line is where
-|    every later turn READS the key back from. You do not remember it and you
-|    never make a new one.
-|- Call kernel_session_open(connection=..., conversation_key=<that key>,
-|    plan_summary=<what this session is actually for>).
+STEP 1b — PRINT the conversation key, then read the kernel startup opened
+|- PRINT THE KEY in the startup report. Printing is not decoration: the printed
+|    line is where every later turn READS the key back from. You do not
+|    remember it and you never make a new one.
+|- startup has ALREADY opened or rejoined the kernel using the key you passed
+|    it; its `kernel` block is that result. You do not need a separate
+|    kernel_session_open. Call it only to author the plan if startup's kernel
+|    block came back with an empty one.
+|- READ `kernel.addressing` AND REPORT IT. `conversation_key` is the correct
+|    state. `transport_hash` means the key did not reach the server — your
+|    startup call omitted it — and the kernel is being found by principal-scoped
+|    guessing, which cannot separate two parallel conversations from one client.
+|    Fix the call; do not proceed as though it were fine.
+|- IF startup returned kernel_state `unopened`, the factory reports DEGRADED and
+|    the reason is yours to fix: you started the factory with no conversation
+|    key, so the server declined to mint a kernel nobody could address again.
+|    Re-run startup WITH the key.
 |- Read `continuity` and report it: bound | adopted | opened.
 |    opened  -> correct on the first call of a NEW conversation.
 |    bound   -> correct on every call after that one. This is the target state.
@@ -893,6 +907,39 @@ Report every capability, connector and surface in exactly one of these. Do not i
 ***
 
 ## 10. Handoff Protocol
+
+### What belongs in the PLAN, and what belongs in the HANDOFF
+
+**Decision #541, 2026-09-14. These are two different artifacts with two
+different homes, and confusing them is a measured defect of this role, not a
+hypothetical one.**
+
+| | THE KERNEL PLAN | THE HANDOFF DOCUMENT |
+|---|---|---|
+| Where | `core_kernel_sessions.plan_summary`, via `kernel_plan_update` | `factory.factory_sessions.resume_notes` |
+| Limit | **1200 characters, enforced, and the cap is DELIBERATE** | `text`, no limit |
+| What | What this conversation is doing, what is in flight, what the next actor must not do | The full session record: what shipped, what was measured, decisions, corrections, open threads |
+| When | Whenever the work materially changes | At close, or when handing off |
+
+**The kernel plan is a COMPACT CARRIED SUMMARY, not the session record.** System
+5.6 in one line — *identity is carried, knowledge is retrieved*. The resident
+kernel is the CARRIED layer, bounded on purpose, the same discipline as the
+Tier 0 identity packet and its enforced byte ceiling. A session narrative is
+knowledge; it goes to a store built to hold it.
+
+**`kernel_plan_update` REFUSES over 1200 characters and that refusal is
+correct.** If you hit it, you are writing a handoff into a summary field. Do not
+work around it — put the document in `resume_notes` and leave a pointer in the
+plan.
+
+**NEVER write the plan by direct SQL.** MEASURED 2026-09-14: this role wrote
+12,331 and then 13,258 characters into `plan_summary` by hand-written UPDATE,
+four times, while describing the kernel as the continuity mechanism. That was
+not a clever workaround for a small field — it bypassed the published contract,
+and with it the ledger row, the concurrency guard, and the refusal reporting.
+`resume_notes` was sitting uncapped the whole time, and Data used it correctly
+for a 4,368-character handoff on the very same day. **The store was never
+missing; the role used the wrong surface.**
 
 **Record the plan into the kernel as the work changes.** When the session's
 work materially changes — a plan is agreed, a route is chosen, a phase closes,
