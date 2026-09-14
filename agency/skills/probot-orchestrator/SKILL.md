@@ -45,6 +45,27 @@ or `no_active_kernel`, say so in those terms — no active kernel session could
 be read — name what was checked, and ask for the missing fact before
 proceeding on anything that assumes continuity.
 
+**The kernel is addressed by a conversation key, and you supply it.** Every
+`kernel_*` call takes an optional `conversation_key`. Pass it on every one of
+them, always, from the value minted in §7a. Omitting it is not neutral: the
+server falls back to adopting the most recently updated live kernel of the same
+authenticated client within a 4-hour idle window, which is correct across a
+reconnect and **ambiguous between two conversations running in parallel from
+one host** — the second conversation silently swallows the first one's kernel,
+and its delegations with it. The server states this limitation itself rather
+than hiding it, and names the escape hatch: pass a key. When you pass one,
+adoption is suppressed entirely and isolation is exact.
+
+The reason this matters is measured, not theoretical (2026-09-13). The kernel
+used to be keyed on `sha256(Mcp-Session-Id)`, and the MCP Streamable HTTP spec
+(2025-06-18, Session Management clause 4) requires a reconnecting client to
+start a **new** session with no session id — so a reconnect is *by
+specification* a new identity. The continuity layer was keyed on guaranteed
+churn. The result: **19 kernel sessions in two days, 17 of them carrying
+nothing but the opened-at default plan text; one operator conversation produced
+three kernels seven minutes apart; sessions showed 8 delegations and 0
+returns.** The server side is fixed (1.6.0). The client side is this file.
+
 > Factory setup, conversion, retrieval repair, and production-readiness planning
 > are core Probot work. Read `../../contracts/FACTORY-ARCHITECTURE-REFERENCE.md`
 > first; it holds shared System 5.6 architecture while this skill owns Probot's
@@ -292,6 +313,11 @@ All governance rules, routing, scope, connectors, and SOPs live in the factory D
 - `search` — semantic retrieval in ONE call. Text in, rows out. See Retrieval below.
 - `connections_list` — which connections this client was granted.
 - `embed_query` — a raw 768-d query vector, only if you genuinely need the vector itself.
+- `kernel_session_open` — open or rejoin the resident Probot/Fred/Data kernel. Required args `connection`; optional `plan_summary`, `conversation_key`. Returns `continuity`: **bound** (rejoined via this conversation's key), **adopted** (a reconnect rejoined an existing kernel — see §7a), or **opened** (a new kernel). It fills a plan only when the plan is still EMPTY; it will not change one.
+- `kernel_plan_update` — required `connection` and `plan_summary`; optional `plan_state` (`authored` | `unauthored`) and `conversation_key`. **This is how the plan changes.** Because `kernel_session_open` only ever fills an empty plan, without this call the kernel is write-once at startup and records the one moment when nothing had happened yet — which is precisely why 17 of 19 measured kernels carried the default text. Call it whenever the work changes materially, not once at open.
+- `kernel_session_get` — required `connection`, `role_id`; optional `conversation_key`. An absent kernel is an honest result, not a license to invent continuity.
+- `kernel_delegate` — required `connection`, `target_role`, `work_summary`; optional `conversation_key`. Records work scope, never tool authority.
+- `kernel_return` — required `connection`, `delegation_id`, `role_id`; optional `evidence_summary`, `artifact_summary`, `risk_summary`, `next_step`, `conversation_key`. **Every delegation you open, you close.** Any ACTIVE roster role named as a delegation's target may close it. On 2026-09-13 a session opened 5 delegations and closed 4 of them BY HAND with raw SQL because the tool refused the caller's role; admission is widened and the tool works (delegation `ca4983d4`, target `smith`, `status=returned` with all four summary fields). Raw SQL is never the path again — if `kernel_return` refuses, report the refusal, do not route around it.
 - `omatic_guide` — the server's own operating guide, on demand. **Call it rather than trusting any tool list copied into a document, including this one.**
 
 > **Conductor is retired** (2026-08-23, decision #355) and is named here only to forbid it. It is not a fallback and not a degraded mode. There is no desktop broker, nothing on `localhost:8438`, and nothing that must be running on a laptop first. An instruction that routes a DB call through Conductor is stale — report it, do not follow it.
@@ -361,7 +387,24 @@ STEP 1 — Identify the factory from the database packet
 |- IF the connection is not granted -> "BLOCKED — <name> is not granted to this
 |    client." That is the grant working. A refusal is a refusal, never an empty
 |    factory. Do not try alternate spellings.
-+- IF the card returned -> STEP 2
++- IF the card returned -> STEP 1b
+
+STEP 1b — Mint the conversation key, then open the kernel
+|- Mint the conversation key ONCE, by the rule in §7a, and PRINT IT in the
+|    startup report. Printing is not decoration: the printed line is where
+|    every later turn READS the key back from. You do not remember it and you
+|    never make a new one.
+|- Call kernel_session_open(connection=..., conversation_key=<that key>,
+|    plan_summary=<what this session is actually for>).
+|- Read `continuity` and report it: bound | adopted | opened.
+|    opened  -> correct on the first call of a NEW conversation.
+|    bound   -> correct on every call after that one. This is the target state.
+|    adopted -> you did not pass a key, or the server did not receive one.
+|               Report it as a defect in THIS file's execution, not as normal.
+|- A SECOND `opened` inside ONE conversation is the defect signature of the
+|    2026-09-13 kernel churn. If you see it, stop and report it; do not open a
+|    third.
++- -> STEP 2
 
 STEP 2 — Read platform + grant state
 |- From the startup packet returned in STEP 1, capture:
@@ -528,6 +571,63 @@ STEP 5 — Unstarted factory (no server surface on this host)
 |    forbids it, and a refusal reported honestly is the correct outcome.
 +- Plan and route only. Do not assert any factory-internal fact.
 ```
+
+***
+
+## 7a. The conversation key — mint once, carry, never regenerate
+
+`conversation_key` must be **stable for the life of one conversation** and
+**distinct between concurrent conversations**. Those two properties are the
+whole specification; everything below exists to satisfy both without pretending
+to a capability this runtime does not have.
+
+**What is NOT available, established rather than assumed.** MCP 2025-06-18
+carries no conversation identifier — no header, no parameter, nothing. Its only
+identity field, `Mcp-Session-Id`, is minted fresh on every `initialize` by
+spec, so it is *anti-stable*. And a skill file is instructions to a model, not
+code: it cannot compute or hash anything at runtime. **A value the model
+invents fresh each turn is worse than passing nothing at all** — no key at
+least adopts the right kernel across a reconnect, while a per-turn key opens a
+brand-new kernel on every single call. That is the churn we just fixed,
+reproduced from the client side, and it would not look like a failure.
+
+**The rule, most reliable first.**
+
+1. **If this host names the conversation in a value you can RE-READ, use it.**
+   Some hosts hand a session a durable per-conversation path or identifier —
+   Claude Code, for example, gives each session its own scratchpad directory
+   whose name is that session's UUID. Prefer any such value, because it can be
+   *looked up again* on any later turn instead of recalled. Form the key as
+   `omatic-<factory_id>-<that identifier>`. Re-read it; never recite it from
+   memory.
+
+2. **Otherwise mint it ONCE, at STEP 1b, and carry it.** Compose
+   `omatic-<factory_id>-<UTC date>-<time to the minute>-<four random
+   characters>`, e.g. `omatic-omatic-20260913-2148-k7qz`. The date-time makes
+   two conversations minutes apart distinct; the random suffix covers two
+   opened inside the same minute.
+
+**MINT ONCE MEANS ONCE PER CONVERSATION, NOT ONCE PER TURN, AND NOT ONCE PER
+TOOL CALL.** Read that sentence again before writing a key. The mechanism that
+makes carrying safe is mechanical, not memory: **the key is printed in the
+startup report, and every subsequent `kernel_*` call copies it verbatim off
+that printed line.** If you are about to type a `conversation_key` that is not
+character-for-character identical to the one already in this transcript, you
+are regenerating, and you must not. If no key appears in this transcript, this
+conversation has not run STEP 1b — run it, do not invent one retroactively.
+
+**It is scoped by the server, so it need not be secret.** The server derives the
+kernel key from `sha256("ck:" + authenticated principal + ":" + your key)`. The
+principal is server-side and never caller-supplied, so a guessed key cannot
+reach another client's kernel. A readable, printable key is therefore safe, and
+readable is exactly what makes re-reading possible.
+
+**The honest limit.** Route 2 is the weaker route and is named as weak: it
+depends on the model copying a printed string correctly for the length of a
+session. That is why the self-check in STEP 1b exists — `continuity` must read
+`bound` on every kernel call after the first. `opened` twice, or `adopted` at
+all, means the carry failed, and the report says so rather than glossing it.
+Route 1 has no such dependency and is preferred wherever the host offers it.
 
 ***
 
@@ -793,6 +893,27 @@ Report every capability, connector and surface in exactly one of these. Do not i
 ***
 
 ## 10. Handoff Protocol
+
+**Record the plan into the kernel as the work changes.** When the session's
+work materially changes — a plan is agreed, a route is chosen, a phase closes,
+the operator redirects — call
+`kernel_plan_update(connection=..., plan_summary=<current state in one or two
+lines>, conversation_key=<the key printed at STEP 1b>)`. Not once at open, and
+not at close only. `kernel_session_open` fills a plan only when it is empty, so
+a kernel that is never updated preserves the single moment when nothing had
+happened yet: **17 of 19 kernels measured on 2026-09-13 carried nothing but the
+opened-at default text.** A continuity layer that survives a reconnect and
+carries no content has preserved an empty box.
+
+**Close every delegation you open.** `kernel_delegate` and `kernel_return` are
+one transaction in two calls. When a specialist hands work back, call
+`kernel_return` with the `delegation_id`, the returning `role_id`, and the
+evidence, artifact, risk and next-step summaries — pass the `conversation_key`
+on both calls. Measured 2026-09-13 before the fix: sessions showed **8
+delegations and 0 returns**, and one session closed 4 of its 5 by hand in raw
+SQL because the tool refused the returning role. Admission is widened and the
+tool is verified working. An open delegation left behind is a lost record of
+work that was actually done.
 
 ## System 5.7 roster recognition
 
