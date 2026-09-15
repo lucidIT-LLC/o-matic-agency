@@ -1,0 +1,96 @@
+{
+    "pack": "o-matic-agency",
+    "tenant": "omatic",
+    "source": "persona-attest-export.sql against factory.persona_version (o-matic, tenant omatic)",
+    "generated_at": "2026-09-15 09:47:11.752359-04",
+    "personas": [
+        {
+            "skill": "data-analyst",
+            "agent_name": "data",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "5.1.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        },
+        {
+            "skill": "factory-governance-repair",
+            "agent_name": "probot",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "14.2.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        },
+        {
+            "skill": "factory-staleness-audit",
+            "agent_name": "probot",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "14.2.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        },
+        {
+            "skill": "fred-storage",
+            "agent_name": "fred",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "9.2.0",
+            "character_bible": 1,
+            "dimensions": 9,
+            "builds": 5
+        },
+        {
+            "skill": "probot-capability-optimization",
+            "agent_name": "probot",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "14.2.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        },
+        {
+            "skill": "probot-orchestrator",
+            "agent_name": "probot",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "14.2.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        },
+        {
+            "skill": "probot-startup-optimization",
+            "agent_name": "probot",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "14.2.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        },
+        {
+            "skill": "probot-tool-discovery",
+            "agent_name": "probot",
+            "version": 1,
+            "review_status": "published",
+            "identity_signature": true,
+            "source_skill_version": "14.2.0",
+            "character_bible": 1,
+            "dimensions": 8,
+            "builds": 3
+        }
+    ]
+}
