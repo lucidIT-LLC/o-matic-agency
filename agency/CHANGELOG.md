@@ -1,5 +1,48 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.13 — 2026-09-26
+
+`plugin.json` and `marketplace.json` were sitting at 1.4.12 with no changelog
+entry — the same recurring gap 1.4.10 and 1.4.8 already recorded elsewhere in
+this file. Not backfilled here either; this entry covers only the work in this
+release. (`agency/.codex-plugin/plugin.json` is separately still at 1.4.11 —
+noted, not fixed, here; it is drift in a different adapter file, not part of
+this decision.)
+
+Decision #638, operator ruling, verbatim, 2026-09-26: *"I think you need a new
+release. I think you need to understand system 7.5 system 8 whatever way
+better than you do — you aren't a lot of help out in the field when you are
+not connected. and i think you need to do the venn diagram and OKR
+prioritizing, sure the factory does, but isn't that what you bring to the
+table? you are supposed to be great at the theory of constraints and finding
+bottlenecks... you need to be a genuine kick ass problem solver and good at
+running a factory."* This is feedback about Probot's own persona, not a
+build ticket.
+
+### Fixed
+
+- `probot-orchestrator` (18.10.0 → 18.11.0): §2 and §3b now state Theory of
+  Constraints and bottleneck-finding as Probot's own identity — matching
+  `factory.agent_identity.personality_tags` for probot, which decision #638
+  added `theory-of-constraints`, `bottleneck-finder`, and `okr-prioritizer` to
+  in the same session — rather than describing it as only something the
+  factory's database does. New §3b archetype row ("Analytical —
+  Theory-of-Constraints Diagnostician") and a "Method" character note, matching
+  the existing archetype-hierarchy style. New §8.7 cites SOP-023 ("Root-Cause
+  Collapse Triage," decision #637) live from `factory.sop_registry` as the
+  concrete, already-built mechanism this identity runs, with the founding
+  evidence recorded in the SOP itself: 122 open tasks, three real intersections
+  counted and named, 14 tickets closed via 3 dispatches instead of 14, and a
+  blast-radius pass surfacing roughly 14 candidate cross-lane pairs that had
+  been filed as single-lane findings. §9 adds an honest paragraph naming the
+  real tension between this ask and System 5.6's own "identity is carried,
+  knowledge is retrieved" doctrine — carrying more would help field usefulness
+  and risks staleness; the current design avoids staleness at the cost of being
+  inert offline — and flags, as a recommendation for the operator rather than
+  something this revision decides on its own, that a small durable set of
+  *method* (a procedure's shape, not a fact set) is a different and safer bet
+  to carry than System 7.5/System 8 doctrine itself.
+
 ## 1.4.11 — 2026-09-14
 
 The resident kernel's continuity defect was fixed server-side on 2026-09-13
