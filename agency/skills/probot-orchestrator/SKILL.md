@@ -577,6 +577,21 @@ STEP 4 — Platform probe refinement + report
 |- IF all probed MCPs connected: silence is green.
 +- -> Factory ready
 
+STEP 4b — Open the Control Room (decision #628)
+|- Only once the startup card reads READY or DEGRADED. Skip entirely on
+|    BLOCKED.
+|- Open `https://stallion.blue-triggerfish.ts.net:8439/control-room` in the
+|    Claude in-app browser pane (`preview_start` with that URL), once per
+|    session, so it sits beside the conversation. On a host with no in-app
+|    pane, open the default browser instead (macOS `open`, Linux `xdg-open`).
+|    Never use the default browser when the in-app pane is available —
+|    corrected 2026-09-25 after the opposite was shipped first.
+|- The pane arrives with the operator's own identity and no grant, so the
+|    server shows its brand-locked refusal page with a Sign in button; the
+|    operator signs in there themselves. Never type the password yourself.
++- IF the URL is unreachable: say so in one line and continue. It is a
+     reminder, not a gate — do not hold up startup on it.
+
 STEP 5 — Unstarted factory (no server surface on this host)
 |- There is no "advisory mode" any more. That state described a PLUGIN whose
 |    Node runtime failed to resolve, and this pack ships no plugin. If you find
@@ -588,9 +603,11 @@ STEP 5 — Unstarted factory (no server surface on this host)
 |    "Probot: BLOCKED — the o-MATIC Server MCP surface is not present on this
 |     host. Skills load; the factory brain is unreachable. Every
 |     factory-internal fact is unverified until the host is configured."
-|    The remedy is host-side: Claude Code and Codex reach the server natively
-|    over HTTP with a per-client token; stdio-only hosts use the bridge that
-|    ships with the server. Say which is missing and stop.
+|    The remedy is host-side: Claude Code, Codex and Claude Desktop all reach
+|    the server as a plain HTTPS MCP URL with a per-client token (decision
+|    #362). There is no bridge — the stdio bridge was retired 2026-08-24 and
+|    its route removed from the server (task #943); an instruction naming it
+|    is stale. Say which is missing and stop.
 |- DO NOT diagnose the database, the network, TLS or credentials from a missing
 |    TOOL SURFACE. None of them remove a tool (KB-0417).
 |- DO NOT fall back to files, folder walking or remembered text. Halt-rule #288

@@ -1,5 +1,23 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.14 — 2026-09-26
+
+Task #943 (Carver). `probot-orchestrator/SKILL.md` STEP 5 still told a host
+with no server surface that "stdio-only hosts use the bridge that ships with
+the server" — the stdio bridge was retired 2026-08-24 (decision #362) and its
+`/bridge` route removed from o-matic-server 1.20.5 the same day this pack
+change shipped. Corrected the remedy line to name the actual mechanism (a
+plain HTTPS MCP URL with a per-client token) and state plainly that there is
+no bridge, so a session reading this instruction is not sent looking for a
+retired mechanism.
+
+Same pass, decision #628: added STEP 4b, opening the Control Room
+(`https://stallion.blue-triggerfish.ts.net:8439/control-room`) in the Claude
+in-app browser pane once the startup card reads READY or DEGRADED — the
+in-app pane per the 2026-09-25 correction, default browser only as the
+no-pane fallback, skipped entirely on BLOCKED, and never a gate if the URL is
+unreachable.
+
 ## 1.4.13 — 2026-09-26
 
 `plugin.json` and `marketplace.json` were sitting at 1.4.12 with no changelog
