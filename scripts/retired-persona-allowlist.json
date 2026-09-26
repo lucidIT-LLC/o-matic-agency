@@ -1,0 +1,15 @@
+{
+  "_comment": [
+    "Every retired persona name is fine to WRITE about (to forbid it, explain the",
+    "retirement, or point at its replacement) but must never appear as a skill's",
+    "own identity or as a live instruction/path/reference. Task #777/#800."
+  ],
+  "retired": [
+    {
+      "name": "tim",
+      "replaced_by": "probot-tool-discovery, probot-capability-optimization, probot-startup-optimization",
+      "decision": "task #655",
+      "reason": "Tim's factory tool-inventory and optimization lanes were split into three bounded Probot lanes; the agent-pack was regenerated to drop retired agent Tim (task #655). No standing persona named Tim ships from this pack."
+    }
+  ]
+}
