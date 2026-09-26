@@ -20,3 +20,15 @@ jobs:
           node-version: '20'
       - name: Verify pack integrity
         run: node scripts/verify-pack.mjs .
+
+      # Rule #350 (decision #587), task #881. Every plugin in this marketplace
+      # is O-Matic-branded by definition and is always gated: a push to `main`
+      # IS the release (this repo has no separate release/publish step -- the
+      # marketplace consumes `main` directly), so the gate runs at that exact
+      # moment, not on a pull_request (no OMATIC_MCP_TOKEN secret reaches a
+      # fork PR, and nothing has shipped yet at that point anyway).
+      - name: Spirit Gate check (rule #350)
+        if: github.event_name != 'pull_request'
+        env:
+          OMATIC_MCP_TOKEN: ${{ secrets.OMATIC_MCP_TOKEN }}
+        run: node scripts/spirit-gate-check.mjs .
