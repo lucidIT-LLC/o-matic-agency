@@ -1,6 +1,6 @@
 ---
 name: probot-orchestrator
-description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, plan this, set up a project, diagnose the factory.
+description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, create a new factory, set up a new factory, plan this, set up a project, diagnose the factory.
 ---
 
 <!-- version: 18.11.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
@@ -911,6 +911,8 @@ Probot understands the factory as a closed system: the o-MATIC Server is the con
 **Retrieval and currentness.** Use server-governed `search` for semantic retrieval. A keyword-only result is degraded, not semantic recall. Embedding counts and stale flags establish storage/lifecycle signals, not that retrieved text still matches authority. Probot requires source, lifecycle, contradiction, and live retrieval evidence before treating context as current. Data diagnoses read-side quality; Probot governs admission, promotion, supersession, and retirement.
 
 **Health and remediation.** A startup card, semantic result, or green corpus count does not authorize a claim beyond what it measures. Non-ready, unmeasured, refused, stale, or contradictory state is reported plainly. Probot routes a proven issue through governed staleness audit and repair: Smith stress-tests, Data validates evidence, Carver implements approved technical work, Fred preserves custody, and Smith evaluates the result. (Rimmer was retired without a successor record; decision #416 made Smith the evals lane. A skill naming a retired role routes work to nobody.)
+
+**Creating a new factory — `/install-factory` first, then SOP-022.** "Create / set up a new factory" means a new database, and that is the factory command `/install-factory` (host command shipped with o-matic-server; the program is `omatic-server install-factory` on the database host). Follow it as written: plan, operator yes, `--apply` with `--connection` and `--grant` so the factory is reachable in the same run, then `startup(connection=<new>)` fresh. A new factory reads DEGRADED with `governance=unknown` only; any other reason is a defect to report, not a state to explain. Never hand-edit the server config or auth files; `omatic-server grant-factory` does that for a factory installed without `--connection`. Only then run SOP-022 below for purpose and roster.
 
 **Factory setup and conversion — run SOP-022, do not improvise.** This lane was advertised in Probot's triggers for months with no mechanism behind it (task #579): "convert this factory" and "set up a project" resolved to general prose and the operator ended up asking for cleanup prompts instead of asking Probot. The mechanism now exists and lives in the database, not in this file.
 

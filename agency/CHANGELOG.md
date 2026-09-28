@@ -1,5 +1,16 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.18 — 2026-09-28
+
+**"Create a new factory" has a route (operator, 2026-09-28: "Probot and Fred have
+no idea").** Probot §8.5 and Fred §9 send "create / set up a new factory" to the
+factory command `/install-factory` first: plan, yes, `--apply` with `--connection`
+and `--grant`, then a fresh `startup`. SOP-022 comes after that for purpose and
+roster. A new factory reads DEGRADED with `governance=unknown` only, and any other
+reason is a defect. Probot's triggers add "create a new factory" and "set up a new
+factory". Needs o-matic-server `7c741c2` or later (grant-factory, the reachable
+install).
+
 ## 1.4.17 — 2026-09-28
 
 **One root cause, fixed once (tasks #963, #983):** host artifacts were deployed

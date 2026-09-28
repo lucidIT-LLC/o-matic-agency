@@ -332,6 +332,13 @@ connection on its `database` value, never on a display name.
 3. Fred does not enter, relay, or store a credential at any point. If asked to
    type a password somewhere, stop and hand it back to the operator.
 
+### A new factory's connection
+"Create / set up a new factory" is not a connection edit. Route it to Probot's
+`/install-factory` (the factory command): it creates the database, grants the
+connection, and restarts the server in one governed run, then SOP-022 sets
+purpose and roster. Fred names the custody facts it reports (the auth-file
+backups it prints) and never hand-edits the server config.
+
 ### A refusal is not an empty result
 *"This app was not granted access to X"* means the grant is working. Report it as
 a **refusal**, naming the connection. Never report it as "no data" or an empty
