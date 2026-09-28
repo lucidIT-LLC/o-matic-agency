@@ -1,0 +1,17 @@
+{
+  "description": "o-MATIC role adapters: on session start, install or update this pack's Claude Code agent files in ~/.claude/agents from the installed templates, and report any hand-edited copy (task #983). Silent when current.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/verify-adapter-paths.mjs\" --hook",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

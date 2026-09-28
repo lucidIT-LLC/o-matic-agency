@@ -1,0 +1,112 @@
+{
+ "_comment": "Commons kb.documents rows whose status is 'retired'. Input to verify-pack.mjs check 6: a shipped instruction file may not cite one as current authority. Exported through the o-MATIC Server (connection whose database is factory_commons): SELECT id, title FROM kb.documents WHERE status = 'retired'. Re-export when a document is retired; the list only grows.",
+ "exported_at": "2026-09-28",
+ "source": "Commons kb.documents.status (the structured column, never a document's own prose)",
+ "retired": [
+  {
+   "kb": "KB-0007",
+   "id": 7,
+   "title": "Data-O-Matic (Data) — O-Matic Data Analyst"
+  },
+  {
+   "kb": "KB-0008",
+   "id": 8,
+   "title": "Find-O-Matic (Fred) — O-Matic Workspace Manager"
+  },
+  {
+   "kb": "KB-0009",
+   "id": 9,
+   "title": "Orch-O-Matic (Probot) — O-Matic Project Orchestrator"
+  },
+  {
+   "kb": "KB-0010",
+   "id": 10,
+   "title": "README"
+  },
+  {
+   "kb": "KB-0014",
+   "id": 14,
+   "title": "Eval-O-Matic (Rimmer) — O-Matic Agent Evaluator"
+  },
+  {
+   "kb": "KB-0042",
+   "id": 42,
+   "title": "The O-Matic Factory Standard"
+  },
+  {
+   "kb": "KB-0048",
+   "id": 48,
+   "title": "Factory Conversion Playbook"
+  },
+  {
+   "kb": "KB-0051",
+   "id": 51,
+   "title": "O-Matic Factory Blueprint — Nuts to Soup (split into KB-0478/0479/0477, decision #435/#436)"
+  },
+  {
+   "kb": "KB-0057",
+   "id": 57,
+   "title": "TheNest Factory 2.0 Rebuild — Startup Failure Root Cause"
+  },
+  {
+   "kb": "KB-0073",
+   "id": 73,
+   "title": "Cowork Factory Root Resolution — Durable Factory Anchor"
+  },
+  {
+   "kb": "KB-0411",
+   "id": 411,
+   "title": "Latest Factory Setup Audit Checklist (successor KB-0461)"
+  },
+  {
+   "kb": "KB-0416",
+   "id": 416,
+   "title": "Standard — Every Factory Must Probe the Embedding Endpoint"
+  },
+  {
+   "kb": "KB-0422",
+   "id": 422,
+   "title": "Factory Advisory FA-2026-04 — Factory 4.0"
+  },
+  {
+   "kb": "KB-0429",
+   "id": 429,
+   "title": "Factory Advisory FA-2026-05"
+  },
+  {
+   "kb": "KB-0430",
+   "id": 430,
+   "title": "Conductor Codex Pairing Can Carry the Wrong Factory Grant Set"
+  },
+  {
+   "kb": "KB-0434",
+   "id": 434,
+   "title": "System 5.2 Architecture and Control Narrative"
+  },
+  {
+   "kb": "KB-0435",
+   "id": 435,
+   "title": "System 5.2 Supported Client Stack Contract"
+  },
+  {
+   "kb": "KB-0439",
+   "id": 439,
+   "title": "Factory Advisory FA-2026-07"
+  },
+  {
+   "kb": "KB-0440",
+   "id": 440,
+   "title": "Factory Advisory FA-2026-08"
+  },
+  {
+   "kb": "KB-0441",
+   "id": 441,
+   "title": "Factory Advisory FA-2026-09"
+  },
+  {
+   "kb": "KB-0444",
+   "id": 444,
+   "title": "Gutenberg in 2026"
+  }
+ ]
+}

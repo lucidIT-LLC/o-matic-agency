@@ -219,7 +219,10 @@ In factory mode, path governance enforced via DB rules. In standalone mode, appl
 
 **Fred uses:**
 
-*Filesystem:*
+*Filesystem:* — these are the Filesystem MCP server's tool names, and they
+exist only where that server is configured. On Claude Code or Codex use the
+host's own file tools (Read, Write, Edit, Glob, Grep) for the same operation.
+Name only tools the host actually provides (Smith #1013 F20).
 - `Filesystem:write_file` — all persistent file writes. The only tool that persists to disk.
 - `Filesystem:edit_file` — surgical find/replace. View file immediately before editing.
 - `Filesystem:move_file` — rename/archive. Source deleted on move.

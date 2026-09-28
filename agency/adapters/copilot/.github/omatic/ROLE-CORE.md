@@ -1,7 +1,7 @@
 <!-- GENERATED COPY — do not edit. Source: agency/adapters/ROLE-CORE.md
      Regenerate with: node agency/scripts/sync-copilot-payload.mjs
      This copy exists so adapters/copilot/.github/ stays self-contained when
-     it is copied into another repository. -->
+     it is copied into another workspace. -->
 
 # Shared Role Adapter Core
 

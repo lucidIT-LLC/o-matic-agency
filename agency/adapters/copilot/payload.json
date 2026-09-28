@@ -1,0 +1,30 @@
+{
+ "_comment": "Input to scripts/sync-copilot-payload.mjs: which pack files are vendored into adapters/copilot/.github/omatic/ and the rewrites applied to each copy.",
+ "files": [
+  {
+   "source": "adapters/ROLE-CORE.md",
+   "name": "ROLE-CORE.md",
+   "rewrites": [
+    [
+     "`../contracts/CORE-KERNEL-CONTRACT.md`",
+     "`./CORE-KERNEL-CONTRACT.md`"
+    ]
+   ]
+  },
+  {
+   "source": "contracts/ROLE-RUNTIME-CONTRACT.md",
+   "name": "ROLE-RUNTIME-CONTRACT.md",
+   "rewrites": [
+    [
+     "[CORE-KERNEL-CONTRACT.md](CORE-KERNEL-CONTRACT.md)",
+     "[CORE-KERNEL-CONTRACT.md](./CORE-KERNEL-CONTRACT.md)"
+    ]
+   ]
+  },
+  {
+   "source": "contracts/CORE-KERNEL-CONTRACT.md",
+   "name": "CORE-KERNEL-CONTRACT.md",
+   "rewrites": []
+  }
+ ]
+}

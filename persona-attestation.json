@@ -1,96 +1,113 @@
 {
-    "pack": "o-matic-agency",
-    "tenant": "omatic",
-    "source": "persona-attest-export.sql against factory.persona_version (o-matic, tenant omatic)",
-    "generated_at": "2026-09-28 (fred updated for decision #672: persona v2 current, signature 2c906db5)",
-    "personas": [
-        {
-            "skill": "data-analyst",
-            "agent_name": "data",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "5.1.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        },
-        {
-            "skill": "factory-governance-repair",
-            "agent_name": "probot",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "14.2.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        },
-        {
-            "skill": "factory-staleness-audit",
-            "agent_name": "probot",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "14.2.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        },
-        {
-            "skill": "fred-storage",
-            "agent_name": "fred",
-            "version": 2,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "10.0.0",
-            "character_bible": 1,
-            "dimensions": 9,
-            "builds": 6
-        },
-        {
-            "skill": "probot-capability-optimization",
-            "agent_name": "probot",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "14.2.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        },
-        {
-            "skill": "probot-orchestrator",
-            "agent_name": "probot",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "14.2.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        },
-        {
-            "skill": "probot-startup-optimization",
-            "agent_name": "probot",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "14.2.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        },
-        {
-            "skill": "probot-tool-discovery",
-            "agent_name": "probot",
-            "version": 1,
-            "review_status": "published",
-            "identity_signature": true,
-            "source_skill_version": "14.2.0",
-            "character_bible": 1,
-            "dimensions": 8,
-            "builds": 3
-        }
-    ]
+ "schema": 2,
+ "pack": "o-matic-agency",
+ "tenant": "omatic",
+ "source": "scripts/persona-attest-export.sql through the o-MATIC Server (connection whose database is o-matic), public.v_persona_version_gate recomputed signatures + factory.persona_build, tenant omatic. Exported 2026-09-28 by Carver for task #1002 (schema 2: signature strings, declares_identity).",
+ "generated_at": "2026-09-28 15:00:53.876778-04:00",
+ "personas": [
+  {
+   "skill": "data-analyst",
+   "agent_name": "data",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "c8fb48ecc1d327e966d0bd7b39b76be7",
+   "declares_identity": true,
+   "verdict": "PASS",
+   "source_skill_version": "5.1.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "factory-governance-repair",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "978ed5a5b2c9deab1b4d070096222da2",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "factory-staleness-audit",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "978ed5a5b2c9deab1b4d070096222da2",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "fred-storage",
+   "agent_name": "fred",
+   "version": 2,
+   "review_status": "published",
+   "identity_signature": "2c906db5b2df11acbc6fcc0855a27190",
+   "declares_identity": true,
+   "verdict": "PASS",
+   "source_skill_version": "10.0.0",
+   "character_bible": 1,
+   "dimensions": 9,
+   "builds": 1
+  },
+  {
+   "skill": "probot-capability-optimization",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "978ed5a5b2c9deab1b4d070096222da2",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "probot-orchestrator",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "978ed5a5b2c9deab1b4d070096222da2",
+   "declares_identity": true,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "probot-startup-optimization",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "978ed5a5b2c9deab1b4d070096222da2",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "probot-tool-discovery",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "978ed5a5b2c9deab1b4d070096222da2",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  }
+ ]
 }

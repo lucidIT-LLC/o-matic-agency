@@ -1,5 +1,60 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.17 — 2026-09-28
+
+**One root cause, fixed once (tasks #963, #983):** host artifacts were deployed
+by hand on one Mac instead of being derived from the pack, so they could not be
+restored, shipped to the second Mac, or kept current. Now the pack delivers them.
+
+- **Role adapters deploy themselves.** `hooks/hooks.json` runs
+  `scripts/verify-adapter-paths.mjs --hook` on SessionStart: it installs this
+  pack's Claude Code agent files into `~/.claude/agents/` when missing, updates
+  one that is still exactly what was last deployed, and reports (never
+  overwrites) a hand-edited copy. `--deploy` adopts legacy copies, backing them
+  up under `~/.claude/state/adapter-backups/` (outside the agents directory,
+  which Claude Code scans recursively).
+- **No versioned path survives.** Agent templates preload their skills through
+  frontmatter `skills:` and reach ROLE-CORE / contracts relative to the preloaded
+  skill's base directory. A versioned plugin-cache path in any deployed adapter
+  now FAILS on sight, whatever version it names. Fixtures:
+  `scripts/verify-adapter-paths.test.mjs` (11 cases, proven able to fail).
+- **CI can pass (task #1002).** The Spirit Gate step needed a token for, and a
+  route into, a tailnet-only server; it is now the local pre-release step and is
+  env-driven with no estate default URL or tenant. CI instead runs
+  `scripts/verify-identity-attestation.mjs`: every shipped identity_signature
+  must equal the committed gold-record export (`persona-attestation.json`,
+  schema 2, from `scripts/persona-attest-export.sql`). Offline, deterministic,
+  proven to fail on a planted mismatch.
+- **Checks that fail on the class (Smith #1013 RC-2, F9, F11, F12).**
+  verify-pack 2.0.0 adds: retired KB cited as current (list exported from
+  Commons `kb.documents.status` into `scripts/retired-kb.json`), a connection
+  name written as a literal, a private tailnet address, and a version-pinned
+  cache path. CI now also runs check-paths, the Copilot payload `--check`, the
+  adapter fixtures and any hook fixture suite. One canonical copy of all pack
+  tooling lives in o-matic-studio and is synced by `scripts/sync-pack-tooling.mjs`
+  (`--check` fails on drift); sync-copilot-payload reads a per-pack
+  `adapters/copilot/payload.json` so one script serves every pack.
+- **Removed:** `sync-shared.mjs` and `shared/system-5-detection.md` — zero
+  consumers; the fragment shipped in three repos and was loaded by nothing
+  (Smith #1013 F10). History keeps it.
+- **Smith #1013 / Data audit fixes.** The daily conformance recorder reads its
+  connection off the wire (database `o-matic`), its tenant from the startup
+  card and its URL from the environment, calls `startup` before
+  `factory_query`, and writes a legal `overall_status` and an array
+  `standards_checked` (F2, F6, F8, F17; two latent constraint violations were
+  hidden behind the earlier refusal). The wire-resolution conformance case
+  asserts behavior, not one factory's connection spelling (F3).
+  `scheduled-live-run.sh selftest` no longer needs a credential (F16).
+  probot-orchestrator: STEP 2 lists the fields the startup packet really
+  returns (C4); the Control Room URL is derived from the host's own endpoint
+  (F7); KB-0051 is no longer cited as current (F9); identity header restamped
+  to the published record's 978ed5a5. factory-governance-repair cites
+  KB-0478/KB-0479 (F9). data-analyst: server `search`, never a hand-built
+  vector (F18); no deleted connection tools (F19); host-neutral file tools
+  (F20); no `fn_refresh_caches` (H1). fred-storage: Filesystem tool names are
+  marked host-specific (F20). factory-staleness-audit: the view-vs-table shape
+  is per factory (H2).
+
 ## 1.4.16 — 2026-09-28
 
 Tasks #989/#990: probot-orchestrator STEP 4c runs the project's bootstrap

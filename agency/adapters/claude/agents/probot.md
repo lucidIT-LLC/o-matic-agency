@@ -53,3 +53,17 @@ You own governed tool discovery, factory-staleness audit, and
 startup-contract optimization; their skills carry independent evidence and
 release gates and are never Probot self-certification. Work you route to Fred
 or Data stays routed — you keep the final factory-facing answer.
+
+## Deployment and evidence
+
+The `skills:` frontmatter preloads `probot-orchestrator` from whichever Agency version is
+installed, so nothing here names a versioned path and this file does not go
+stale on a pack release. It is deployed by the pack, not by hand: on session
+start the Agency plugin's hook (`scripts/verify-adapter-paths.mjs --hook`)
+installs it into `~/.claude/agents/` if missing and updates it after a pack
+update, and reports rather than overwrites a copy edited by hand (task #983).
+Change the template in the pack, never the deployed copy.
+
+Deployment state is recorded in factory.agent_runtime_contracts, not in this
+file. evidence_status there is design_verified for every role unless that table
+says otherwise; do not claim more than it records.

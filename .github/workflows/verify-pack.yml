@@ -1,9 +1,16 @@
 name: verify-pack
 
-# Task #659: none of the four shipped marketplace repos had any CI. The pack
-# verifier existed but ran only when a human remembered, from a sibling path
-# that exists solely in the maintainer's local layout -- so it was a check that
-# could not fail anything on a clone. This is the moment at which it can.
+# CANONICAL SOURCE: o-matic-studio/.github/workflows/verify-pack.yml. Copied
+# byte-for-byte into o-matic-firm and o-matic-agency by
+# scripts/sync-pack-tooling.mjs; every step discovers the plugin directory
+# rather than naming it, so one file serves all three packs.
+#
+# Task #659: the four marketplace repos had no CI. Task #1002: the Spirit Gate
+# step that followed could never pass here -- it needed a token for, and a route
+# into, a tailnet-only server. CI now checks what it can check deterministically
+# and offline; the live Spirit Gate (scripts/spirit-gate-check.mjs) is the local
+# pre-release step, run where the server is reachable. Smith #1013 F11: the
+# drift and path checks that existed but never ran in CI are wired below.
 on:
   push:
     branches: [main]
@@ -20,15 +27,26 @@ jobs:
           node-version: '20'
       - name: Verify pack integrity
         run: node scripts/verify-pack.mjs .
-
-      # Rule #350 (decision #587), task #881. Every plugin in this marketplace
-      # is O-Matic-branded by definition and is always gated: a push to `main`
-      # IS the release (this repo has no separate release/publish step -- the
-      # marketplace consumes `main` directly), so the gate runs at that exact
-      # moment, not on a pull_request (no OMATIC_MCP_TOKEN secret reaches a
-      # fork PR, and nothing has shipped yet at that point anyway).
-      - name: Spirit Gate check (rule #350)
-        if: github.event_name != 'pull_request'
-        env:
-          OMATIC_MCP_TOKEN: ${{ secrets.OMATIC_MCP_TOKEN }}
-        run: node scripts/spirit-gate-check.mjs .
+      - name: Persona identity matches the committed attestation (offline, task #1002)
+        run: node scripts/verify-identity-attestation.mjs .
+      - name: Per-plugin checks (paths, Copilot payload drift, adapter deploy fixtures)
+        run: |
+          set -e
+          for manifest in */.claude-plugin/plugin.json; do
+            plugin="$(dirname "$(dirname "$manifest")")"
+            echo "== $plugin"
+            node "$plugin/scripts/check-paths.mjs"
+            node "$plugin/scripts/sync-copilot-payload.mjs" --check
+            node "$plugin/scripts/verify-adapter-paths.test.mjs"
+          done
+      - name: Hook fixture suites
+        run: |
+          set -e
+          found=0
+          for suite in */hooks/*_fixtures.py; do
+            [ -e "$suite" ] || continue
+            found=1
+            echo "== $suite"
+            python3 "$suite"
+          done
+          [ "$found" = 1 ] || echo "no hook fixture suites in this pack"

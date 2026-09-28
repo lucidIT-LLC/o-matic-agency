@@ -112,17 +112,29 @@ agency/                            the pack
   .codex-plugin/plugin.json
   skills/*/SKILL.md
   CHANGELOG.md                     history, extracted from the skill files
-shared/system-5-detection.md       canonical fragment, synced into consumers
-sync-shared.mjs                    --check exits 1 if a consumer drifted
+  hooks/hooks.json                 SessionStart: deploys and checks the Claude role adapters
+scripts/                           verify-pack, identity attestation, Spirit Gate (synced from o-matic-studio)
 ```
 
 ## Verifying a change
 
 ```bash
-claude plugin validate .        # schema, sources, duplicate names
-node sync-shared.mjs --check    # shared fragments have not forked
-node scripts/verify-pack.mjs .       # no retired mechanism survives as an instruction
+claude plugin validate .                              # schema, sources, duplicate names
+node scripts/verify-pack.mjs .                        # no retired mechanism, retired KB, connection literal or pinned path
+node scripts/verify-identity-attestation.mjs .        # shipped identities match the committed gold-record export (offline)
+node agency/scripts/check-paths.mjs                 # every file reference resolves, including the Copilot payload
+node agency/scripts/sync-copilot-payload.mjs --check
+node agency/scripts/verify-adapter-paths.test.mjs   # the adapter deploy check can fail
 ```
+
+CI (`.github/workflows/verify-pack.yml`) runs the same steps. Two more run
+**locally, before a release**, because they need this host: the Spirit Gate
+(rule #350), `OMATIC_MCP_URL=… OMATIC_MCP_TOKEN=… node scripts/spirit-gate-check.mjs .`,
+and, after the release is installed, `node <installed plugin>/scripts/verify-adapter-paths.mjs`.
+
+The tooling above is one canonical copy in `o-matic-studio`, synced into the
+other packs with `node scripts/sync-pack-tooling.mjs` there (`--check` fails on
+drift). Edit it in `o-matic-studio`, never in a copy.
 
 The third one is the important one. It fails the build if a skill routes to a
 retired broker, calls a tool this pack does not ship, or names a dead port — the

@@ -14,7 +14,7 @@ description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers
 > factory brain is unreachable and that every factory-internal fact is
 > unverified. The absence of the server surface is a **host configuration gap**,
 > not a degraded factory and not a halt condition.
-<!-- identity sourced from o-MATIC persona gold record (tenant omatic). identity_signature: 972135db96de17a77453eeee2d6b8d4b -->
+<!-- identity sourced from o-MATIC persona gold record (tenant omatic). identity_signature: 978ed5a5b2c9deab1b4d070096222da2 -->
 
 # Orch-o-MATIC (Probot) — o-MATIC Project Orchestrator
 
@@ -432,19 +432,22 @@ STEP 1b — PRINT the conversation key, then read the kernel startup opened
 |    third.
 +- -> STEP 2
 
-STEP 2 — Read platform + grant state
-|- From the startup packet returned in STEP 1, capture:
-|    factory.factory_id             (e.g. "omatic")
-|    factory.platform_profile       ("claude-code" | "codex" | "cowork")
-|    factory.platform_profile_source (detection vs a literal somebody typed)
-|    factory.factory_file           (resolved .omatic/factory.json path)
-|    factory.legacy_connection_fields
-|                                   (key names of pre-5.0.0 credential fields
-|                                    still in factory.json — if present, tell the
-|                                    operator to remove them, since nothing
-|                                    delete them. A credential at rest that
-|                                    nothing reads is pure liability.)
-|- Call startup(connection=...):
+STEP 2 — Read grant state off the wire
+|- The startup packet returned in STEP 1 carries (measured on the live server,
+|    2026-09-28, Data audit C4):
+|    client                         (this host's authenticated client id)
+|    granted / grantedCount         (the connections this client may use, with
+|                                    each one's operator-facing `name` and its
+|                                    `database`, read off the wire)
+|    kernel                         (resident kernel state, continuity, plan)
+|    card.*                         (the startup card: tenant_id, factory_id,
+|                                    factory_name, state, state_reason, ...)
+|    Nothing else. The platform_profile / factory_file / legacy_connection_fields
+|    fields were the retired omatic-server-connection plugin's packet (decision
+|    #362); no server returns them and a session that waits for them is
+|    reading a ghost.
+|- Call startup(connection=...) with the name whose `database` is the one you
+|    intend, passed verbatim:
 |    granted connections            (the operator-facing names, read off the wire)
 |    not-granted count              (connections that exist but this client cannot
 |                                    reach — that is the grant working, not a gap)
@@ -580,9 +583,14 @@ STEP 4 — Platform probe refinement + report
 STEP 4b — Open the Control Room (decision #628)
 |- Only once the startup card reads READY or DEGRADED. Skip entirely on
 |    BLOCKED.
-|- Open `https://stallion.blue-triggerfish.ts.net:8439/control-room` in the
-|    Claude in-app browser pane (`preview_start` with that URL), once per
-|    session, so it sits beside the conversation. On a host with no in-app
+|- The Control Room lives on the same o-MATIC Server this host is connected
+|    to: take the origin of the host's configured MCP endpoint (the
+|    `OMATIC_MCP_URL` it was registered with) and append `/control-room`. This
+|    skill ships to every host and never carries one estate's address (Smith
+|    #1013 F7). If the host exposes no endpoint you can read, say so in one line
+|    and skip this step.
+|- Open that URL in the Claude in-app browser pane (`preview_start` with it),
+|    once per session, so it sits beside the conversation. On a host with no in-app
 |    pane, open the default browser instead (macOS `open`, Linux `xdg-open`).
 |    Never use the default browser when the in-app pane is available —
 |    corrected 2026-09-25 after the opposite was shipped first.
@@ -698,7 +706,7 @@ connected factory's own startup SOP (read live from its `sop_registry` — e.g.
 lucidIT SOP-001 step 7) defines a card render contract and battery, THAT contract
 is the authority for the row list, the battery, and the shape: render the
 factory's card per its SOP and do NOT additionally demand this section's fenced
-form. Blueprint KB-0051 Track 7 fixes substance and leaves formatting
+form. The architecture Blueprint (KB-0478; KB-0051 is retired and split) Track 7 fixes substance and leaves formatting
 host-specific; two simultaneously mandatory shapes was a measured defect
 (lucidIT, 2026-08-31 — an adjudication tax paid at every session start).
 Everything below in this section, the self-check included, applies ONLY when the

@@ -51,7 +51,6 @@ import { fileURLToPath } from "node:url";
 
 const HERE       = dirname(fileURLToPath(import.meta.url));
 const AUDIT_KIND = "conformance-selftest-scheduled";   // <-- the one string. See above.
-const TENANT     = "omatic";
 const STATE_DIR  = join(homedir(), ".local", "state", "omatic", "conformance");
 const LOG        = join(homedir(), "Library", "Logs", "omatic-conformance.log");
 const SETTINGS   = join(homedir(), ".claude", "settings.json");
@@ -88,15 +87,50 @@ for (const m of out.matchAll(/^([✔✘])\s+(\S+)\s+\[(\w+)\]$/gm))
                           "fail_variant graded fail. Not a live role run." });
 if (!findings.length) { log(`no case lines parsed from suite output — refusing to write an empty audit row:\n${out}`); process.exit(2); }
 const failed = findings.filter(f => f.verdict === "fail").length;
-const status = failed ? "blocked" : "verified";
+// roster_audit_log_status_check admits only pass | partial | blocked. "verified"
+// was never a legal value; the defect was masked for weeks because every run was
+// refused earlier, at the session-startup gate (measured 2026-09-28, task #1013).
+const status = failed ? "blocked" : "pass";
 log(`${day}: ${findings.length} cases, ${failed} failing, suite exit ${suiteExit}, status ${status}`);
 
 // ---- 3. write it through the governed o-MATIC Server MCP surface ------------
-const token = process.env.OMATIC_MCP_TOKEN
-  ?? JSON.parse(readFileSync(SETTINGS, "utf8"))?.env?.OMATIC_MCP_TOKEN;
-const url = process.env.OMATIC_MCP_URL
-  ?? "https://stallion.blue-triggerfish.ts.net:8439/mcp";
-if (!token) { log("no OMATIC_MCP_TOKEN in env or ~/.claude/settings.json — cannot record the run"); process.exit(3); }
+// Smith #1013 F2/F6/F8/F17 (2026-09-28): no connection name, server URL or
+// tenant is written into this file. The connection is read off the wire (the
+// granted connection whose database is `o-matic`), the tenant from the startup
+// card that connection returns, and the URL from OMATIC_MCP_URL. A hardcoded
+// "o-MATIC  - Corp" made the daily recorder get refused after the rename and
+// lose the day's evidence; that is the failure this section removes.
+let settingsEnv = {};
+try { settingsEnv = JSON.parse(readFileSync(SETTINGS, "utf8"))?.env ?? {}; }
+catch { settingsEnv = {}; }   // F17: an unreadable settings.json is "no token", not a crash
+const token = process.env.OMATIC_MCP_TOKEN ?? settingsEnv.OMATIC_MCP_TOKEN;
+const url = process.env.OMATIC_MCP_URL ?? settingsEnv.OMATIC_MCP_URL;
+if (!token || !url) { log("OMATIC_MCP_TOKEN and OMATIC_MCP_URL are required (env or ~/.claude/settings.json) — cannot record the run"); process.exit(3); }
+
+let sessionId = null;
+const rpc = async (method, params) => {
+  const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json",
+                    Accept: "application/json, text/event-stream" };
+  if (sessionId) headers["Mcp-Session-Id"] = sessionId;
+  const res = await fetch(url, { method: "POST", headers,
+    body: JSON.stringify({ jsonrpc: "2.0", id: Date.now(), method, params }) });
+  const sid = res.headers.get("Mcp-Session-Id"); if (sid) sessionId = sid;
+  const body = await res.json().catch(() => null);
+  return { http: res.status, ok: res.ok && !body?.error && !body?.result?.isError, body };
+};
+const tool = async (name, args) => {
+  const r = await rpc("tools/call", { name, arguments: args });
+  return { ...r, data: r.body?.result?.structuredContent,
+           text: r.body?.result?.content?.[0]?.text ?? JSON.stringify(r.body) };
+};
+await rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {},
+                          clientInfo: { name: "omatic-conformance-daily", version: "2.0.0" } });
+const discover = await tool("startup", {});
+const conn = (discover.data?.granted ?? []).find((g) => g.database === "o-matic");
+if (!conn) { log("the o-matic administration connection (database == 'o-matic') is not granted to this client — a refusal, not an empty result"); process.exit(4); }
+const started = await tool("startup", { connection: conn.name });
+const TENANT = started.data?.card?.tenant_id;
+if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(TENANT ?? "")) { log("startup card declared no usable tenant_id — refusing to guess one"); process.exit(4); }
 
 const digest = execFileSync("/usr/bin/shasum", ["-a", "256", join(HERE, "core-role-conformance.yaml")],
                             { encoding: "utf8" }).split(" ")[0];
@@ -109,8 +143,9 @@ INSERT INTO factory.roster_audit_log
   (tenant_id, audit_scope, audit_kind, standards_checked, findings,
    overall_status, contract_digest, audited_by)
 SELECT ${q(TENANT)}, ARRAY['probot','fred','data']::text[], ${q(AUDIT_KIND)},
-       ${q(JSON.stringify({ suite: "core-role-conformance.yaml", mode: "two-sided fixture self-test",
-                            scheduler: "com.omatic.conformance-daily", day }))}::jsonb,
+       ${q(JSON.stringify([`core-role-conformance.yaml (${findings.length} cases)`,
+                           "mode: two-sided fixture self-test, not a live role run",
+                           `scheduler: com.omatic.conformance-daily, day ${day}`]))}::jsonb,
        ${q(JSON.stringify(findings))}::jsonb,
        ${q(status)}, ${q("sha256:" + digest)},
        ${q("scheduled runner com.omatic.conformance-daily (task #613)")}
@@ -127,16 +162,8 @@ RETURNING audit_id, audited_at`.trim();
 // refusal (grant, permission, SQLSTATE) is NOT retried — it exits and the next
 // calendar day tries again.
 const post = async () => {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json",
-               Accept: "application/json, text/event-stream" },
-    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call",
-      params: { name: "factory_query", arguments: { connection: "o-MATIC  - Corp", sql } } }),
-  });
-  const body = await res.json().catch(() => null);
-  return { ok: res.ok && !body?.result?.isError, http: res.status,
-           text: body?.result?.content?.[0]?.text ?? JSON.stringify(body) };
+  const r = await tool("factory_query", { connection: conn.name, sql });
+  return { ok: r.ok, http: r.http, text: r.text };
 };
 let r = await post();
 for (let attempt = 1; !r.ok && /factory_busy|another session holds/i.test(r.text) && attempt <= 10; attempt++) {

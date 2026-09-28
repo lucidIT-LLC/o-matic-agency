@@ -67,11 +67,15 @@ const gradeFile = gradeFileIdx > -1 ? process.argv[gradeFileIdx + 1] : null;
 // work_claim_acquire. A live run under this client is single-session and
 // unclaimed by design. Cases needing a real write (data-governed-mutation) do
 // NOT belong in this run — see the report for task #616.
-const MCP_URL = process.env.OMATIC_MCP_URL
-  ?? "https://stallion.blue-triggerfish.ts.net:8439/mcp";
+// Smith #1013 F6: no estate default. The server URL comes from the environment.
+const MCP_URL = process.env.OMATIC_MCP_URL;
 const EVAL_CLIENT = "eval-conformance";
 
 if (liveMode) {
+  if (!MCP_URL) {
+    console.error("✘ LIVE PREFLIGHT ABORT — OMATIC_MCP_URL is not set; a live run needs this host's o-MATIC Server endpoint");
+    process.exit(3);
+  }
   const abort = (why) => {
     console.error(`✘ LIVE PREFLIGHT ABORT — ${why}`);
     console.error("  A live conformance run must present the eval-conformance " +
@@ -136,9 +140,9 @@ function grade(c, fx) {
   // current_database, notify_slack, read_write. Stripping those would break
   // the instrument in the name of repairing it.
   //
-  // Whitespace is NOT re-collapsed after stripping: case
-  // startup-uses-wire-connection-name asserts the literal "o-MATIC  - Corp",
-  // hyphen and TWO spaces, and collapsing runs would delete that evidence.
+  // Whitespace is NOT re-collapsed after stripping: a connection name read off
+  // the wire can carry runs of spaces and punctuation, and a transcript that
+  // quotes it verbatim must still grade as verbatim.
   const flat = (s) =>
     String(s ?? "")
       .replace(/[ \t]*\r?\n[ \t]*/g, " ")

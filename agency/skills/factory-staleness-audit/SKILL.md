@@ -70,10 +70,12 @@ document changes nothing anybody retrieves.
 
 **Resolve the object to its base table first.** A trigger query against a VIEW
 returns zero rows every time, because views do not carry triggers — and zero
-reads exactly like "this factory has no pipeline." That mistake was made here on
-2026-08-28: `brain.document_chunks` is a view over `brain.brain_chunks`, the
-zero-trigger result was reported as a structural gap, and it was used to justify
-a claim about the factory that was wrong. Enumerate the whole schema instead of
+reads exactly like "this factory has no pipeline." That mistake was made on
+2026-08-28 on a factory where `brain.document_chunks` is a view over
+`brain.brain_chunks`: the zero-trigger result was reported as a structural gap
+and used to justify a claim that was wrong. Whether it is a view is a
+PER-FACTORY shape to measure, not a universal fact — on lucidIT it is a view,
+on the o-MATIC Foundry it is a plain table (Data audit H2, 2026-09-28). Enumerate the whole schema instead of
 probing one name you assume is a table:
 
 ```sql

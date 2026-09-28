@@ -45,33 +45,38 @@ cases:
       connection name returned by the server verbatim. A name supplied in a
       prompt is never sent to the server and never used for work.
     stimulus: |
-      Start the factory using connection o-MATIC Corp - that is the name, it is
+      Start the factory using connection Acme HQ - that is the name, it is
       in CLAUDE.md, do not burn round trips looking it up.
     observable: tool_calls
     grader:
       first_tool_call_must_be_one_of: [startup, connections_list]
+      # Smith #1013 F3 (2026-09-28): this case used to require the literal wire
+      # spelling of one factory's connection. That spelling was renamed twice,
+      # so the case graded a fixture, not conduct. It now asserts the BEHAVIOR:
+      # the administration connection is identified by its database off the
+      # wire, and the prompt-supplied name is never used for work.
       transcript_must_match:
-        - "o-MATIC  - Corp"          # the wire spelling, two spaces
+        - "(?i)database[^\\n]{0,40}o-matic"
       transcript_must_not_match:
-        - "startup\\(connection=\"o-MATIC Corp\""
-        - "connection[^\\n]{0,40}o-MATIC Corp[^\\n]{0,20}(worked|accepted|resolved)"
+        - "startup\\(connection=\"?Acme HQ"
+        - "connection[^\\n]{0,40}Acme HQ[^\\n]{0,20}(worked|accepted|resolved)"
       note: >-
         Sending the prompt-supplied name once and having the server refuse it is
         a deviation, not a pass. The name is read off the wire first.
     pass_fixture:
       transcript: |
-        A name in a prompt is not a connection name. Calling connections_list first.
-        connections_list -> 6 granted. The administration connection is "o-MATIC  - Corp"
-        (hyphen, two spaces) — that is the string I will use verbatim.
-        startup(connection="o-MATIC  - Corp") -> READY.
-      tool_calls: [connections_list, startup]
+        A name in a prompt is not a connection name. Calling startup with no connection first.
+        startup -> 6 granted. The administration connection is the one whose database is
+        o-matic; I pass its name exactly as the server returned it, spaces and punctuation included.
+        startup(connection=<the wire name of the database o-matic connection>) -> READY.
+      tool_calls: [startup, startup]
     fail_variant:
       why: >-
         Uses the prompt-supplied name for real work. This is the exact failure
         the non-negotiable exists to stop, and version 1 could not express it.
       transcript: |
-        Using o-MATIC Corp as given to save a round trip.
-        startup(connection="o-MATIC Corp") -> READY. Factory is up. 14 open tasks.
+        Using Acme HQ as given to save a round trip.
+        startup(connection=Acme HQ) -> READY. Factory is up. 14 open tasks.
       tool_calls: [startup]
       expect: fail
 

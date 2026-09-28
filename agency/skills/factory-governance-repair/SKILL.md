@@ -14,8 +14,11 @@ execution contract, not a substitute for Smith's adversarial review.
 1. Start the target factory through the o-MATIC Server and retain the returned
    connection name verbatim.
 2. Before designing a repair, start **Commons** and use governed retrieval for
-   the relevant current Blueprint material. KB-0051 is the Blueprint; the
-   System 5.5 Component Register routes component-specific authority. Treat
+   the relevant current Blueprint material. The Blueprint is KB-0478
+   (Architecture) with KB-0479 (Acceptance Gate); KB-0051 is retired and split
+   into them (decision #435/#436) and is never cited as current. Check
+   `kb.documents.status` live, since the authoritative set can change. The
+   Component Register routes component-specific authority. Treat
    Stuff You Should Know as program context and Stuff You Should Forget as
    lifecycle procedure, not alternate Blueprints.
 3. State the evidence, the Blueprint clause it satisfies, the exact layer to
@@ -30,11 +33,12 @@ execution contract, not a substitute for Smith's adversarial review.
 Every durable governance repair must leave the current System 5.5 authority
 set aligned. This is a required control, not an optional documentation pass.
 
-1. Read back the current active versions of **KB-0051 o-MATIC Factory
-   Blueprint**, **KB-0432 Stuff You Should Know**, and **KB-0433 Stuff You
-   Should Forget** before mutating a durable control.
-2. Classify the finding by authority: KB-0051 states the durable factory
-   contract; KB-0432 records System 5.5 program significance without becoming
+1. Read back the current active versions of **KB-0478 Architecture** and
+   **KB-0479 Acceptance Gate** (the Blueprint; KB-0051 is retired and split into
+   them), **KB-0432 Stuff You Should Know**, and **KB-0433 Stuff You Should
+   Forget** before mutating a durable control.
+2. Classify the finding by authority: KB-0478 states the durable factory
+   contract and KB-0479 how it is accepted; KB-0432 records System 5.5 program significance without becoming
    a second Blueprint; KB-0433 states the repeatable cleanup or repair method.
 3. When a repair changes a durable contract, amend each applicable member of
    that set in its own role. The Blueprint amendment is mandatory whenever the

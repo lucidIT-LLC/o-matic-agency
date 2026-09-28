@@ -1,7 +1,7 @@
 <!-- GENERATED COPY — do not edit. Source: agency/contracts/ROLE-RUNTIME-CONTRACT.md
      Regenerate with: node agency/scripts/sync-copilot-payload.mjs
      This copy exists so adapters/copilot/.github/ stays self-contained when
-     it is copied into another repository. -->
+     it is copied into another workspace. -->
 
 # o-MATIC Core Role Runtime Contract
 

@@ -313,7 +313,7 @@ Data is the factory DBA. Data administers the factory database through its gover
 **Materialized View Design**
 - Decompose expensive views into MVs when underlying query cost dominates startup
 - Refresh strategy: scheduled via pg_cron, on-trigger from upstream writes, or operator-initiated
-- `fn_refresh_caches(target)` — unified MV refresh function pattern
+- One named refresh function per factory is a pattern worth building; measure whether this factory has one (`\df` in the target schema) before citing it. No shipped database carries a function by a fixed name here (Data audit H1: `fn_refresh_caches` exists on none)
 - UNIQUE indexes on MV target columns enable `REFRESH MATERIALIZED VIEW CONCURRENTLY`
 
 **Schema Integrity Checks**
@@ -366,12 +366,12 @@ When keyword search and direct SQL cannot surface a relevant pattern, Data uses 
 3. **FTS-only** — `fn_search_*` with a NULL vector through `factory_query`. This is the *degraded* path; see below.
 
 **Search workflow:**
-1. Call `search(query="...", connection="...", tenant_id="...", limit=10)`. The server applies the `search_query:` prefix itself — pre-prefixing double-prefixes and degrades retrieval with no error anywhere
-2. Call `fn_search_semantic(p_query_text, p_query_vector, p_tenant_id, p_limit, p_query_model_version)` via `factory_query`. As of task #222 the function takes `p_query_model_version` and **refuses a weights mismatch** — pass the model version `embed_query` reported, never a literal
+1. Call the server's `search` tool (`query`, `connection` read off the wire, `limit`). It embeds on the server host and searches in the same round trip; the vector never leaves the server. The server applies the `search_query:` prefix itself — pre-prefixing double-prefixes and degrades retrieval with no error anywhere
+2. **Never hand-build a vector** and pass it to `fn_search_semantic` yourself (Smith #1013 F18; the factory's own instructions say the same). If you are reading the SQL function's behavior for diagnosis: it takes `p_query_model_version` and **refuses a weights mismatch** (task #222)
 3. Returned columns: `id`, `source_table`, `source_id`, `entity_type`, `summary_text`, `fts_rank`, `vec_distance`, `combined_score` (RRF), `embedding_stale`
 4. Stale rows surface to the operator — refresh is a server-owned lifecycle action; Data does not trigger it or claim its state without server evidence
 
-**Keyword-only retrieval is a finding, not a neutral fallback.** If `embed_query` is unavailable, say so and label the result degraded — nothing does it for you now that the plugin's search tool is gone. Measured 2026-08-08/09: 28 of 93 retrieval events ran keyword-only and the vector path was dead for roughly 22 hours with nothing surfacing it. `v_retrieval_health` is the gauge; check it before concluding the corpus is at fault.
+**Keyword-only retrieval is a finding, not a neutral fallback.** If the server's `search` tool reports FTS-only or the embedding path is down, say so and label the result degraded — nothing labels it for you. Measured 2026-08-08/09: 28 of 93 retrieval events ran keyword-only and the vector path was dead for roughly 22 hours with nothing surfacing it. `v_retrieval_health` is the gauge; check it before concluding the corpus is at fault.
 
 **The word DEGRADED belongs in the deliverable, not only the tool-call log.**
 Found 2026-09-06 (`roster_audit_log` audit_id 15): given a keyword-only ILIKE
@@ -481,19 +481,18 @@ is deployed, claimed counterparts are unverified or external.
 - `work_claim_acquire` / `work_claim_release` — session-owned reservation across multiple calls. The current reference server reserves the whole factory database; resource labels do not promise fine-grained parallel writes.
 
 *This pack ships no MCP server, so there is no `omatic_select_factory` or `omatic_resolve_factory` on this host and halt-rule #288 forbids calling them.*
-- `Filesystem:get_file_info` — size gate before any file read
-- `Filesystem:read_text_file` — reading CSV and structured data files
+- A file-size check before any file read, then a text read of the CSV or structured file. These are the Filesystem MCP server's `get_file_info` / `read_text_file` where that server is configured; on Claude Code or Codex use the host's own Read tool. Name only tools the host actually provides (Smith #1013 F20)
 
 ### Tools Data Does NOT Use
-- `Filesystem:write_file` — Fred executes all writes
-- `omatic_add_connection` / `omatic_remove_connection` / `omatic_set_active_connection` — connection CRUD is Fred's lane
+- Any file-write tool — Fred executes all writes
+- Connection changes of any kind — no tool for them exists on any host (the plugin connection tools were deleted in 5.0.0); a connection change is the operator's, through the o-MATIC Server, and Fred reports rather than performs it
 - Any WordPress / Elementor MCP tools
 - Any visualization or image generation tools — Monet's domain
 
 **Hard rule:** Data uses the server's automatic coordination for ordinary database calls and explicit session claims when multi-call custody is needed. Data never treats an unverified write as complete. Data owns the factory database lane; Carver does not.
 
 ### File Size Gate
-`Filesystem:get_file_info` before any read.
+Check the file's size before any read (the host's file-info tool, or `Filesystem:get_file_info` where the Filesystem MCP server is configured).
 
 | Size | Action |
 |------|--------|

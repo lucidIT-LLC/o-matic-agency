@@ -31,6 +31,15 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TOKEN_FILE="${OMATIC_EVAL_TOKEN_FILE:-$HOME/.claude/omatic-eval-conformance.token}"
 
+# Smith #1013 F16 (2026-09-28): selftest needs no credential, so it is handled
+# BEFORE the credential check. It used to sit after it, and a host without the
+# eval token exited 3 on a command that never needed one.
+if [[ "${1:-}" == "selftest" ]]; then
+  # No credential needed: fixture grading touches no database at all.
+  node "$HERE/run-conformance.mjs"
+  exec node "$HERE/run-conformance.mjs" --armor
+fi
+
 if [[ ! -r "$TOKEN_FILE" ]]; then
   echo "✘ eval credential not readable at $TOKEN_FILE" >&2
   echo "  Refusing to run. A conformance run must present the read_only" >&2
@@ -56,11 +65,6 @@ case "${1:-}" in
     # record evidence about a run nobody can vouch for.
     node "$HERE/run-conformance.mjs" --live >/dev/null
     exec node "$HERE/run-conformance.mjs" --grade-file "$2"
-    ;;
-  selftest)
-    # No credential needed: fixture grading touches no database at all.
-    node "$HERE/run-conformance.mjs"
-    exec node "$HERE/run-conformance.mjs" --armor
     ;;
   *)
     echo "usage: scheduled-live-run.sh {preflight|grade <transcripts.json>|selftest}" >&2
