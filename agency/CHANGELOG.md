@@ -1,5 +1,12 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.16 — 2026-09-28
+
+Tasks #989/#990: probot-orchestrator STEP 4c runs the project's bootstrap
+check (`_omatic/scripts/check-bootstrap-manifest-drift.py`) once per session
+when the project carries it: heal a missing pointer file, report drift, and
+record the run in the database. Never `--accept-drift` without the operator.
+
 ## 1.4.15 — 2026-09-28
 
 Task #759, decision #672: the operator chose **warm Fred (v2)** as the live

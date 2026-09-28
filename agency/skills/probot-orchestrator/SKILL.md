@@ -592,6 +592,16 @@ STEP 4b — Open the Control Room (decision #628)
 +- IF the URL is unreachable: say so in one line and continue. It is a
      reminder, not a gate — do not hold up startup on it.
 
+STEP 4c — Check the project's bootstrap files (tasks #989/#990)
+|- Only when the project carries `_omatic/scripts/check-bootstrap-manifest-drift.py`.
+|    Run it once per session with python3. It compares the project's pointer
+|    files with factory.bootstrap_manifest through the o-MATIC Server, rebuilds
+|    a MISSING file from its certified bytes, never overwrites a DRIFTED one,
+|    and writes the run to factory.bootstrap_check_runs.
+|- CURRENT or HEALED: say nothing beyond one line if something was rebuilt.
++- DRIFT or UNMEASURED: one line naming the file or the reason. Never pass
+     --accept-drift unless the operator says the edit was deliberate.
+
 STEP 5 — Unstarted factory (no server surface on this host)
 |- There is no "advisory mode" any more. That state described a PLUGIN whose
 |    Node runtime failed to resolve, and this pack ships no plugin. If you find
