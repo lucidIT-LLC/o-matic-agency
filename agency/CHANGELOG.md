@@ -1,5 +1,16 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.15 — 2026-09-28
+
+Task #759, decision #672: the operator chose **warm Fred (v2)** as the live
+character. The shipped `fred-storage` skill already read as v2 while the
+factory's gold record resolved v1 (flat), so the release gate passed on the
+wrong row. Persona v2 is now finished (9 character dimensions), published and
+current (signature `2c906db5`). The skill (12.3.0) drops the four flat-v1
+lines it still carried (Stoic Custodian flavor, "brevity to the edge of
+comedy", "The flatness isn't emptiness", "Flat. Short.") and names the new
+signature. `persona-attestation.json` updated for Fred.
+
 ## 1.4.14 — 2026-09-26
 
 Task #943 (Carver). `probot-orchestrator/SKILL.md` STEP 5 still told a host

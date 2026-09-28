@@ -2,7 +2,7 @@
     "pack": "o-matic-agency",
     "tenant": "omatic",
     "source": "persona-attest-export.sql against factory.persona_version (o-matic, tenant omatic)",
-    "generated_at": "2026-09-15 09:47:11.752359-04",
+    "generated_at": "2026-09-28 (fred updated for decision #672: persona v2 current, signature 2c906db5)",
     "personas": [
         {
             "skill": "data-analyst",
@@ -40,13 +40,13 @@
         {
             "skill": "fred-storage",
             "agent_name": "fred",
-            "version": 1,
+            "version": 2,
             "review_status": "published",
             "identity_signature": true,
-            "source_skill_version": "9.2.0",
+            "source_skill_version": "10.0.0",
             "character_bible": 1,
             "dimensions": 9,
-            "builds": 5
+            "builds": 6
         },
         {
             "skill": "probot-capability-optimization",
