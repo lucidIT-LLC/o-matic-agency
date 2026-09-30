@@ -9,6 +9,7 @@
 // and its --check fails on drift (Smith #1013 F12: four copies, three variants).
 // Exit 1 on any FAIL. Every rule here encodes a failure this factory has already had.
 import { readFileSync, readdirSync, existsSync, statSync, lstatSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join, basename } from "node:path";
 
 const root = process.argv[2];
@@ -395,19 +396,31 @@ const CITE_EXEMPT = /retired|superseded|replac|successor|split into|do not cite|
   }
   if (!hits) OK("no connection name is written as a literal in a loaded file");
   // Same class, one layer down (Smith #1013 F5/F6/F7): an estate's private
-  // server address written into a shipped file. A tailnet (*.ts.net) host or a
-  // loopback broker port is one operator's network, not something a pack can
-  // assume on every host that installs it.
+  // server written into anything a pack ships. Operator ruling 2026-09-30:
+  // "they shouldn't be looking for any tailscale or private servers." This
+  // scans EVERY text file in the repository, not only the files a host loads:
+  // the first version scanned loaded files only, and a CHANGELOG carried the
+  // operator's private Control Room URL through release 1.4.20 unseen.
+  const PRIVATE_NAME_SHA256 = new Set(["9274d49c27b7583a60a06420b820077e38c6ad785f6df54b667d42aa9a5b325c", "9731971c9b2dfb957a786ef661835fc1fb1d12886a9c290d1933545aa600c44d"]); // one operator's private host and tailnet names, stored hashed so no shipped file spells them
+const namesPrivate = (line) => (line.toLowerCase().match(/[a-z0-9-]{6,}/g) || []).some((w) => PRIVATE_NAME_SHA256.has(createHash("sha256").update(w).digest("hex")));
+const PRIVATE = [
+    [/https?:\/\/[A-Za-z0-9.-]+\.ts\.net\b/, "a private tailnet address"],
+    [/\b[A-Za-z0-9-]+\.[A-Za-z0-9-]+\.ts\.net\b/, "a private tailnet host"],
+        [/\/Users\/[a-z][A-Za-z0-9_-]+\//, "one person's home folder"],
+    [/\/Volumes\/NVMe/, "one machine's disk path"],
+  ];
+  const shipped = walk(root).filter((f) => !/\/(\.git|node_modules|\.build)\//.test(f) && !/verify-pack\.mjs$/.test(f) && /\.(md|ya?ml|mjs|js|cjs|ts|py|sh|json|txt|toml|swift)$/.test(f));
   let hosts = 0;
-  for (const [f, rel] of loadedFiles) {
+  for (const f of shipped) {
+    const rel = f.replace(root, ".");
     readFileSync(f, "utf8").split("\n").forEach((line, k) => {
-      if (/https?:\/\/[A-Za-z0-9.-]+\.ts\.net\b/.test(line)) {
-        hosts++;
-        FAIL(`${rel}:${k + 1}: ships a private tailnet address — read the server endpoint from the host's configuration, never from the pack`);
+      if (namesPrivate(line)) { hosts++; FAIL(`${rel}:${k + 1}: ships one operator's private server or tailnet name — a pack runs on strangers' machines`); return; }
+      for (const [re, what] of PRIVATE) {
+        if (re.test(line)) { hosts++; FAIL(`${rel}:${k + 1}: ships ${what} — a pack runs on strangers' machines and must never name or look for a private server`); break; }
       }
     });
   }
-  if (!hosts) OK("no private server address ships in a loaded file");
+  if (!hosts) OK(`no private server, tailnet host or personal path in any of ${shipped.length} shipped text files`);
 }
 
 // 8. VERSION-PINNED PLUGIN CACHE PATH (task #983). A path like

@@ -68,7 +68,7 @@ let failures = scan(pack, "pack", (f) => f.includes(`${"/"}audits${"/"}`));
 
 // Claude agent templates: plugin-root-relative references (task #983).
 {
-  const dir = join(pack, "adapters", "claude", "agents");
+  const dir = join(pack, "agents");
   const ROOT_REF = /`((?:adapters|contracts|skills|evals|scripts)\/[A-Za-z0-9_.\/-]+\.(?:md|ya?ml|mjs))`/g;
   let bad = 0, ok = 0;
   let files = [];
@@ -79,7 +79,7 @@ let failures = scan(pack, "pack", (f) => f.includes(`${"/"}audits${"/"}`));
         let exists = true;
         try { statSync(join(pack, m[1])); } catch { exists = false; }
         if (exists) ok++;
-        else { bad++; console.log(`BROKEN [plugin-root] adapters/claude/agents/${f}:${i + 1}  \`${m[1]}\``); }
+        else { bad++; console.log(`BROKEN [plugin-root] agents/${f}:${i + 1}  \`${m[1]}\``); }
       }
     });
   }
