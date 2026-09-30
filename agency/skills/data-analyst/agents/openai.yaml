@@ -3,7 +3,7 @@ interface:
   short_description: "Measure the factory and explain what the evidence shows."
   icon_small: "./assets/data.svg"
   icon_large: "./assets/data.svg"
-  brand_color: "#526DFF"
+  brand_color: "#00B5AD"
   default_prompt: "Data, check retrieval health."
 policy:
   allow_implicit_invocation: true

@@ -1,0 +1,9 @@
+interface:
+  display_name: "Probot Tool Discovery"
+  short_description: "Discover and document the live factory tool surface."
+  icon_small: "./assets/probot.svg"
+  icon_large: "./assets/probot.svg"
+  brand_color: "#00B5AD"
+  default_prompt: "Probot, what tools do we actually have?"
+policy:
+  allow_implicit_invocation: true

@@ -1,1 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Data"><rect width="64" height="64" rx="16" fill="#1A1A1A"/><path d="M18 45V33m14 12V20m14 25V27" fill="none" stroke="#F5F5F5" stroke-linecap="round" stroke-width="7"/></svg>
+<svg viewBox="44 33 932 932" version="1.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Data O-Matic Robot Vector</title>
+  <desc id="desc">Affinity-safe roster vector of Data, O-Matic data analyst, using the new robot model with report sheet, magnifier, database, and structured analysis cues. Task #751 (2026-09-28, Monet): chest O-ring restored from the registered master brand/omatic-robot-vector-no-bg.svg (sha256 837fbc0156a023ec) at its own geometry, gold r66 + teal r35 at 510,658; palette rebound to the master's gradients per decision #522; the role instrument moved off the chest per brand_messaging #120; no red on the robot (color.alert).</desc>
+  <defs>
+    <radialGradient id="teal" cx="28%" cy="18%" r="88%">
+      <stop offset="0" stop-color="#0aa1aa"/>
+      <stop offset="0.55" stop-color="#087f88"/>
+      <stop offset="1" stop-color="#045c64"/>
+    </radialGradient>
+    <radialGradient id="blue" cx="30%" cy="18%" r="86%">
+      <stop offset="0" stop-color="#46c3ff"/>
+      <stop offset=".58" stop-color="#0a8fd1"/>
+      <stop offset="1" stop-color="#075082"/>
+    </radialGradient>
+    <radialGradient id="gold" cx="30%" cy="20%" r="82%">
+      <stop offset="0" stop-color="#ffe477"/>
+      <stop offset="0.52" stop-color="#ffc928"/>
+      <stop offset="1" stop-color="#e4a900"/>
+    </radialGradient>
+    <radialGradient id="cream" cx="30%" cy="20%" r="86%">
+      <stop offset="0" stop-color="#fff2cb"/>
+      <stop offset="1" stop-color="#fff2cb"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="none"/>
+
+  <g id="data-roster" transform="translate(0 8)">
+    
+
+    <g id="antenna">
+      <path fill="#064f55" stroke="#050606" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" d="M514 171l-9-83h24l11 83z"/>
+      <circle fill="url(#blue)" stroke="#050606" stroke-width="9" cx="515" cy="69" r="31"/>
+      <circle fill="#ffc928" cx="515" cy="69" r="11"/>
+      <circle fill="#fff5d5" cx="525" cy="58" r="8"/>
+      <path fill="url(#gold)" stroke="#050606" stroke-width="9" stroke-linejoin="round" d="M470 179c28-18 73-18 101 0l7 42H463z"/>
+    </g>
+
+    <g id="head">
+      <path fill="url(#teal)" stroke="#050606" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" d="M286 226c42-45 395-47 449-4 39 31 43 197 7 239-58 68-407 68-465 1-35-40-30-193 9-236z"/>
+      <path fill="#064f55" stroke="#050606" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity=".72" d="M327 304c59-47 301-55 373-22 34 16 44 45 43 82-1 49-22 87-67 104-76 29-260 27-321-6-43-23-58-116-28-158z"/>
+      <circle fill="url(#cream)" stroke="#050606" stroke-width="10" cx="435" cy="351" r="58"/>
+      <circle fill="url(#cream)" stroke="#050606" stroke-width="10" cx="587" cy="351" r="58"/>
+      <circle fill="#0b4970" cx="435" cy="351" r="22"/>
+      <circle fill="#0b4970" cx="587" cy="351" r="22"/>
+      <circle fill="#050606" cx="435" cy="351" r="10"/>
+      <circle fill="#050606" cx="587" cy="351" r="10"/>
+      <circle fill="#fff" cx="445" cy="337" r="9"/>
+      <circle fill="#fff" cx="597" cy="337" r="9"/>
+      <path fill="none" stroke="#050606" stroke-width="8" stroke-linecap="round" d="M475 422c26 20 58 20 84 0"/>
+      <path fill="none" stroke="#fff5d5" stroke-width="8" stroke-linecap="round" d="M361 256h116"/>
+    </g>
+
+    <g id="ears">
+      <rect fill="url(#blue)" stroke="#050606" stroke-width="9" x="246" y="328" width="44" height="78" rx="18"/>
+      <rect fill="url(#blue)" stroke="#050606" stroke-width="9" x="734" y="328" width="44" height="78" rx="18"/>
+    </g>
+
+    <g id="neck-body">
+      <path fill="#1f3030" stroke="#050606" stroke-width="9" stroke-linejoin="round" d="M459 499h105v44c-31 17-75 17-105 0z"/>
+      <path fill="url(#teal)" stroke="#050606" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" d="M364 548c54-38 240-40 300-1 43 28 48 189 9 225-55 52-268 53-324 0-37-35-30-194 15-224z"/>
+      <path fill="#07848d" opacity=".35" d="M388 574c36-31 106-43 181-36-103 42-155 110-158 205-43-37-50-139-23-169z"/>
+      <g id="chest-o-ring">
+        <!-- brand_messaging #48: the defining mark. Master geometry and fills, verbatim:
+             gold r=66 + teal r=35 at (510,658), outline stroke 8 in the master's near-black. -->
+        <circle fill="url(#gold)" stroke="#050606" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" cx="510" cy="658" r="66"/>
+        <circle fill="url(#teal)" stroke="#050606" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" cx="510" cy="658" r="35"/>
+      </g>
+    </g>
+
+    <g id="left-report-arm">
+      <path fill="url(#gold)" stroke="#050606" stroke-width="9" d="M358 571c-34 5-54 25-57 58 9 20 27 33 51 39l36-56z"/>
+      <path fill="#1f3030" stroke="#050606" stroke-width="8" stroke-linejoin="round" d="M299 616l54 50-32 42-60-45z"/>
+      <path fill="url(#teal)" stroke="#050606" stroke-width="9" stroke-linejoin="round" d="M248 648c31 9 59 27 81 55l-53 71c-42-9-73-35-88-75 12-24 32-40 60-51z"/>
+      <g id="data-report" transform="translate(110 561) rotate(8)">
+        <rect fill="#f5f2e8" stroke="#050606" stroke-width="8" x="0" y="0" width="160" height="184" rx="12"/>
+        <path fill="none" stroke="#0d626a" stroke-width="6" stroke-linecap="round" d="M23 33h58M23 61h102M23 89h46"/>
+        <path fill="#0a8fd1" d="M28 132h13v29H28zM52 112h13v49H52zM76 123h13v38H76zM100 94h13v67h-13z"/>
+        <text x="22" y="178" font-family="Monaco, Menlo, Consolas, Courier New, monospace" font-size="19" font-weight="700" fill="#0b4970">301514</text>
+      </g>
+      <circle fill="url(#cream)" stroke="#050606" stroke-width="7" cx="258" cy="741" r="18"/>
+      <circle fill="url(#cream)" stroke="#050606" stroke-width="7" cx="281" cy="758" r="18"/>
+    </g>
+
+    <g id="right-magnifier-arm">
+      <path fill="url(#gold)" stroke="#050606" stroke-width="9" d="M667 571c34 5 54 25 57 58-9 20-27 33-51 39l-36-56z"/>
+      <path fill="#1f3030" stroke="#050606" stroke-width="8" stroke-linejoin="round" d="M726 616l-54 50 32 42 60-45z"/>
+      <path fill="url(#teal)" stroke="#050606" stroke-width="9" stroke-linejoin="round" d="M777 648c-31 9-59 27-81 55l53 71c42-9 73-35 88-75-12-24-32-40-60-51z"/>
+      <g id="magnifier" transform="translate(703 535) rotate(-10)">
+        <circle fill="#e8fbff" stroke="#050606" stroke-width="10" cx="82" cy="82" r="72"/>
+        <circle fill="#b9eef5" cx="82" cy="82" r="50" opacity=".7"/>
+        <path fill="#0a8fd1" d="M45 101h13V81H45zM69 101h13V61H69zM93 101h13V42H93zM117 101h13V68h-13z"/>
+        <path fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".7" d="M40 49c22-23 56-29 84-15"/>
+        <path fill="#1f3030" stroke="#050606" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" d="M133 135l67 67-31 31-67-67z"/>
+      </g>
+      <circle fill="url(#cream)" stroke="#050606" stroke-width="7" cx="760" cy="789" r="18"/>
+      <circle fill="url(#cream)" stroke="#050606" stroke-width="7" cx="787" cy="805" r="18"/>
+    </g>
+
+    <g id="data-role-badge" transform="translate(272 872) scale(0.54) translate(-512.5 -669)">
+      <!-- #751 / brand_messaging #120: the role instrument that used to replace the O-ring,
+           relocated here unchanged in shape. -->
+      <rect fill="#0d626a" stroke="#050606" stroke-width="8" x="418" y="601" width="189" height="136" rx="14"/>
+        <path fill="#e8fbff" stroke="#050606" stroke-width="6" d="M447 625h132v88H447z"/>
+        <path fill="#0a8fd1" d="M467 689h14v18h-14zM491 674h14v33h-14zM515 653h14v54h-14zM539 635h14v72h-14z"/>
+        <path fill="none" stroke="#0d626a" stroke-width="5" stroke-linecap="round" d="M461 645h48M461 662h29"/>
+        <path fill="none" stroke="#0a8fd1" stroke-width="5" stroke-linecap="round" d="M461 629h86"/>
+    </g>
+
+    <g id="legs">
+      <path fill="#1f3030" stroke="#050606" stroke-width="8" d="M431 775h59v47h-59zM535 775h59v47h-59z"/>
+      <path fill="url(#gold)" stroke="#050606" stroke-width="8" d="M438 820h48v64h-48zM540 820h48v64h-48z"/>
+      <path fill="url(#teal)" stroke="#050606" stroke-width="9" d="M404 880c56-22 101-2 120 52-57 18-133 16-181 0 10-23 30-41 61-52z"/>
+      <path fill="url(#teal)" stroke="#050606" stroke-width="9" d="M620 880c-56-22-101-2-120 52 57 18 133 16 181 0-10-23-30-41-61-52z"/>
+      <path fill="none" stroke="#fff5d5" stroke-width="7" stroke-linecap="round" d="M390 908c18-9 35-12 50-10"/>
+      <path fill="none" stroke="#fff5d5" stroke-width="7" stroke-linecap="round" d="M584 900c18 2 34 8 48 18"/>
+    </g>
+  </g>
+</svg>

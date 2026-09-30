@@ -1,0 +1,9 @@
+interface:
+  display_name: "Factory Governance Repair"
+  short_description: "Repair a proven governance defect after an audit."
+  icon_small: "./assets/probot.svg"
+  icon_large: "./assets/probot.svg"
+  brand_color: "#00B5AD"
+  default_prompt: "Probot, repair this audit finding."
+policy:
+  allow_implicit_invocation: true

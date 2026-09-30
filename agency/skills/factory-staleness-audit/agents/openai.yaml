@@ -1,0 +1,9 @@
+interface:
+  display_name: "Factory Staleness Audit"
+  short_description: "Find stale doctrine still being served as current."
+  icon_small: "./assets/probot.svg"
+  icon_large: "./assets/probot.svg"
+  brand_color: "#00B5AD"
+  default_prompt: "Probot, audit the corpus for staleness."
+policy:
+  allow_implicit_invocation: true

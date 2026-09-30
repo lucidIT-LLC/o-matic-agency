@@ -1,0 +1,9 @@
+interface:
+  display_name: "Probot Capability Optimization"
+  short_description: "Scope the live tool surface to the work, with evidence."
+  icon_small: "./assets/probot.svg"
+  icon_large: "./assets/probot.svg"
+  brand_color: "#00B5AD"
+  default_prompt: "Probot, optimize the tools for this job."
+policy:
+  allow_implicit_invocation: true

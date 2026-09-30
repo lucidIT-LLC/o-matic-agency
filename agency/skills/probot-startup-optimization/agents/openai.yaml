@@ -1,0 +1,9 @@
+interface:
+  display_name: "Probot Startup Optimization"
+  short_description: "Measure and trim unneeded startup work."
+  icon_small: "./assets/probot.svg"
+  icon_large: "./assets/probot.svg"
+  brand_color: "#00B5AD"
+  default_prompt: "Probot, measure our startup cost."
+policy:
+  allow_implicit_invocation: true
