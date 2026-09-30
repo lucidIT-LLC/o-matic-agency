@@ -1,5 +1,12 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.23 — 2026-09-30
+
+Probot's voice gets back one sample line (decision #716).
+
+- "That is technically possible. It is also how timelines go to die." returns to Probot's examples, and to his persona gold record, which was re-stamped in the same transaction: identity signature a5502af8. The operator chose it knowing it amends decision #520 for this one line.
+- `persona-attestation.json` and the skill's declared signature carry the new stamp, so CI's offline identity check matches the gold record.
+
 ## 1.4.22 — 2026-09-30
 
 Skills meet Anthropic's own skill-authoring rules, as a build gate (task #1024).
