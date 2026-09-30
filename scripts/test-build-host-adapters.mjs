@@ -72,5 +72,19 @@ for (const [label, opts, want] of cases) {
   rmSync(root, { recursive: true, force: true });
 }
 
+// An openai.yaml icon that does not exist fails the build.
+{
+  const root = pack();
+  const y = join(root, "demo/skills/tess-testing/agents/openai.yaml");
+  mkdirSync(dirname(y), { recursive: true });
+  writeFileSync(y, 'interface:\n  icon_small: "./assets/tess.svg"\n');
+  const r = run(root);
+  check("rule fails: an openai.yaml icon that does not exist", r.status === 1 && /icon \.\/assets\/tess\.svg does not exist/.test(r.stdout), r.stdout.slice(0, 300));
+  mkdirSync(join(root, "demo/skills/tess-testing/assets"), { recursive: true });
+  writeFileSync(join(root, "demo/skills/tess-testing/assets/tess.svg"), "<svg/>");
+  check("the same skill passes once the icon exists", run(root).status === 0);
+  rmSync(root, { recursive: true, force: true });
+}
+
 console.log(failed ? `\n${failed} check(s) failed` : "\nall checks passed");
 process.exit(failed ? 1 : 0);

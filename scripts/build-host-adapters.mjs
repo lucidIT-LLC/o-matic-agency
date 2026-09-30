@@ -293,6 +293,21 @@ Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
 Grok <= 4,000, Copilot <= 30,000, M365 name <= 100 and description <= 1,000.
 `);
 
+// Every skill's agents/openai.yaml names icons that exist (task #1024:
+// jo-release-journal shipped "./assets/jo.svg" with no such file, so the
+// OpenAI surfaces showed that skill without an icon).
+const skillsRoot = join(root, pluginDir, "skills");
+if (existsSync(skillsRoot)) {
+  for (const d of readdirSync(skillsRoot, { withFileTypes: true }).filter((e) => e.isDirectory())) {
+    const y = join(skillsRoot, d.name, "agents", "openai.yaml");
+    if (!existsSync(y)) continue;
+    for (const m of readFileSync(y, "utf8").matchAll(/^\s*icon_[a-z]+:\s*"?([^"\n]+?)"?\s*$/gm)) {
+      if (!existsSync(join(skillsRoot, d.name, m[1])))
+        problems.push(`${pluginDir}/skills/${d.name}/agents/openai.yaml: icon ${m[1]} does not exist`);
+    }
+  }
+}
+
 // Write or check.
 let drift = 0;
 for (const [rel, text] of out) {
