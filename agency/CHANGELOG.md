@@ -1,5 +1,15 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.22 — 2026-09-30
+
+Skills meet Anthropic's own skill-authoring rules, as a build gate (task #1024).
+
+- Anthropic's guidance ("Skill authoring best practices", platform.claude.com) keeps a SKILL.md body under 500 lines and moves detail into reference files linked one level deep. `scripts/build-host-adapters.mjs` now enforces it: a body over 500 lines, an unlinked or missing reference, a nested reference, or a reference over 100 lines without a "## Contents" fails the build.
+- The Gemini CLI copy now carries every file of a skill, reference files included, and each ChatGPT setup lists every reference file as knowledge (up to OpenAI's 20-file limit). Before this, a split skill would have lost its reference files on both hosts.
+- `scripts/test-build-host-adapters.mjs` is the builder's own test: 10 checks, 7 of which fail on the previous builder.
+- CI was red on the previous release: it still called a test retired in that same release. It now runs the builder test and `build-host-adapters.mjs --check` instead.
+- Probot's role guide went from 1,116 lines to 486: the startup protocol, conversation key, startup card, anchor commands, root-cause triage and Sage/standalone mode moved, word for word, into `reference/` files, each named in SKILL.md with the moment to read it. Data's went from 511 to 403 (DBA operations, vector search). Identity, voice, archetype, the distress override and lane discipline stay in SKILL.md.
+
 ## 1.4.21 — 2026-09-30
 
 Every role on every host, built to each vendor's own documentation (task #1024).

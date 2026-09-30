@@ -37,8 +37,12 @@ jobs:
             echo "== $plugin"
             node "$plugin/scripts/check-paths.mjs"
             node "$plugin/scripts/sync-copilot-payload.mjs" --check
-            node "$plugin/scripts/verify-adapter-paths.test.mjs"
           done
+      - name: Host adapters are current, and skills meet the vendor rules (task #1024)
+        run: |
+          set -e
+          node scripts/test-build-host-adapters.mjs
+          node scripts/build-host-adapters.mjs . --check
       - name: Hook fixture suites
         run: |
           set -e

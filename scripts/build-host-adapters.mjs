@@ -96,11 +96,42 @@ function condensed(a, { knowledgeFile, limit }) {
   return text;
 }
 
+// Every .md file in the skill folder, relative to it (SKILL.md plus its
+// reference files), so hosts that take the whole skill get all of it.
+const mdFiles = (dir, rel = "") => readdirSync(join(dir, rel), { withFileTypes: true }).flatMap((e) =>
+  e.isDirectory() ? mdFiles(dir, join(rel, e.name)) : e.name.endsWith(".md") ? [join(rel, e.name)] : []).sort();
+
 const skillOf = (a) => {
   const p = join(root, a.canonical_skill);
   const text = readFileSync(p, "utf8");
-  return { path: p, text, name: frontmatter(text).name, dir: dirname(p) };
+  const dir = dirname(p);
+  const files = mdFiles(dir).map((rel) => ({ rel, text: readFileSync(join(dir, rel), "utf8") }));
+  return { path: p, text, name: frontmatter(text).name, dir, files };
 };
+
+// Anthropic, "Skill authoring best practices" (platform.claude.com, read
+// 2026-09-30): SKILL.md body under 500 lines; split detail into reference
+// files linked ONE level deep from SKILL.md; a reference file over 100 lines
+// starts with a table of contents. Enforced here so it is a gate, not advice.
+const SKILL_BODY_MAX_LINES = 500;
+const REF_TOC_OVER_LINES = 100;
+const mdLinks = (text) => [...text.matchAll(/\]\(([^)#\s]+\.md)\)/g)].map((m) => m[1]).filter((l) => !/^[a-z]+:/i.test(l));
+function skillRules(a, s) {
+  const body = s.text.replace(/^---\n[\s\S]*?\n---\n/, "");
+  const lines = body.split("\n").length;
+  if (lines > SKILL_BODY_MAX_LINES) problems.push(`${a.canonical_skill}: body ${lines} lines > ${SKILL_BODY_MAX_LINES}`);
+  const refs = s.files.filter((f) => f.rel !== "SKILL.md");
+  const have = new Set(refs.map((f) => f.rel));
+  for (const l of mdLinks(body)) if (!have.has(join(l))) problems.push(`${a.canonical_skill}: links ${l}, which does not exist`);
+  const linked = new Set(mdLinks(body).map((l) => join(l)));
+  for (const f of refs) {
+    if (!linked.has(f.rel)) problems.push(`${a.canonical_skill}: ${f.rel} is not linked from SKILL.md`);
+    const nested = mdLinks(f.text).filter((l) => have.has(join(dirname(f.rel), l)) || have.has(join(l)));
+    if (nested.length) problems.push(`${a.canonical_skill}: ${f.rel} links ${nested.join(", ")} (references must be one level deep)`);
+    if (f.text.split("\n").length > REF_TOC_OVER_LINES && !/^## Contents\b/m.test(f.text))
+      problems.push(`${a.canonical_skill}: ${f.rel} is over ${REF_TOC_OVER_LINES} lines and has no "## Contents"`);
+  }
+}
 
 const starters = (a) => {
   const y = join(dirname(join(root, a.canonical_skill)), "agents", "openai.yaml");
@@ -117,6 +148,7 @@ const shortDesc = (a) => `${a.role} from o-MATIC. ${a.one_liner}`.slice(0, 1000)
 
 for (const a of pack.agents) {
   const s = skillOf(a);
+  skillRules(a, s);
   const id = a.id;
 
   // 1. Claude Code plugin subagent (also read by Grok Build).
@@ -159,7 +191,7 @@ ${condensed(a, { knowledgeFile: null, limit: LIMITS.copilot })}
 
 Your full role guide is the \`${s.name}\` skill in this extension. Load it before substantive work.
 `);
-  put(`skills/${s.name}/SKILL.md`, s.text);
+  for (const f of s.files) put(`skills/${s.name}/${f.rel}`, f.text);
 
   // 4. GitHub Copilot custom agent.
   const cop = condensed(a, { knowledgeFile: null, limit: LIMITS.copilot });
@@ -187,6 +219,12 @@ ${cop}
 
   // 6. ChatGPT custom GPT.
   const gptKnowledge = `${s.name}.md`;
+  const refs = s.files.filter((f) => f.rel !== "SKILL.md");
+  if (refs.length + 1 > 20) problems.push(`${id}: ${refs.length + 1} knowledge files > 20 (custom GPT limit)`);
+  const skillRel = a.canonical_skill.replace(/^[^/]+\//, "");
+  const knowledgeStep = "Under Knowledge, upload the role guide: `" + skillRel + "`, renamed to `" + gptKnowledge + "`" +
+    (refs.length ? ", and its " + refs.length + " reference file(s), each under its own name:\n" +
+      refs.map((f) => "   - `" + dirname(skillRel) + "/" + f.rel + "`").join("\n") : ".");
   put(`${pluginDir}/adapters/chatgpt/${id}/instructions.md`, condensed(a, { knowledgeFile: gptKnowledge, limit: LIMITS.gpt }));
   put(`${pluginDir}/adapters/chatgpt/${id}/SETUP.md`, `# ${a.display_name} as a custom GPT
 
@@ -194,7 +232,7 @@ ${HEADER(a)}
 
 1. In ChatGPT, create a GPT. Name: **${a.display_name}**. Description: ${a.one_liner}
 2. Paste \`instructions.md\` into Instructions (it is under OpenAI's 8,000-character limit).
-3. Under Knowledge, upload the role guide: \`${a.canonical_skill.replace(/^[^/]+\//, "")}\`, renamed to \`${gptKnowledge}\`.
+3. ${knowledgeStep}
 4. Conversation starters:
 ${starters(a).map((t) => `   - ${t}`).join("\n")}
 `);
