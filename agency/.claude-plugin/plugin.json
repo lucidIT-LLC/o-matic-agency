@@ -1,10 +1,10 @@
 {
   "name": "agency",
   "displayName": "o-MATIC Agency",
-  "version": "1.4.18",
-  "description": "The portable core roster of an o-MATIC factory \u2014 Probot, Fred, and Data with their full role skills, Probot-owned audit/startup/tool-discovery lanes, governance contract, and host adapters. Ships NO MCP server; database access is the o-MATIC Server MCP surface configured by the host.",
+  "version": "1.4.19",
+  "description": "The portable core roster of an o-MATIC factory — Probot, Fred, and Data with their full role skills, Probot-owned audit/startup/tool-discovery lanes, governance contract, and host adapters. Ships NO MCP server; database access is the o-MATIC Server MCP surface configured by the host.",
   "author": {
-    "name": "LucidIT, LLC",
+    "name": "o-MATIC AI Research Lab",
     "url": "https://o-matic.ai"
   },
   "homepage": "https://o-matic.ai",
