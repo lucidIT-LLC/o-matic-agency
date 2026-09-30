@@ -28,9 +28,15 @@
   </defs>
 
   <rect width="1024" height="1024" fill="none"/>
+  <ellipse fill="#d8d2c2" cx="518" cy="930" rx="276" ry="28" opacity=".42"/>
 
   <g id="fred-roster" transform="translate(0 8)">
-    
+    <g id="storage-backdrop">
+      <path fill="url(#folderGold)" stroke="#050606" stroke-width="9" stroke-linejoin="round" opacity=".9" d="M164 276h249l43 52h404v392H164z"/>
+      <path fill="#f1c679" stroke="#050606" stroke-width="8" stroke-linejoin="round" opacity=".88" d="M164 333h696v387H164z"/>
+      <path fill="none" stroke="#fff2c8" stroke-width="11" stroke-linecap="round" opacity=".68" d="M205 374h215M205 421h251M629 379h175M633 426h155"/>
+      <path fill="none" stroke="#ba7c33" stroke-width="7" stroke-linecap="round" opacity=".56" d="M211 650h148M211 690h126M673 650h129M673 690h95"/>
+    </g>
 
     <g id="antenna">
       <path fill="#075b64" stroke="#050606" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" d="M514 171l-9-83h24l11 83z"/>

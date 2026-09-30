@@ -23,6 +23,7 @@
   </defs>
 
   <rect width="1024" height="1024" fill="none"/>
+  <ellipse fill="#e8ddc7" cx="518" cy="930" rx="276" ry="28" opacity=".42"/>
 
   <g id="probot-roster" transform="translate(0 8)">
     <g id="antenna">

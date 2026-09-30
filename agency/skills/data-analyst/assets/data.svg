@@ -24,9 +24,26 @@
   </defs>
 
   <rect width="1024" height="1024" fill="none"/>
+  <ellipse fill="#e8ddc7" cx="518" cy="930" rx="276" ry="28" opacity=".42"/>
 
   <g id="data-roster" transform="translate(0 8)">
-    
+    <g id="analysis-backdrop">
+      <circle fill="#e8fbff" stroke="#7fd0dc" stroke-width="7" cx="512" cy="431" r="337" opacity=".54"/>
+      <path fill="none" stroke="#0a8fd1" stroke-width="5" stroke-linecap="round" opacity=".38" d="M226 620l61-63 69 41 72-93 70 31 83-110 74 66 87-126"/>
+      <circle fill="#0a8fd1" cx="226" cy="620" r="7" opacity=".75"/>
+      <circle fill="#0a8fd1" cx="356" cy="598" r="7" opacity=".75"/>
+      <circle fill="#0a8fd1" cx="498" cy="536" r="7" opacity=".75"/>
+      <circle fill="#0a8fd1" cx="655" cy="492" r="7" opacity=".75"/>
+      <path fill="#0a8fd1" opacity=".38" d="M244 236h13v48h-13zM268 216h13v68h-13zM292 252h13v32h-13zM316 197h13v87h-13z"/>
+      <text x="692" y="286" font-family="Monaco, Menlo, Consolas, Courier New, monospace" font-size="28" font-weight="700" fill="#0a8fd1" opacity=".7">1010</text>
+      <text x="234" y="318" font-family="Monaco, Menlo, Consolas, Courier New, monospace" font-size="27" font-weight="700" fill="#0a8fd1" opacity=".7">301514</text>
+      <g id="database-stack" transform="translate(733 212)">
+        <ellipse fill="#e8fbff" stroke="#050606" stroke-width="7" cx="0" cy="0" rx="54" ry="20"/>
+        <path fill="#b9eef5" stroke="#050606" stroke-width="7" d="M-54 0v78c0 11 24 20 54 20s54-9 54-20V0"/>
+        <ellipse fill="#e8fbff" stroke="#050606" stroke-width="7" cx="0" cy="78" rx="54" ry="20"/>
+        <path fill="none" stroke="#0a8fd1" stroke-width="5" stroke-linecap="round" d="M-33 35c20 8 47 8 66 0M-33 60c20 8 47 8 66 0"/>
+      </g>
+    </g>
 
     <g id="antenna">
       <path fill="#064f55" stroke="#050606" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" d="M514 171l-9-83h24l11 83z"/>
