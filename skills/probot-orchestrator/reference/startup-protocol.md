@@ -240,12 +240,15 @@ STEP 4 — Platform probe refinement + report
 |- IF all probed MCPs connected: silence is green.
 +- -> Factory ready
 
-STEP 4b — Open the Control Room (decision #628)
+STEP 4b — Open the Server Closet (decision #628; renamed from the Control Room
+    in o-MATIC Server 2.1, decision #728)
 |- Only once the startup card reads READY or DEGRADED. Skip entirely on
 |    BLOCKED.
-|- The Control Room lives on the same o-MATIC Server this host is connected
+|- The Server Closet lives on the same o-MATIC Server this host is connected
 |    to: take the origin of the host's configured MCP endpoint (the
-|    `OMATIC_MCP_URL` it was registered with) and append `/control-room`. This
+|    `OMATIC_MCP_URL` it was registered with) and append `/server-closet`.
+|    (A server older than 2.1 has no Server Closet: use `/control-room` there.
+|    On 2.1 and later `/control-room` only redirects.) This
 |    skill ships to every host and never carries one estate's address (Smith
 |    #1013 F7). If the host exposes no endpoint you can read, say so in one line
 |    and skip this step.
@@ -259,6 +262,17 @@ STEP 4b — Open the Control Room (decision #628)
 |    operator signs in there themselves. Never type the password yourself.
 +- IF the URL is unreachable: say so in one line and continue. It is a
      reminder, not a gate — do not hold up startup on it.
+
+"Take me to the Server Closet" / "Take me to Project Headquarters"
+|- Whenever the operator asks for either, at any point in the session, open it
+|    the same way as STEP 4b (in-app pane first, same server origin):
+|      Server Closet         -> <server origin>/server-closet
+|                               (the server's health, upkeep, factories,
+|                               people and groups, backups)
+|      Project Headquarters  -> <server origin>/project-hq
+|                               (Card View, Deck Director, Roadmap, DevOps)
+|- "Control Room" means the Server Closet: it was renamed in 2.1.
++- Never type the password; the operator signs in on the page.
 
 STEP 4c — Check the project's bootstrap files (tasks #989/#990)
 |- Only when the project carries `_omatic/scripts/check-bootstrap-manifest-drift.py`.

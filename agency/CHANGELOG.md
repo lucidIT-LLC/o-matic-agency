@@ -1,5 +1,12 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.24 — 2026-10-01
+
+Probot opens the Server Closet, and goes to it or to Project Headquarters when asked (decision #728).
+
+- o-MATIC Server 2.1 renamed the Control Room to the Server Closet (`/server-closet`: the server's health, upkeep, factories, people and groups, backups) and moved the project boards to Project Headquarters (`/project-hq`: Card View, Deck Director, Roadmap, DevOps). Startup STEP 4b now opens the Server Closet; a server older than 2.1 still gets `/control-room`.
+- "Take me to the Server Closet" and "Take me to Project Headquarters" open each page on the same server, any time in a session. "Control Room" is read as the Server Closet.
+
 ## 1.4.23 — 2026-09-30
 
 Probot's voice gets back one sample line (decision #716).
