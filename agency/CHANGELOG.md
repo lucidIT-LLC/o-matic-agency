@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.4.25 — 2026-10-19
+
+Governance repair resolves the Blueprint from the installed o-MATIC Server release.
+
+- Read the live Blueprint index and its document topics before designing a repair. Former Commons Blueprint copies remain audit history; an active catalog label cannot override the release.
+- Use the released certification checklist and supported factory catch-up path. Preserve local controls without reviving retired floors, requiring separate persona credentials, or making a custom shared Server patch a certification prerequisite.
+- Keep contract amendments in the Blueprint source/release, corrections in new migration files, and false-positive evidence recoverable.
+
 ## 1.4.24 — 2026-10-01
 
 Probot opens the Server Closet, and goes to it or to Project Headquarters when asked (decision #728).
