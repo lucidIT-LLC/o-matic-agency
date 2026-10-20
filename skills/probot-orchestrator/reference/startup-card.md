@@ -40,7 +40,7 @@ summary is still a failure here, because the artifact under test is the shape.
 
 **The shape is defined by code, not by this paragraph.**
 `scripts/format-startup-card.mjs` is the single source of the render, and
-`scripts/smoke-startup-card.mjs` asserts it — 15 assertions in `npm run check`,
+`scripts/smoke-startup-card.mjs` asserts it — assertions run by the pack check,
 including one that REJECTS a bullet summary of the exact form that failed the
 first three acceptance attempts. If the block below and that function ever
 disagree, **the function is right.** Prose lost this argument three times; it is
@@ -49,12 +49,15 @@ not being asked to win it a fourth.
 ```text
 ╭─ 🏠 O-Matic · an o-MATIC factory
 │ State       🟢 READY · all database-measured fields ok
-│ Generation  system-7 governance · release 5.7.1
-│ Connection  o-MATIC  - Corp · o-matic · 6 granted
+│ Generation  system-7 governance · release 7.2.0
+│ Connection  o-MATIC Foundry · o-matic · 8 granted
 │ Retrieval   🟢 vector · telemetry live
 │ Corpus      🟢 1,540 / 1,540 embedded · 0 stale · 0 unembedded
 │ Roster      11/11 · 15 rules · 13 SOPs
 │ Work        🟢 0 P1 · 5 open
+│ Running code v2.5.0 -- CURRENT · CURRENT
+│ Capabilities web_publish READY · ocr READY · vision READY · proposal_vault UNCONFIGURED · LISTED
+│ Front door   factory.o-matic.ai -- OK · OK
 │ Signal      🟢 all reported
 ╰─ Measured 2026-09-06 23:01:38.684427-04:00
 ```
@@ -87,6 +90,9 @@ never the answer to "what system are we on."
 | Corpus | embedded/total **summed across every tier in `card.corpus`** · `corpus_stale_total` · `corpus_unembedded_total` |
 | Roster | `roster_ready` · `governance.active_rules` · `governance.active_sops` |
 | Work | `open_p1_count` · `open_task_total` |
+| Running code | `presentation.startup_card.running_code` value · condition label (from `code_integrity`: CURRENT, STALE_PROCESS, MODIFIED, EXTRA_FILES or UNVERIFIED). Omitted when the server sends no `presentation` block |
+| Capabilities | `presentation.startup_card.capabilities` value · condition label (web_publish, ocr, vision, proposal_vault, each with its state). Omitted likewise |
+| Front door | `presentation.startup_card.front_door` value · condition label. Omitted likewise |
 | Signal | `unmeasured[]`, or `all reported` when empty |
 | footer | `measured_at` |
 
@@ -98,6 +104,13 @@ embedded corpus as `0 / 0 embedded` and 15 rules as `0`. Separately, the server
 returns `corpus_stale_total` and `corpus_unembedded_total` as **strings**, so
 `=== 0` is false and painted a clean corpus orange. Coerce with `Number()`
 before comparing, never test the raw field.
+
+**Add-on module state is not on the card.** The Capabilities row lists the server's
+built-in capabilities; whether the o-MATIC Reader, Insight or MoM module is installed
+and running comes from the `module_status` tool. A host with no module is a normal state.
+The three added rows are the server's own words (`value · condition label`); never
+recompute them. A `running_code` state other than CURRENT is reported in the prose
+beneath the card, not hidden.
 
 `pin_state`, `identity_*` and `last_session_*` are on the card but are **not
 card rows** — report them in the prose beneath it. The table above lists exactly

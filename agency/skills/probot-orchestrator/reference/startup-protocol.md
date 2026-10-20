@@ -142,7 +142,7 @@ STEP 3 — Startup card (returned by the STEP 2 startup call)
 |  reuse is hygiene only and asserts nothing about how fresh any measurement is).
 |
 |- FIRST QUERY, ALWAYS, EVERY MODE:  SELECT * FROM v_startup_card
-|    ONE row, ~49 columns. It IS the startup report — factory identity and
+|    ONE row, dozens of columns (do not rely on a count). It IS the startup report — factory identity and
 |    version, pin state, connection, retrieval and drain state, corpus counts,
 |    roster readiness, governance, last session, open counts, and a computed
 |    state of READY / DEGRADED / BLOCKED with state_reason and severity.
@@ -160,6 +160,12 @@ STEP 3 — Startup card (returned by the STEP 2 startup call)
 |    The card also states what it CANNOT know rather than guessing: pin_state,
 |    connection_name and drain scope emit CLIENT_SUPPLIED or an *_inferred value.
 |    Fill those from STEP 1/STEP 2 — never let the card's honesty read as a gap.
+|
+|    The startup packet (not the card view) also carries `capabilities`,
+|    `code_integrity` (running_code state: CURRENT, STALE_PROCESS, MODIFIED,
+|    EXTRA_FILES or UNVERIFIED) and `front_door`; the printed card shows them as
+|    rows. Report a running_code state other than CURRENT as a state, not as
+|    noise. Add-on module state is not in the packet: call `module_status`.
 |
 |- SECOND QUERY, ALWAYS: SELECT * FROM v_startup_connectors
 |    ONE row. Connector readiness rolled up: total / ok / untested /
@@ -296,8 +302,9 @@ STEP 5 — Unstarted factory (no server surface on this host)
 |     host. Skills load; the factory brain is unreachable. Every
 |     factory-internal fact is unverified until the host is configured."
 |    The remedy is host-side: Claude Code, Codex and Claude Desktop all reach
-|    the server as a plain HTTPS MCP URL with a per-client token (decision
-|    #362). There is no bridge — the stdio bridge was retired 2026-08-24 and
+|    the server as a plain HTTPS MCP URL, registered once with a browser
+|    sign-in and no stored token, under the connection name `o-matic-server`
+|    (decisions #362, #726). There is no bridge — the stdio bridge was retired 2026-08-24 and
 |    its route removed from the server (task #943); an instruction naming it
 |    is stale. Say which is missing and stop.
 |- DO NOT diagnose the database, the network, TLS or credentials from a missing

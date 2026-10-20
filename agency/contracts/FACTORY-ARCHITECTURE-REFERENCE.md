@@ -33,7 +33,8 @@ operating procedure. No separate Server Guide role or pseudo-skill exists.
   migrations, and database mutation through the governed server path (#415).
 - Fred owns durable source custody.
 - Carver implements approved technical changes.
-- Smith stress-tests; Rimmer evaluates evidence.
+- Smith stress-tests and evaluates evidence (decision #416).
+- Add-on modules (o-MATIC Reader, o-MATIC Insight, MoM) are separate sandboxed containers that talk to the server over unix sockets; the server's edge adapter (Tailscale, Cloudflare or Cato) is swappable.
 
 ## Non-negotiables
 

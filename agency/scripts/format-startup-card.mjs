@@ -20,6 +20,14 @@ const tierSum = (corpus, key) =>
     ? Object.values(corpus).reduce((total, tier) => total + num(tier?.[key]), 0)
     : 0;
 
+/** One presentation row: `value · CONDITION`, or null when the server (older than
+ * 2.5) did not send it. The rows are the server's own words; nothing is derived. */
+const presented = (packet, key) => {
+  const row = packet?.presentation?.startup_card?.[key];
+  if (!row || row.value == null) return null;
+  return row.condition?.label ? `${row.value} · ${row.condition.label}` : String(row.value);
+};
+
 export function formatStartupCard(packet) {
   const card = packet?.card ?? packet;
   if (!card?.state) throw new TypeError('A native o-MATIC Server startup card is required.');
@@ -47,6 +55,10 @@ export function formatStartupCard(packet) {
   const rules = card.governance?.active_rules;
   const sops = card.governance?.active_sops;
 
+  const runningCode = presented(packet, 'running_code');
+  const capabilities = presented(packet, 'capabilities');
+  const frontDoor = presented(packet, 'front_door');
+
   const lines = [
     `╭─ 🏠 ${name} · ${subtitle}`,
     `│ State       ${stateMark(card.state)} ${card.state} · ${card.state_reason}`,
@@ -56,6 +68,9 @@ export function formatStartupCard(packet) {
     `│ Corpus      ${corpusClean ? '🟢' : '🟠'} ${count(embedded)} / ${count(total)} embedded · ${count(stale)} stale · ${count(unembedded)} unembedded`,
     `│ Roster      ${card.roster_ready ?? 'UNKNOWN'} · ${count(rules)} rules · ${count(sops)} SOPs`,
     `│ Work        ${num(card.open_p1_count) > 0 ? '⚠' : '🟢'} ${count(card.open_p1_count)} P1 · ${count(card.open_task_total)} open`,
+    ...(runningCode ? [`│ Running code ${runningCode}`] : []),
+    ...(capabilities ? [`│ Capabilities ${capabilities}`] : []),
+    ...(frontDoor ? [`│ Front door   ${frontDoor}`] : []),
     `│ Signal      ${Array.isArray(card.unmeasured) && card.unmeasured.length ? `◌ ${card.unmeasured.join(', ')} unmeasured` : '🟢 all reported'}`,
     `╰─ Measured ${card.measured_at ?? 'UNKNOWN'}`,
   ];

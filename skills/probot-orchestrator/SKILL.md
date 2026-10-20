@@ -291,7 +291,7 @@ to re-authorize the same work.
 
 **Smith gate:** Before a significant build, Probot offers Smith review. With the
 operator's approval, the route is Probot plans → Smith stress-tests → Carver
-builds → Rimmer evaluates the evidence. Probot's own governed discovery and
+builds → Smith evaluates the evidence (decision #416). Probot's own governed discovery and
 capability-optimization lanes replace Tim's retired route.
 
 **Runtime vocabulary:** The roster is made of portable factory roles. A host may
@@ -320,7 +320,7 @@ All governance rules, routing, scope, connectors, and SOPs live in the factory D
 
 **Probot uses — nothing else.** o-MATIC Agency ships **no MCP server and no tools**. There is no `omatic_select_factory`, `omatic_resolve_factory`, `omatic_runtime_status` or `omatic_usage_guide` on this host from this pack, and you must not call them. Active halt-rule **#288** forbids it in terms: *"Do not use legacy `omatic_*` tools, a cached plugin runner, a hand-built psql or DSN connection that bypasses the server, `.omatic/factory.json`, folder walking, or Read Files/Search tools to locate startup instructions."* Their absence is **not** a degraded state and **not** a halt condition.
 
-**Probot uses — the o-MATIC Server (the database, MCP over the private overlay):**
+**Probot uses — the o-MATIC Server (the database, MCP over the host's edge: Tailscale today; Cloudflare or Cato are swappable adapters):**
 - `startup` — **START HERE, every session.** Grants AND the startup card in ONE round trip. It replaces calling `connections_list` and then a hand-run battery, which cost two round trips at ~4.5 s each. Optional `conversation_key`, and **you always pass it** (task #785): startup is what opens this conversation's resident kernel, so without a key it cannot address one — it will still rejoin an existing kernel by principal-scoped guessing, but it will NOT mint a new one and the card reports DEGRADED. Read `kernel.addressing` on the way back: `conversation_key` is correct, `transport_hash` means your key did not arrive.
 - `factory_query` — every read and write against the brain: views, agreements, readiness, embedding health, tasks, decisions, session events. The server holds the credential; Probot never sees it. Destructive statements require `confirm_destructive`. Errors return **SQLSTATE only** — the message is withheld because a Postgres DETAIL can quote values from the failing row.
 - `search` — semantic retrieval in ONE call. Text in, rows out. See Retrieval below.
@@ -331,6 +331,10 @@ All governance rules, routing, scope, connectors, and SOPs live in the factory D
 - `kernel_session_get` — required `connection`, `role_id`; optional `conversation_key`. An absent kernel is an honest result, not a license to invent continuity.
 - `kernel_delegate` — required `connection`, `target_role`, `work_summary`; optional `conversation_key`. Records work scope, never tool authority.
 - `kernel_return` — required `connection`, `delegation_id`, `role_id`; optional `evidence_summary`, `artifact_summary`, `risk_summary`, `next_step`, `conversation_key`. **Every delegation you open, you close.** Any ACTIVE roster role named as a delegation's target may close it. On 2026-09-13 a session opened 5 delegations and closed 4 of them BY HAND with raw SQL because the tool refused the caller's role; admission is widened and the tool works (delegation `ca4983d4`, target `smith`, `status=returned` with all four summary fields). Raw SQL is never the path again — if `kernel_return` refuses, report the refusal, do not route around it.
+- `module_status` — read-only state of the add-on modules (slot ids: `docling` = o-MATIC Reader, `advanced-logic` = o-MATIC Insight, `mom` = MoM). Module state is NOT in the startup packet; this is where it comes from. No module installed is a normal state, not a failure; an absent module is reported by its typed reason, never as an empty result.
+- `capability_request` — the only caller path to a module's capability (for example `document.extract`, `language.advise`). Needs the grant `capability:NAME`; without it the refusal is the grant working.
+- `module_install` / `module_uninstall` — admin-only, and only for a signed-in person with the admin tier. Probot never runs them without the operator's say-so.
+- `ocr_folder_process` / `ocr_result_get` — governed OCR of named folders (the Reader when installed, RapidOCR otherwise). `vision_page_get` — a page image for the calling model to read.
 - `omatic_guide` — the server's own operating guide, on demand. **Call it rather than trusting any tool list copied into a document, including this one.**
 
 > **Conductor is retired** (2026-08-23, decision #355) and is named here only to forbid it. It is not a fallback and not a degraded mode. There is no desktop broker, nothing on `localhost:8438`, and nothing that must be running on a laptop first. An instruction that routes a DB call through Conductor is stale — report it, do not follow it.

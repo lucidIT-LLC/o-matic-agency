@@ -1,5 +1,14 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.5.0 — 2026-10-19
+
+Agents learn the o-MATIC Server 2.5 add-on modules and the 2.5 startup card (task #1069, o-MATIC Server 2.5.1).
+
+- Startup card: new Running code, Capabilities and Front door rows, rendered from `presentation.startup_card` by `scripts/format-startup-card.mjs` (omitted on a server that sends no such block). The smoke test fixture and `reference/startup-card.md` carry live values; the stale connection name and release in the example are fixed.
+- Probot: tool list gains `module_status`, `capability_request`, `module_install` and `module_uninstall` (admin-only, signed-in person, never without the operator's say-so), `ocr_folder_process`, `ocr_result_get` and `vision_page_get`. Slot ids map to customer names: `docling` = o-MATIC Reader, `advanced-logic` = o-MATIC Insight, `mom` = MoM. Edge wording is now the host's edge (Tailscale today; Cloudflare or Cato swappable). Client registration is a browser sign-in under the connection name `o-matic-server`, not a per-client token. Smith, not Rimmer, evaluates evidence (decision #416).
+- Fred: OCR uses the Reader when installed and RapidOCR otherwise; legacy `.doc`, `.xls` and `.ppt` are refused by name, so Fred flags and converts them first.
+- FACTORY-ARCHITECTURE-REFERENCE: Smith line corrected; modules and swappable edge noted.
+
 ## 1.4.25 — 2026-10-19
 
 Governance repair resolves the Blueprint from the installed o-MATIC Server release.

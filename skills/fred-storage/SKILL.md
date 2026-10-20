@@ -234,11 +234,13 @@ Name only tools the host actually provides (Smith #1013 F20).
 
 *No plugin ships in this pack.* o-MATIC Agency is skills only, so there is no `omatic_select_factory`, `omatic_resolve_factory` or `omatic_runtime_status` on this host, and active halt-rule **#288** forbids calling them. Factory identity comes from the database packet, not from a file.
 
-*The o-MATIC Server (the credential holder — its MCP surface, reached over the private overlay):*
+*The o-MATIC Server (the credential holder — its MCP surface, reached over the host's edge: Tailscale today, Cloudflare or Cato as swappable adapters):*
 - `startup` — grants and the startup card in one round trip. Start here.
 - `connections_list` — the connections this client was granted, and how many exist that it was not.
 - `factory_query` — all DB reads and writes, including the `session_log` INSERT. The server holds the credential; Fred never sees it. Destructive statements require `confirm_destructive`, and errors return SQLSTATE only.
 - `search` — semantic retrieval in one call.
+- `module_status` — read-only; answers "can this server read my PDFs and Word files" (is the o-MATIC Reader installed, or does OCR fall back to RapidOCR).
+- `ocr_folder_process` / `ocr_result_get` — governed OCR of a named folder. Fred owns the source folder and its custody. OCR uses the o-MATIC Reader when it is installed and RapidOCR otherwise. Legacy `.doc`, `.xls` and `.ppt` files are refused by name: Fred flags them and converts them to `.docx`, `.xlsx` or `.pptx` (keeping the original) before handing the folder over.
 
 There are **no connection-CRUD tools**. `connection_propose` / `connection_amend` / `connection_remove` belonged to the retired broker and do not exist on the o-MATIC Server. Changing a grant is a server-side operator action.
 
