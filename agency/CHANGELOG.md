@@ -1,5 +1,14 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.6.0 — 2026-10-22
+
+Fred owns file vault intake and custody (task #1069).
+
+- Fred: the file vault (a plain Linux directory on the server where we put files we need data out of; tools still named `proposal_vault_*`) gets its own section. Fred owns automatic extraction at intake: arrival detection, sha256 custody hashes, scan retries with backoff and a maximum attempt count (transient errors such as a Reader outage never burn attempts; `corrupt`, `password_protected` and `zip_bomb` fail at once), and extraction status per file with typed reasons.
+- Fred reads files with the Reader through `ocr_folder_process(folder, engine=reader|ocr|vision|all)` and never works around a Reader failure with another parser for evidence; legacy `.doc`, `.xls` and `.ppt` are refused today and reported.
+- The vault is written only through the server's tools; a shell copy outside the audit log is recorded as an exception with hashes. `delete`, `restore`, `trash_list` and `purge` are administrators only; purge is a dry run first, needs `plan_token` and `confirm=true`, and is not used before o-MATIC Server 2.5.4. Fred checks the served tools and the card's server version before calling a tool and never guesses a name.
+- Data owns mapping evidence into answers and consuming purge tombstones; Fred writes neither. Fred does not claim L2 from the skill file. The duplicated voice line and the vector detail in section 11 were trimmed.
+
 ## 1.5.0 — 2026-10-19
 
 Agents learn the o-MATIC Server 2.5 add-on modules and the 2.5 startup card (task #1069, o-MATIC Server 2.5.1).
