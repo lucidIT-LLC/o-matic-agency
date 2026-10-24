@@ -1,5 +1,16 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.7.0 — 2026-10-24
+
+Cursor 4.7 becomes a first-class Agency host (method parity path for Probot, Fred, and Data). Firm and Studio are untouched by this release.
+
+- **Cursor plugin surface:** `agency/.cursor-plugin/plugin.json` points at `./skills/` (core trio + Probot companion skills) and ships **no** `mcpServers` block. Root `.cursor-plugin/marketplace.json` catalogs the pack for Cursor.
+- **Cursor method cards:** `adapters/cursor/<role>.md` for Probot, Fred, and Data, plus `adapters/cursor/INSTALL.md`. Cards carry prompt substitutes for missing Claude hooks: discover tools live (never invent Claude tool names), fan-out ≤3 specialists, `startup` + `conversation_key` when MCP is present, GrokBot explicitly undefined.
+- **Grok paste stubs:** regenerated from the gold record with corrected voice (Fred courteous / “Always glad to be of service”; Data affable android — not “gruff” / “unemotional”) and a mandatory MCP startup/kernel ritual inside the 4k limit.
+- **Host matrix:** `adapters/README.md` adds Cursor 4.7 (`design verified` until measured) and a GrokBot TODO row.
+- **Install docs:** `agency/INSTALL.md` documents the Cursor path and the Project-skills fallback.
+- **Builder / verify:** `scripts/build-host-adapters.mjs` emits Cursor adapters; `scripts/verify-pack.mjs` checks `.cursor-plugin` version lockstep and no-MCP. Sibling packs are **not** sync-tooling-bumped.
+
 ## 1.6.0 — 2026-10-22
 
 Fred owns file vault intake and custody (task #1069).
