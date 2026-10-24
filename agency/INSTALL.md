@@ -15,6 +15,15 @@ Install the repository's `agency/` directory as a Claude plugin. Its
 `.claude-plugin` manifest loads the same `skills/` roster. Use the Claude agent
 wrappers in `adapters/claude/agents/` when the host supports named subagents.
 
+## Cursor 4.7
+
+Install `agency/` via the Cursor marketplace entry (`.cursor-plugin`). Skills
+load from `./skills/` (Probot, Fred, Data, and Probot companion skills);
+condensed method cards and Cursor host rules live in `adapters/cursor/`. See
+`adapters/cursor/INSTALL.md` for the primary path and the Project-skills
+fallback if the agent skill list stays thin. Configure o-MATIC Server MCP
+separately; this pack ships no MCP.
+
 ## Copilot
 
 Copy `adapters/copilot/.github/` into the target repository's `.github/`. That

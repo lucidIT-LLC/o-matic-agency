@@ -94,6 +94,20 @@ for (const d of readdirSync(root)) {
       else OK(`${d}: .claude-plugin and .codex-plugin versions match (${pj.version})`);
     }
   }
+  // Cursor host plugin (Agency 1.7.0+ / Studio 1.11.0+). Optional: packs without .cursor-plugin skip.
+  const cursorCp = join(pd, ".cursor-plugin", "plugin.json");
+  if (existsSync(cursorCp)) {
+    let uj;
+    try { uj = JSON.parse(readFileSync(cursorCp, "utf8")); }
+    catch (e) { FAIL(`${d}/.cursor-plugin/plugin.json invalid: ${e.message}`); uj = null; }
+    if (uj) {
+      if (uj.mcpServers) FAIL(`${d}/.cursor-plugin/plugin.json must not declare mcpServers`);
+      else OK(`${d}/.cursor-plugin/plugin.json declares no mcpServers`);
+      if (uj.version !== pj.version)
+        FAIL(`${d}: version drift -- .claude-plugin/plugin.json is ${pj.version}, .cursor-plugin/plugin.json is ${uj.version}`);
+      else OK(`${d}: .claude-plugin and .cursor-plugin versions match (${pj.version})`);
+    }
+  }
 }
 
 // 2b. compatibility tier must be declared — known_rules #284 is halt-grade

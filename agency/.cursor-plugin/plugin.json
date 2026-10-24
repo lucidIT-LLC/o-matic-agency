@@ -1,0 +1,24 @@
+{
+  "name": "agency",
+  "version": "1.7.0",
+  "description": "The portable core roster of an o-MATIC factory — Probot, Fred, and Data with their full role skills, Probot-owned audit/startup/tool-discovery lanes, governance contract, and host adapters. Ships NO MCP server; database access is the o-MATIC Server MCP surface configured by the host.",
+  "author": {
+    "name": "o-MATIC AI Research Lab",
+    "url": "https://o-matic.ai"
+  },
+  "homepage": "https://o-matic.ai",
+  "repository": "https://github.com/lucidIT-LLC/o-matic-agency",
+  "license": "BUSL-1.1",
+  "keywords": [
+    "orchestration",
+    "governance",
+    "factory-startup",
+    "storage",
+    "data-analysis",
+    "skill-only",
+    "agent-runtime",
+    "platform-portability",
+    "cursor"
+  ],
+  "skills": "./skills/"
+}

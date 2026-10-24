@@ -29,6 +29,8 @@
 //   ChatGPT custom GPT     adapters/chatgpt/<role>/instructions.md <= 8,000 chars,
 //                          knowledge = the role's SKILL.md (<= 20 files per GPT)
 //   Grok custom agent      adapters/grok/<role>.md, instructions <= 4,000 chars
+//   Cursor 4.7             adapters/cursor/<role>.md + .cursor-plugin skills path;
+//                          prompt substitutes for missing Claude hooks (Agency 1.7.0)
 //
 // Usage: node scripts/build-host-adapters.mjs <marketplace-root> [--check]
 // --check rebuilds in memory and exits 1 if any generated file differs or any
@@ -237,8 +239,33 @@ ${HEADER(a)}
 ${starters(a).map((t) => `   - ${t}`).join("\n")}
 `);
 
-  // 7. Grok custom agent.
-  put(`${pluginDir}/adapters/grok/${id}.md`, condensed(a, { knowledgeFile: null, limit: LIMITS.grok }));
+  // 7. Grok custom agent — gold-record voice plus mandatory startup/kernel ritual
+  // inside the 4k paste limit (chat-form Grok drops Claude hooks).
+  const grokRitual = `
+
+## MCP startup (when this host has o-MATIC Server)
+
+- Call \`startup\` with a stable \`conversation_key\` before any factory claim; render the card's \`state\`; never invent READY, DEGRADED, or BLOCKED.
+- Discover live tools before naming them. Never invent Claude Code tool names.
+- GrokBot is a separate, undefined product surface — do not claim its binding from these instructions.
+`;
+  const grokBody = condensed(a, { knowledgeFile: null, limit: LIMITS.grok - grokRitual.length }) + grokRitual;
+  put(`${pluginDir}/adapters/grok/${id}.md`, grokBody);
+
+  // 8. Cursor 4.7 host adapter — method card + prompt substitutes (no Claude hooks).
+  // Skills load via agency/.cursor-plugin; these cards are the portable method
+  // surface when the marketplace skill list is thin or for Project fallbacks.
+  const cursorBody = condensed(a, { knowledgeFile: null, limit: LIMITS.copilot }) + `
+
+## Cursor host rules (prompt substitutes for missing Claude hooks)
+
+- Prefer the installed \`${s.name}\` skill as your full role guide when the Cursor plugin loads it. Companion Probot skills (tool-discovery, startup-optimization, capability-optimization, governance-repair, staleness-audit) load from the same skills path.
+- Discover tools live on this host before naming them. Use Cursor tools that exist here (for example Read, Write, StrReplace, Glob, Grep, Shell, Task) or MCP tool names returned by the live server. Never invent Claude Code tool names (Edit, NotebookEdit, and the like).
+- Fan-out: at most three specialists in flight for one ask; name owners and stop conditions; do not spawn unbounded parallel work.
+- If an o-MATIC Server MCP connection is configured: call \`startup\` with a stable \`conversation_key\` before factory claims; render the card's \`state\`; never invent READY, DEGRADED, or BLOCKED. Copy Probot's \`conversation_key\` into kernel tools — never mint a second key.
+- GrokBot is a separate, undefined product surface in this pack — do not claim a GrokBot binding or runtime from these instructions.
+`;
+  put(`${pluginDir}/adapters/cursor/${id}.md`, cursorBody);
 
   // Limits, measured on what was generated.
   const lim = [
@@ -288,9 +315,36 @@ on that host, and is recorded in the o-MATIC factory, not in this file.
 | Microsoft 365 Copilot | chat | \`adapters/m365/<role>/declarativeAgent.json\` | package with the Microsoft 365 Agents Toolkit |
 | ChatGPT | chat | \`adapters/chatgpt/<role>/\` instructions + SETUP | create a custom GPT; upload the role guide as knowledge |
 | Grok (grok.com) | chat | \`adapters/grok/<role>.md\` | paste into a Custom Agent's instructions |
+| Cursor 4.7 | skills + method cards | \`.cursor-plugin\` + \`adapters/cursor/<role>.md\` | add this repo as a Cursor marketplace / install \`agency\`; see \`adapters/cursor/INSTALL.md\`. Status: design verified until skill discovery is measured on the host. |
+| GrokBot | — | not shipped | Jimmy must define runtime + MCP principal first; do not overload Cursor or Grok stubs |
 
 Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
 Grok <= 4,000, Copilot <= 30,000, M365 name <= 100 and description <= 1,000.
+`);
+
+// Cursor install note (regenerated with the matrix).
+put(`${pluginDir}/adapters/cursor/INSTALL.md`, `# Cursor 4.7 — install o-MATIC Agency
+
+${HEADER({ canonical_skill: "each role's SKILL.md" })}
+
+## Primary path (marketplace plugin)
+
+1. Add this repository as a Cursor plugin marketplace (GitHub: \`lucidIT-LLC/o-matic-agency\`).
+2. Install the \`agency\` plugin. It declares \`.cursor-plugin/plugin.json\` with \`"skills": "./skills/"\` and **no** \`mcpServers\` block (marketplace hosts omit MCP-declaring plugins).
+3. Configure the host's o-MATIC Server MCP pairing separately if you need factory memory — this pack never ships credentials or an MCP server.
+4. Invoke Probot, Fred, or Data by name / skill trigger (companion Probot skills ship in the same skills path). Prefer the installed skill; fall back to \`adapters/cursor/<role>.md\` for the condensed method card and Cursor host rules.
+
+## Fallback if marketplace skills do not appear on the agent skill list
+
+Measured gap on some Cursor 4.7 sessions: the marketplace cache can exist while \`agency:*\` skills still do not load into the agent skill surface.
+
+1. Copy or symlink thin wrappers under the project \`.cursor/skills/<skill-name>/SKILL.md\` (or \`.agents/skills/\`) that point the agent to read the installed pack skill — prefer wrappers over forked skill bodies.
+2. Optionally add \`.cursor/rules\` pointers for lane/voice only; rules are not a substitute for full SKILL.md depth.
+3. Re-measure skill visibility after refresh; do not claim production_verified until measured.
+
+## Prompt substitutes (Claude hooks are absent on Cursor)
+
+Every \`adapters/cursor/<role>.md\` card repeats: discover tools live, never invent Claude tool names, fan-out ≤3 specialists, \`startup\` + \`conversation_key\` when MCP is present, GrokBot undefined.
 `);
 
 // Every skill's agents/openai.yaml names icons that exist (task #1024:

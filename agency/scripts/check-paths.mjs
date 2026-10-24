@@ -32,7 +32,7 @@ const pack = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const IGNORE = new Set([
   ".trash/", "archive/", "_omatic/", "factory/", "/Library/CloudStorage/",
   `${basename(pack)}/`, ".github/", "agents/", "skills/", "contracts/", "evals/",
-  ".claude-plugin", ".codex-plugin",
+  ".claude-plugin", ".codex-plugin", ".cursor-plugin",
 ]);
 const REF = /`((?:\.{1,2}\/)[A-Za-z0-9_.\/-]*(?:\.md|\.ya?ml|\.sql|\.mjs|\/))`/g;
 
