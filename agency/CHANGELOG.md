@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.8.1 — 2026-10-25
+
+Grok Bot / Cursor marketplace branding (display name, master logo, category). Additive Cursor fields only; Claude PreToolUse and Codex paths unchanged.
+
+- **Cursor plugin:** `agency/.cursor-plugin/plugin.json` adds `displayName`, `logo` (`assets/logo.png`), `category` (`productivity`), and `tags`.
+- **Cursor marketplace:** root `.cursor-plugin/marketplace.json` adds matching `displayName` / `logo` / `category` for the agency entry.
+- **Versions:** all host manifests + `gemini-extension.json` patch-bumped in lockstep (1.8.0 → 1.8.1). Robot art untouched.
+
 ## 1.8.0 — 2026-10-25
 
 Cursor/Grok kernel ritual becomes pack-enforced (not Project-preference-only). Claude PreToolUse paths untouched — additive Cursor skills and adapters only. Firm/Studio not sync-tooling-bumped by this Agency commit.
