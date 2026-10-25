@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.8.0 — 2026-10-25
+
+Cursor/Grok kernel ritual becomes pack-enforced (not Project-preference-only). Claude PreToolUse paths untouched — additive Cursor skills and adapters only. Firm/Studio not sync-tooling-bumped by this Agency commit.
+
+- **Cursor skills:** `skills/cursor-probot/`, `skills/cursor-fred/`, `skills/cursor-data/` — auto-attach host skills that mandate first-call `startup` + Project-stable `conversation_key`, believe card `state`, `kernel_plan_update` / `kernel_delegate` / `kernel_return` (Probot owns plan), Decision 694 ≤3 specialists, multi-host MCP reconnect (Cursor Settings/MCP / Reload Window; Codex; Claude `/mcp`; generic — never Claude-only), and `omatic_guide` before unsure capability claims. Point at canonical `probot-orchestrator` / `fred-storage` / `data-analyst` for lane depth.
+- **Cursor method cards + Grok paste stubs:** regenerated with the same ritual (Grok ≤4k). GrokBot remains undefined; do not reuse a Cursor principal.
+- **Install / matrix:** Cursor path documents the `cursor-*` trio as the enforcement layer ahead of Project preferences.
+
 ## 1.7.0 — 2026-10-24
 
 Cursor 4.7 becomes a first-class Agency host (method parity path for Probot, Fred, and Data). Firm and Studio are untouched by this release.

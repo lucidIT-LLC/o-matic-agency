@@ -18,8 +18,11 @@ wrappers in `adapters/claude/agents/` when the host supports named subagents.
 ## Cursor 4.7
 
 Install `agency/` via the Cursor marketplace entry (`.cursor-plugin`). Skills
-load from `./skills/` (Probot, Fred, Data, and Probot companion skills);
-condensed method cards and Cursor host rules live in `adapters/cursor/`. See
+load from `./skills/`: the Cursor/Grok enforcement trio (`cursor-probot`,
+`cursor-fred`, `cursor-data`), the canonical Probot/Fred/Data skills, and Probot
+companion skills. Condensed method cards live in `adapters/cursor/`. The
+`cursor-*` skills mandate startup → kernel plan/delegate/return without Claude
+PreToolUse hooks — Project preferences alone are not enough. See
 `adapters/cursor/INSTALL.md` for the primary path and the Project-skills
 fallback if the agent skill list stays thin. Configure o-MATIC Server MCP
 separately; this pack ships no MCP.

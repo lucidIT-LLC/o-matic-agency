@@ -4,15 +4,15 @@
     "name": "lucidIT-LLC"
   },
   "metadata": {
-    "description": "o-MATIC Agency — where an o-MATIC factory is staffed. Probot, Fred, and Data. Ships no MCP server.",
-    "version": "1.7.0"
+    "description": "o-MATIC Agency \u2014 where an o-MATIC factory is staffed. Probot, Fred, and Data. Ships no MCP server.",
+    "version": "1.8.0"
   },
   "plugins": [
     {
       "name": "agency",
       "source": "./agency",
-      "description": "o-MATIC Agency portable core roster — Probot, Fred, and Data. Ships no MCP server.",
-      "version": "1.7.0"
+      "description": "o-MATIC Agency portable core roster \u2014 Probot, Fred, and Data. Ships no MCP server.",
+      "version": "1.8.0"
     }
   ]
 }

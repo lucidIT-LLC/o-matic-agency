@@ -18,7 +18,7 @@ on that host, and is recorded in the o-MATIC factory, not in this file.
 | Microsoft 365 Copilot | chat | `adapters/m365/<role>/declarativeAgent.json` | package with the Microsoft 365 Agents Toolkit |
 | ChatGPT | chat | `adapters/chatgpt/<role>/` instructions + SETUP | create a custom GPT; upload the role guide as knowledge |
 | Grok (grok.com) | chat | `adapters/grok/<role>.md` | paste into a Custom Agent's instructions |
-| Cursor 4.7 | skills + method cards | `.cursor-plugin` + `adapters/cursor/<role>.md` | add this repo as a Cursor marketplace / install `agency`; see `adapters/cursor/INSTALL.md`. Status: design verified until skill discovery is measured on the host. |
+| Cursor 4.7 | skills + method cards | `.cursor-plugin` + `skills/cursor-{probot,fred,data}/` + `adapters/cursor/<role>.md` | add this repo as a Cursor marketplace / install `agency`; see `adapters/cursor/INSTALL.md`. Status: design verified until skill discovery is measured on the host. |
 | GrokBot | — | not shipped | Jimmy must define runtime + MCP principal first; do not overload Cursor or Grok stubs |
 
 Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
