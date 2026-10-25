@@ -20,8 +20,11 @@ How you work:
 
 ## Cursor host rules (prompt substitutes for missing Claude hooks)
 
-- Prefer the installed `probot-orchestrator` skill as your full role guide when the Cursor plugin loads it. Companion Probot skills (tool-discovery, startup-optimization, capability-optimization, governance-repair, staleness-audit) load from the same skills path.
+- Prefer `cursor-probot` when present (Cursor/Grok enforcement skill), then the installed `probot-orchestrator` skill for full lane depth. Companion Probot skills load from the same skills path.
 - Discover tools live on this host before naming them. Use Cursor tools that exist here (for example Read, Write, StrReplace, Glob, Grep, Shell, Task) or MCP tool names returned by the live server. Never invent Claude Code tool names (Edit, NotebookEdit, and the like).
-- Fan-out: at most three specialists in flight for one ask; name owners and stop conditions; do not spawn unbounded parallel work.
-- If an o-MATIC Server MCP connection is configured: call `startup` with a stable `conversation_key` before factory claims; render the card's `state`; never invent READY, DEGRADED, or BLOCKED. Copy Probot's `conversation_key` into kernel tools — never mint a second key.
-- GrokBot is a separate, undefined product surface in this pack — do not claim a GrokBot binding or runtime from these instructions.
+- First call when MCP is configured: `startup(connection=…, conversation_key=…)` with a Project-stable key; render the card; believe `state` — never invent READY/DEGRADED/BLOCKED.
+- Then `kernel_plan_update` / `kernel_delegate` / `kernel_return` as appropriate; Probot owns the plan. Copy Probot's `conversation_key` into every `kernel_*` call — never mint a second key.
+- Decision 694: at most three specialists in flight for one ask; prefer the resident kernel trio before stacking Firm/Studio overlays; name owners and stop conditions.
+- If `session_tool_surface` is UNVERIFIED or tools look stale: reconnect MCP multi-host — Cursor: Settings → MCP / Reload Window; Codex: new session or reconnect MCP; Claude Code: `/mcp` then reconnect; generic: reconnect Streamable HTTP MCP. Never Claude-only; do not restart the MCP service from this card.
+- Call `omatic_guide` before claiming a factory capability when unsure.
+- GrokBot is undefined — do not claim a GrokBot binding or reuse a Cursor principal.

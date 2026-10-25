@@ -30,7 +30,9 @@
 //                          knowledge = the role's SKILL.md (<= 20 files per GPT)
 //   Grok custom agent      adapters/grok/<role>.md, instructions <= 4,000 chars
 //   Cursor 4.7             adapters/cursor/<role>.md + .cursor-plugin skills path;
-//                          prompt substitutes for missing Claude hooks (Agency 1.7.0)
+//                          prompt substitutes for missing Claude hooks (Agency 1.7.0+).
+//                          Agency 1.8.0 also ships skills/cursor-{probot,fred,data}/
+//                          (hand-authored; not generated here) for auto-attach ritual.
 //
 // Usage: node scripts/build-host-adapters.mjs <marketplace-root> [--check]
 // --check rebuilds in memory and exits 1 if any generated file differs or any
@@ -245,25 +247,32 @@ ${starters(a).map((t) => `   - ${t}`).join("\n")}
 
 ## MCP startup (when this host has o-MATIC Server)
 
-- Call \`startup\` with a stable \`conversation_key\` before any factory claim; render the card's \`state\`; never invent READY, DEGRADED, or BLOCKED.
+- First call: \`startup(connection=…, conversation_key=…)\` with a Project-stable key; render the card; believe \`state\` (READY/DEGRADED/BLOCKED) — never invent it.
+- Then \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` as appropriate; Probot owns the plan. Copy the same \`conversation_key\` into every \`kernel_*\` call — never mint a second key.
+- Decision 694: at most 3 specialists in flight for one operator turn; prefer the resident kernel trio before stacking overlays.
+- If \`session_tool_surface\` is UNVERIFIED or tools look stale: reconnect MCP multi-host — Cursor: Settings → MCP / Reload Window; Codex: new session or reconnect MCP; Claude Code: \`/mcp\` then reconnect; generic: reconnect the Streamable HTTP MCP client. Never Claude-only.
+- Call \`omatic_guide\` before claiming a factory capability when unsure.
 - Discover live tools before naming them. Never invent Claude Code tool names.
-- GrokBot is a separate, undefined product surface — do not claim its binding from these instructions.
+- GrokBot is undefined — do not claim its binding or reuse a Cursor principal.
 `;
   const grokBody = condensed(a, { knowledgeFile: null, limit: LIMITS.grok - grokRitual.length }) + grokRitual;
   put(`${pluginDir}/adapters/grok/${id}.md`, grokBody);
 
   // 8. Cursor 4.7 host adapter — method card + prompt substitutes (no Claude hooks).
-  // Skills load via agency/.cursor-plugin; these cards are the portable method
-  // surface when the marketplace skill list is thin or for Project fallbacks.
+  // Skills load via agency/.cursor-plugin (including skills/cursor-{probot,fred,data});
+  // these cards are the portable method surface / Project fallback.
   const cursorBody = condensed(a, { knowledgeFile: null, limit: LIMITS.copilot }) + `
 
 ## Cursor host rules (prompt substitutes for missing Claude hooks)
 
-- Prefer the installed \`${s.name}\` skill as your full role guide when the Cursor plugin loads it. Companion Probot skills (tool-discovery, startup-optimization, capability-optimization, governance-repair, staleness-audit) load from the same skills path.
+- Prefer \`cursor-${id}\` when present (Cursor/Grok enforcement skill), then the installed \`${s.name}\` skill for full lane depth. Companion Probot skills load from the same skills path.
 - Discover tools live on this host before naming them. Use Cursor tools that exist here (for example Read, Write, StrReplace, Glob, Grep, Shell, Task) or MCP tool names returned by the live server. Never invent Claude Code tool names (Edit, NotebookEdit, and the like).
-- Fan-out: at most three specialists in flight for one ask; name owners and stop conditions; do not spawn unbounded parallel work.
-- If an o-MATIC Server MCP connection is configured: call \`startup\` with a stable \`conversation_key\` before factory claims; render the card's \`state\`; never invent READY, DEGRADED, or BLOCKED. Copy Probot's \`conversation_key\` into kernel tools — never mint a second key.
-- GrokBot is a separate, undefined product surface in this pack — do not claim a GrokBot binding or runtime from these instructions.
+- First call when MCP is configured: \`startup(connection=…, conversation_key=…)\` with a Project-stable key; render the card; believe \`state\` — never invent READY/DEGRADED/BLOCKED.
+- Then \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` as appropriate; Probot owns the plan. Copy Probot's \`conversation_key\` into every \`kernel_*\` call — never mint a second key.
+- Decision 694: at most three specialists in flight for one ask; prefer the resident kernel trio before stacking Firm/Studio overlays; name owners and stop conditions.
+- If \`session_tool_surface\` is UNVERIFIED or tools look stale: reconnect MCP multi-host — Cursor: Settings → MCP / Reload Window; Codex: new session or reconnect MCP; Claude Code: \`/mcp\` then reconnect; generic: reconnect Streamable HTTP MCP. Never Claude-only; do not restart the MCP service from this card.
+- Call \`omatic_guide\` before claiming a factory capability when unsure.
+- GrokBot is undefined — do not claim a GrokBot binding or reuse a Cursor principal.
 `;
   put(`${pluginDir}/adapters/cursor/${id}.md`, cursorBody);
 
@@ -315,7 +324,7 @@ on that host, and is recorded in the o-MATIC factory, not in this file.
 | Microsoft 365 Copilot | chat | \`adapters/m365/<role>/declarativeAgent.json\` | package with the Microsoft 365 Agents Toolkit |
 | ChatGPT | chat | \`adapters/chatgpt/<role>/\` instructions + SETUP | create a custom GPT; upload the role guide as knowledge |
 | Grok (grok.com) | chat | \`adapters/grok/<role>.md\` | paste into a Custom Agent's instructions |
-| Cursor 4.7 | skills + method cards | \`.cursor-plugin\` + \`adapters/cursor/<role>.md\` | add this repo as a Cursor marketplace / install \`agency\`; see \`adapters/cursor/INSTALL.md\`. Status: design verified until skill discovery is measured on the host. |
+| Cursor 4.7 | skills + method cards | \`.cursor-plugin\` + \`skills/cursor-{probot,fred,data}/\` + \`adapters/cursor/<role>.md\` | add this repo as a Cursor marketplace / install \`agency\`; see \`adapters/cursor/INSTALL.md\`. Status: design verified until skill discovery is measured on the host. |
 | GrokBot | — | not shipped | Jimmy must define runtime + MCP principal first; do not overload Cursor or Grok stubs |
 
 Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
@@ -332,19 +341,19 @@ ${HEADER({ canonical_skill: "each role's SKILL.md" })}
 1. Add this repository as a Cursor plugin marketplace (GitHub: \`lucidIT-LLC/o-matic-agency\`).
 2. Install the \`agency\` plugin. It declares \`.cursor-plugin/plugin.json\` with \`"skills": "./skills/"\` and **no** \`mcpServers\` block (marketplace hosts omit MCP-declaring plugins).
 3. Configure the host's o-MATIC Server MCP pairing separately if you need factory memory — this pack never ships credentials or an MCP server.
-4. Invoke Probot, Fred, or Data by name / skill trigger (companion Probot skills ship in the same skills path). Prefer the installed skill; fall back to \`adapters/cursor/<role>.md\` for the condensed method card and Cursor host rules.
+4. Invoke Probot, Fred, or Data by name / skill trigger. Prefer \`cursor-probot\` / \`cursor-fred\` / \`cursor-data\` for host ritual enforcement, then the canonical \`probot-orchestrator\` / \`fred-storage\` / \`data-analyst\` skills for lane depth. Fall back to \`adapters/cursor/<role>.md\` for the condensed method card.
 
 ## Fallback if marketplace skills do not appear on the agent skill list
 
 Measured gap on some Cursor 4.7 sessions: the marketplace cache can exist while \`agency:*\` skills still do not load into the agent skill surface.
 
-1. Copy or symlink thin wrappers under the project \`.cursor/skills/<skill-name>/SKILL.md\` (or \`.agents/skills/\`) that point the agent to read the installed pack skill — prefer wrappers over forked skill bodies.
-2. Optionally add \`.cursor/rules\` pointers for lane/voice only; rules are not a substitute for full SKILL.md depth.
+1. Copy or symlink thin wrappers under the project \`.cursor/skills/<skill-name>/SKILL.md\` (or \`.agents/skills/\`) that point the agent to read the installed pack skill — prefer wrappers over forked skill bodies. Prioritize the \`cursor-*\` trio when the gap is missing ritual.
+2. Optionally add \`.cursor/rules\` pointers for lane/voice only; rules are not a substitute for full SKILL.md depth or pack-shipped \`cursor-*\` skills.
 3. Re-measure skill visibility after refresh; do not claim production_verified until measured.
 
 ## Prompt substitutes (Claude hooks are absent on Cursor)
 
-Every \`adapters/cursor/<role>.md\` card repeats: discover tools live, never invent Claude tool names, fan-out ≤3 specialists, \`startup\` + \`conversation_key\` when MCP is present, GrokBot undefined.
+Pack-shipped \`skills/cursor-{probot,fred,data}/\` and every \`adapters/cursor/<role>.md\` card mandate: first-call \`startup\` + Project-stable \`conversation_key\`, believe card \`state\`, \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` (Probot owns plan), Decision 694 ≤3 specialists, multi-host MCP reconnect (Cursor / Codex / Claude \`/mcp\` / generic — never Claude-only), \`omatic_guide\` before unsure capability claims, GrokBot undefined. Project preferences alone are not enough.
 `);
 
 // Every skill's agents/openai.yaml names icons that exist (task #1024:
