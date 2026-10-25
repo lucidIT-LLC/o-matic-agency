@@ -146,6 +146,12 @@ See `SECURITY.md` and `COMPLIANCE.md`. Short version: this repository is text. I
 holds no credentials, opens no connections, and makes no compliance claim. The
 trust boundary is the o-MATIC Server.
 
+## Cursor and Grok Bot
+
+**Cursor:** This repository includes a Cursor plugin manifest. On Teams and Enterprise, a team admin can import this GitHub repository as a team marketplace from **Dashboard → Plugins & MCPs → Team Marketplaces → Add Marketplace → Import from Repo**, then install the `agency` plugin in Cursor Customize. Cursor requires public Marketplace plugins to be open source. This repository's current BUSL license explicitly is not open source, so it is not eligible for public Marketplace submission under the current license. A fresh install is also unverified; the documented team import route does not itself establish license permission. See [Cursor's plugin guide](https://prod.cursor.com/docs/plugins) and [Marketplace submission page](https://cursor.com/marketplace/publish).
+
+**Grok Bot:** This repository is a source for the o-MATIC role; it does not itself install a Bot. Grok Bot uses its own template sharing and import flow. No o-MATIC public Bot template or clean import test is published yet. Publishing a role-derived Bot template requires licensing review first. See [xAI's Bot sharing and import guide](https://docs.x.ai/grok-bot/bots).
+
 ## License
 
 Business Source License 1.1 (BUSL). See `LICENSE.md`. Converts to Apache License, Version 2.0 on 2030-09-05.
