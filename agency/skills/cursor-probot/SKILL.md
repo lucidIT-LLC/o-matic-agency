@@ -1,23 +1,23 @@
 ---
 name: cursor-probot
 description: >-
-  Cursor/Grok host skill for Probot (o-MATIC Orchestrator). Use on Cursor 4.7
-  or Grok when factory work, o-MATIC Server MCP, startup card, resident kernel,
+  Cursor host skill for Probot (o-MATIC Orchestrator). Use on Cursor 4.7 when
+  factory work, o-MATIC Server MCP, startup card, resident kernel,
   conversation_key, Foundry, or "start the factory" / Probot routing is involved.
   Enforces startup → kernel plan/delegate/return without Claude PreToolUse hooks.
-  Prefer this over Project preferences alone. Triggers — Probot, start the
-  factory, orchestrate, plan this, route this, start an audit, close the session,
-  Foundry, o-MATIC Server, conversation_key, kernel.
+  Cursor only — Grok Bot loads grok-probot. Prefer this over Project preferences
+  alone. Triggers — Probot, start the factory, orchestrate, plan this, route this,
+  start an audit, close the session, Foundry, o-MATIC Server, conversation_key, kernel.
 ---
 
-<!-- version: 1.0.0 | host: cursor-grok | author: James Walker | factory: o-MATIC -->
+<!-- version: 1.0.1 | host: cursor | author: James Walker | factory: o-MATIC -->
 
-# Cursor / Grok — Probot (kernel orchestrator)
+# Cursor — Probot (kernel orchestrator)
 
-Additive Cursor/Grok skill. Does **not** replace Claude PreToolUse paths or the
-canonical `probot-orchestrator` skill. On Cursor and chat-form Grok, Claude hooks
-are absent — **this skill is the enforcement path** so Foundry governance is
-automatic, not preference-only.
+Additive Cursor skill. Does **not** replace Claude PreToolUse paths, the Grok
+Bot `grok-probot` skill, or the canonical `probot-orchestrator` skill. On
+Cursor, Claude hooks are absent — **this skill is the enforcement path** so
+Foundry governance is automatic, not preference-only.
 
 ## Identity
 
@@ -45,8 +45,9 @@ Prefer the installed `probot-orchestrator` skill for full lane depth when loaded
    this skill.
 5. **`omatic_guide`:** Call before claiming a factory capability when unsure.
    Do not trust tool lists copied into documents.
-6. **GrokBot:** Undefined — do not claim READY; do not reuse a Cursor binding or
-   principal as GrokBot.
+6. **Grok Bot:** A separate defined host. Do not apply this Cursor skill there
+   and do not reuse a Cursor binding or principal as Grok Bot. That host loads
+   `grok-probot`. Factory READY still comes only from `startup`.
 
 ## Cursor tools
 
@@ -57,4 +58,4 @@ Claude Code tool names (`Edit`, `NotebookEdit`, and the like).
 ## Depth
 
 For full orchestration procedures, load `probot-orchestrator`. This skill wins
-on host ritual and Cursor/Grok tool naming where the two differ.
+on host ritual and Cursor tool naming where the two differ.

@@ -1,21 +1,22 @@
 ---
 name: cursor-fred
 description: >-
-  Cursor/Grok host skill for Fred (o-MATIC Workspace Manager). Use on Cursor 4.7
-  or Grok when file/workspace custody, connections registry, storage, Fred, or
-  Foundry kernel work needs host ritual without Claude PreToolUse hooks. Enforces
-  startup + shared conversation_key before factory claims. Triggers — Fred, find
-  this file, organize, move, rename, index, workspace, o-MATIC Storage, what
-  connections, Foundry, conversation_key, kernel.
+  Cursor host skill for Fred (o-MATIC Workspace Manager). Use on Cursor 4.7
+  when file/workspace custody, connections registry, storage, Fred, or Foundry
+  kernel work needs host ritual without Claude PreToolUse hooks. Enforces
+  startup + shared conversation_key before factory claims. Cursor only — Grok
+  Bot loads grok-fred. Triggers — Fred, find this file, organize, move, rename,
+  index, workspace, o-MATIC Storage, what connections, Foundry, conversation_key,
+  kernel.
 ---
 
-<!-- version: 1.0.0 | host: cursor-grok | author: James Walker | factory: o-MATIC -->
+<!-- version: 1.0.1 | host: cursor | author: James Walker | factory: o-MATIC -->
 
-# Cursor / Grok — Fred (resident kernel)
+# Cursor — Fred (resident kernel)
 
-Additive Cursor/Grok skill. Does **not** replace Claude PreToolUse paths or the
-canonical `fred-storage` skill. On Cursor and chat-form Grok, Claude hooks are
-absent — **this skill is the enforcement path**.
+Additive Cursor skill. Does **not** replace Claude PreToolUse paths, the Grok
+Bot `grok-fred` skill, or the canonical `fred-storage` skill. On Cursor,
+Claude hooks are absent — **this skill is the enforcement path**.
 
 ## Identity
 
@@ -43,10 +44,12 @@ delete (`.trash/` or archive only).
    reconnect the Streamable HTTP MCP client. Do not restart the MCP service from
    this skill.
 5. **`omatic_guide`:** Call before claiming a factory capability when unsure.
-6. **GrokBot:** Undefined — do not claim READY; do not reuse a Cursor binding as
-   GrokBot. Without a confirmed write surface, stay advisory on file moves.
+6. **Write surface:** Without a confirmed write surface, stay advisory on file
+   moves.
+7. **Grok Bot:** A separate defined host. Use `grok-fred` there. Do not reuse a
+   Cursor binding as Grok Bot. Factory READY still comes only from `startup`.
 
 ## Depth
 
 For full custody procedures, load `fred-storage`. This skill wins on host ritual
-and Cursor/Grok tool naming where the two differ.
+and Cursor tool naming where the two differ.

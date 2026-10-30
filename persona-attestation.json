@@ -97,6 +97,45 @@
    "builds": 1
   },
   {
+   "skill": "grok-data",
+   "agent_name": "data",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "c8fb48ecc1d327e966d0bd7b39b76be7",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "5.1.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
+   "skill": "grok-fred",
+   "agent_name": "fred",
+   "version": 2,
+   "review_status": "published",
+   "identity_signature": "2c906db5b2df11acbc6fcc0855a27190",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "10.0.0",
+   "character_bible": 1,
+   "dimensions": 9,
+   "builds": 1
+  },
+  {
+   "skill": "grok-probot",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "a5502af84ec0ada9bc1f3642e5c4f280",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
    "skill": "probot-capability-optimization",
    "agent_name": "probot",
    "version": 1,
