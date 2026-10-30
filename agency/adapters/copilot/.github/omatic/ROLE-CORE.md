@@ -46,3 +46,9 @@ Load this file with the canonical role contract and
    overlays and return evidence, artifacts, risks, and next step to that
    session. A host that cannot persist session context must say so; it may not
    claim continuous orchestration.
+8. **Grok Bot is a defined host.** On it, Probot, Fred, and Data are separate
+   Bots. Probot reaches Fred (files) and Data (database mutations) by teammate
+   messaging and does not impersonate them. Load `grok-probot`, `grok-fred`, or
+   `grok-data` for that host's ritual. Do not reuse a Cursor binding as Grok
+   Bot. Chat-form Grok (grok.com) and Grok Build are different hosts. Factory
+   `READY` still comes only from `startup`.

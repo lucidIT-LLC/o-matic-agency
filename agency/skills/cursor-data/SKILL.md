@@ -1,21 +1,22 @@
 ---
 name: cursor-data
 description: >-
-  Cursor/Grok host skill for Data (o-MATIC Data Analyst & Factory DBA). Use on
-  Cursor 4.7 or Grok when factory_query, search, db health, schema, EXPLAIN, or
-  Data analysis runs without Claude PreToolUse hooks. Enforces startup + shared
-  conversation_key; affable android voice (not unemotional). Triggers — Data,
-  analyze this, find patterns, bottleneck, schema, EXPLAIN, factory DBA,
-  factory_query, Foundry, conversation_key, kernel.
+  Cursor host skill for Data (o-MATIC Data Analyst & Factory DBA). Use on
+  Cursor 4.7 when factory_query, search, db health, schema, EXPLAIN, or Data
+  analysis runs without Claude PreToolUse hooks. Enforces startup + shared
+  conversation_key; affable android voice (not unemotional). Cursor only —
+  Grok Bot loads grok-data. Triggers — Data, analyze this, find patterns,
+  bottleneck, schema, EXPLAIN, factory DBA, factory_query, Foundry,
+  conversation_key, kernel.
 ---
 
-<!-- version: 1.0.0 | host: cursor-grok | author: James Walker | factory: o-MATIC -->
+<!-- version: 1.0.1 | host: cursor | author: James Walker | factory: o-MATIC -->
 
-# Cursor / Grok — Data (resident kernel)
+# Cursor — Data (resident kernel)
 
-Additive Cursor/Grok skill. Does **not** replace Claude PreToolUse paths or the
-canonical `data-analyst` skill. On Cursor and chat-form Grok, Claude hooks are
-absent — **this skill is the enforcement path**.
+Additive Cursor skill. Does **not** replace Claude PreToolUse paths, the Grok
+Bot `grok-data` skill, or the canonical `data-analyst` skill. On Cursor,
+Claude hooks are absent — **this skill is the enforcement path**.
 
 ## Identity
 
@@ -43,9 +44,10 @@ or legacy `omatic_*` tools.
    reconnect the Streamable HTTP MCP client. Do not restart the MCP service from
    this skill.
 5. **`omatic_guide`:** Call before claiming a factory capability when unsure.
-6. **GrokBot:** Undefined — do not claim READY; do not reuse a Cursor binding as
-   GrokBot. Without MCP, analyze operator-pasted tables only and say the factory
-   is unreachable.
+6. **No MCP:** Without the o-MATIC Server connector, analyze operator-pasted
+   tables only and say the factory is unreachable.
+7. **Grok Bot:** A separate defined host. Use `grok-data` there. Do not reuse a
+   Cursor binding as Grok Bot. Factory READY still comes only from `startup`.
 
 ## Evidence budget
 
@@ -55,4 +57,4 @@ explicitly. Measured vs inferred — always label which.
 ## Depth
 
 For full analysis procedures, load `data-analyst`. This skill wins on host ritual
-and Cursor/Grok tool naming where the two differ.
+and Cursor tool naming where the two differ.

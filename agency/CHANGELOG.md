@@ -1,5 +1,14 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.9.0 — 2026-10-30
+
+Grok Bot is a defined host for Probot, Fred, and Data. Cursor, grok.com, and Grok Build stay separate. Claude PreToolUse paths are unchanged.
+
+- **Grok Bot skills:** `skills/grok-probot/`, `skills/grok-fred/`, `skills/grok-data/`. Each Bot loads its skill by name. The ritual is startup on the o-MATIC Server connector when it is configured, one stable `conversation_key`, believe card `state`, `kernel_*` with Probot owning the plan, and Decision 694. Tools are discovered live and called by the names that host returns. Probot routes file work to the Fred bot and database mutations to the Data bot by teammate message. Writes wait for the operator's own explicit approval of the exact content. Outgoing messages are drafts for the operator.
+- **Paste descriptions:** `adapters/grok-bot/<role>.md` plus `adapters/grok-bot/INSTALL.md`. No public Bot template, and no new avatar art.
+- **Other hosts:** grok.com paste stubs and Cursor method cards now name Grok Bot as a defined host and point at `grok-*`. Cursor skills no longer claim that host. `adapters/ROLE-CORE.md` carries the same distinction.
+- **Versions:** host manifests and `gemini-extension.json` move 1.8.1 → 1.9.0. Sibling packs are not sync-tooling-bumped. The adapter builder and its test were edited in this repo, the same way the Cursor host work was.
+
 ## 1.8.1 — 2026-10-25
 
 Grok Bot / Cursor marketplace branding (display name, master logo, category). Additive Cursor fields only; Claude PreToolUse and Codex paths unchanged.

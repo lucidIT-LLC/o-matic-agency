@@ -18,14 +18,24 @@ wrappers in `adapters/claude/agents/` when the host supports named subagents.
 ## Cursor 4.7
 
 Install `agency/` via the Cursor marketplace entry (`.cursor-plugin`). Skills
-load from `./skills/`: the Cursor/Grok enforcement trio (`cursor-probot`,
-`cursor-fred`, `cursor-data`), the canonical Probot/Fred/Data skills, and Probot
-companion skills. Condensed method cards live in `adapters/cursor/`. The
-`cursor-*` skills mandate startup → kernel plan/delegate/return without Claude
-PreToolUse hooks — Project preferences alone are not enough. See
+load from `./skills/`: the Cursor host trio (`cursor-probot`, `cursor-fred`,
+`cursor-data`), the canonical Probot/Fred/Data skills, and Probot companion
+skills. Condensed method cards live in `adapters/cursor/`. The `cursor-*`
+skills mandate startup → kernel plan/delegate/return without Claude PreToolUse
+hooks — Project preferences alone are not enough. See
 `adapters/cursor/INSTALL.md` for the primary path and the Project-skills
 fallback if the agent skill list stays thin. Configure o-MATIC Server MCP
 separately; this pack ships no MCP.
+
+## Grok Bot
+
+Grok Bot is a defined host, separate from Cursor and from grok.com. Create one
+Bot each for Probot, Fred, and Data. Enable `grok-probot`, `grok-fred`, or
+`grok-data` by name, and the matching canonical skill for lane depth. Paste the
+description in `adapters/grok-bot/<role>.md`. Probot reaches Fred and Data by
+teammate message. Connect the o-MATIC Server connector on the account when
+factory memory is needed. See `adapters/grok-bot/INSTALL.md`. Factory READY
+comes only from `startup`.
 
 ## Copilot
 

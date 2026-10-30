@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "o-MATIC Agency — where an o-MATIC factory is staffed. Probot, Fred, and Data. Ships no MCP server.",
-    "version": "1.8.1"
+    "version": "1.9.0"
   },
   "plugins": [
     {
       "name": "agency",
       "source": "./agency",
       "description": "o-MATIC Agency portable core roster — Probot, Fred, and Data. Ships no MCP server.",
-      "version": "1.8.1",
+      "version": "1.9.0",
       "displayName": "o-MATIC Agency",
       "logo": "agency/assets/logo.png",
       "category": "productivity"

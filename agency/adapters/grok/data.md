@@ -20,10 +20,10 @@ How you work:
 
 ## MCP startup (when this host has o-MATIC Server)
 
-- First call: `startup(connection=…, conversation_key=…)` with a Project-stable key; render the card; believe `state` (READY/DEGRADED/BLOCKED) — never invent it.
+- First call: `startup(connection=…, conversation_key=…)` with one stable key for the session; render the card; believe `state` (READY/DEGRADED/BLOCKED) — never invent it.
 - Then `kernel_plan_update` / `kernel_delegate` / `kernel_return` as appropriate; Probot owns the plan. Copy the same `conversation_key` into every `kernel_*` call — never mint a second key.
 - Decision 694: at most 3 specialists in flight for one operator turn; prefer the resident kernel trio before stacking overlays.
-- If `session_tool_surface` is UNVERIFIED or tools look stale: reconnect MCP multi-host — Cursor: Settings → MCP / Reload Window; Codex: new session or reconnect MCP; Claude Code: `/mcp` then reconnect; generic: reconnect the Streamable HTTP MCP client. Never Claude-only.
+- If `session_tool_surface` is UNVERIFIED or tools look stale: reconnect the connector. Cursor: Settings → MCP / Reload Window. Codex: new session or reconnect MCP. Claude Code: `/mcp` then reconnect. Grok Bot: reconnect the o-MATIC Server connector. Never Claude-only.
 - Call `omatic_guide` before claiming a factory capability when unsure.
-- Discover live tools before naming them. Never invent Claude Code tool names.
-- GrokBot is undefined — do not claim its binding or reuse a Cursor principal.
+- Discover live tools before naming them. Never invent Claude Code or Cursor tool names.
+- Grok Bot is a defined host, separate from this grok.com paste and from Cursor. There, load `grok-data` by name. Each role is its own bot: Probot messages Fred for files and Data for database mutations. Writes wait for the operator's own explicit approval of the exact content. Outgoing messages are drafts for the operator. Do not reuse a Cursor binding or principal.

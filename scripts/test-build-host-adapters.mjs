@@ -12,8 +12,10 @@
 //      an unlinked reference, a link to a missing file, a nested reference,
 //      a long reference with no "## Contents");
 //   3. --check fails on drift and passes when current.
+//   4. generated adapters define Grok Bot, and this pack no longer teaches
+//      that the host is undefined.
 // Run: node scripts/test-build-host-adapters.mjs
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, readdirSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -84,6 +86,45 @@ for (const [label, opts, want] of cases) {
   writeFileSync(join(root, "demo/skills/tess-testing/assets/tess.svg"), "<svg/>");
   check("the same skill passes once the icon exists", run(root).status === 0);
   rmSync(root, { recursive: true, force: true });
+}
+
+// 3. Grok Bot is a defined host in generated adapters, including on a one-role pack.
+{
+  const root = pack();
+  const r = run(root);
+  check("Grok Bot adapters build clean", r.status === 0, r.stdout + r.stderr);
+  const grok = existsSync(join(root, "demo/adapters/grok/tess.md")) ? readFileSync(join(root, "demo/adapters/grok/tess.md"), "utf8") : "";
+  check("grok.com paste defines Grok Bot and stays within 4000 characters",
+    /Grok Bot is a defined host/.test(grok) && !/GrokBot is undefined/.test(grok) && grok.length <= 4000,
+    `len=${grok.length} tail=${grok.slice(-240)}`);
+  const bot = existsSync(join(root, "demo/adapters/grok-bot/tess.md")) ? readFileSync(join(root, "demo/adapters/grok-bot/tess.md"), "utf8") : "";
+  const about = (bot.match(/^> (.+)$/m) || [])[1] || "";
+  check("Grok Bot paste description names the skill, approval, and drafts",
+    /grok-tess/.test(bot) && /operator's own explicit approval/.test(bot) && /drafts for the operator/.test(bot),
+    bot.slice(0, 300));
+  check("Grok Bot About line is at most 140 characters", about.length > 0 && [...about].length <= 140, `${[...about].length}: ${about}`);
+  const matrix = existsSync(join(root, "demo/adapters/README.md")) ? readFileSync(join(root, "demo/adapters/README.md"), "utf8") : "";
+  check("host matrix ships Grok Bot instead of an undefined row",
+    /\| Grok Bot \|/.test(matrix) && !/GrokBot \| — \| not shipped/.test(matrix),
+    matrix.split("\n").filter((l) => /Grok/.test(l)).join("\n"));
+  rmSync(root, { recursive: true, force: true });
+}
+
+// 4. The real pack must not still teach that Grok Bot is undefined.
+{
+  const repo = join(dirname(BUILDER), "..");
+  const banned = "GrokBot is undefined";
+  const walk = (d) => readdirSync(d).flatMap((f) => {
+    if (f === ".git" || f === "node_modules") return [];
+    const p = join(d, f);
+    return statSync(p).isDirectory() ? walk(p) : [p];
+  });
+  const hits = walk(repo).filter((p) => {
+    if (p.endsWith("CHANGELOG.md") || p.endsWith("test-build-host-adapters.mjs")) return false;
+    if (!/\.(md|mjs|json|yml|yaml)$/.test(p)) return false;
+    return readFileSync(p, "utf8").includes(banned);
+  });
+  check("shipped files no longer say Grok Bot is undefined", hits.length === 0, hits.join("\n"));
 }
 
 console.log(failed ? `\n${failed} check(s) failed` : "\nall checks passed");

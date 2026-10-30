@@ -12,6 +12,7 @@ tool discovery, the core-role conformance suite, and a retained trace.
 | Claude | Skill adapter for L1; explicit subagent or SDK harness for L2 | Skill files remain a host adapter, while MCP is the common o-MATIC Server path. | design verified | project MCP approval, tool discovery, L1 trace; autonomous trigger and permission policy for L2 |
 | Copilot | Custom `.agent.md` plus focused skills | Create one custom agent per core role; select only host-verified tools because tool names differ by Copilot surface. | design verified | actual Copilot-surface tool inventory, MCP connection, skill discovery, conformance trace |
 | Gemini | Managed/custom agent with skills and o-MATIC Server MCP | Use a custom Agent configuration with skills. Keep credentials least-privileged and network access allowlisted. | design verified | agent config, restricted egress, MCP/tool discovery, human-oversight check, conformance trace |
+| Grok Bot | One Bot per core role, plus `skills/grok-{probot,fred,data}/` and `adapters/grok-bot/<role>.md` | Probot, Fred, and Data are separate Bots. Probot routes by teammate message. Writes wait for the operator's approval of the exact content. | design verified | live tool discovery recorded against this pack, conformance trace, approval-policy trace |
 
 ## Documentation decisions
 
@@ -33,6 +34,12 @@ tool discovery, the core-role conformance suite, and a retained trace.
   least-privilege credentials, restricted network access, and human oversight;
   managed agents are preview and therefore remain non-production until the
   adapter evaluation passes.
+- **Grok Bot:** Each Bot has a name, memory, and skills loaded by name, and
+  the account's Bots share one Linux computer. Official guidance
+  (docs.x.ai/grok-bot, read 2026-10-30) says Bots message each other, draft
+  outgoing messages for review, and surface approval cards before consequential
+  actions. The host skills are the ritual. A paste description is not a live
+  conformance trace, and factory READY still comes only from `startup`.
 
 ## Release gate
 
