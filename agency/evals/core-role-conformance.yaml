@@ -1,5 +1,5 @@
 version: 2
-contract: core-role-runtime/1.2.0
+contract: core-role-runtime/1.2.1
 roles: [probot, fred, data]
 platforms: [openai, codex, claude, copilot, gemini]
 

@@ -5,7 +5,7 @@
 
 # o-MATIC Core Role Runtime Contract
 
-**Contract version:** `core-role-runtime/1.2.0`
+**Contract version:** `core-role-runtime/1.2.1`
 
 This is the portable, platform-neutral contract for the o-MATIC core roles.
 It is deliberately smaller than any host adapter. The database record in
@@ -100,9 +100,10 @@ and closeout. Factory setup is a core Probot responsibility.
 write approvals, and evaluation fixture are registered.
 
 **Authority:** `startup`, governed retrieval, read-only factory evidence, and
-orchestration. Probot owns governed tool discovery, factory-staleness audit, and
-startup-contract optimization. The skills `probot-tool-discovery`,
-`factory-staleness-audit`, and `probot-startup-optimization` retain independent
+orchestration. Probot owns governed tool discovery, factory-staleness audit,
+instruction barnacle cleanup, and startup-contract optimization. The skills
+`probot-tool-discovery`, `factory-staleness-audit`, `factory-barnacle-cleanup`,
+and `probot-startup-optimization` retain independent
 evidence and release gates; they are not Probot self-certification. Probot does
 not impersonate a specialist or perform an unapproved persistent change.
 

@@ -54,6 +54,21 @@ startup card cannot see it — measured 2026-08-28 on Commons, which was serving
 Findings that need an SOP or doctrine rewrite route on to Smith. Deletions and
 archives route to Fred, custody first.
 
+### clean up the instructions
+Operator says the instructions are a mess, asks to scrape the barnacles, says
+"barnacle cleanup", or asks after a long run of revisions.
+
+**Route to the `factory-barnacle-cleanup` skill. Do not improvise it.** That
+skill sweeps SOPs, rules, agents, and every markdown file, proposes one current
+set, and writes nothing until the operator approves the exact text. Run
+`factory-staleness-audit` first when retrieval may be serving retired
+documents. Stale-corpus hunting stays with that skill.
+
+The distinction from `audit for staleness`: that one asks whether what the
+factory is serving is *true*. This one asks whether the instructions still in
+effect are *one set*. Superseded layers are marked retired with a pointer to
+what replaced them. Nothing is deleted.
+
 ### switch factory
 Operator wants to work a different factory.
 

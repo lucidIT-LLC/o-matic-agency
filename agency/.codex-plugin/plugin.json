@@ -1,7 +1,7 @@
 {
   "name": "agency",
-  "version": "1.9.0",
-  "description": "The portable core-role layer of an o-MATIC factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, and tool-discovery skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the o-MATIC Server's MCP surface configured by the host.",
+  "version": "1.10.0",
+  "description": "The portable core-role layer of an o-MATIC factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, tool-discovery, and barnacle-cleanup skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the o-MATIC Server's MCP surface configured by the host.",
   "author": {
     "name": "LucidIT, LLC",
     "url": "https://o-matic.ai"
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "o-MATIC Agency",
     "shortDescription": "Staff an o-MATIC factory — orchestrator, storage, and data.",
-    "longDescription": "The portable core-role layer of an o-MATIC factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, and tool-discovery skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the o-MATIC Server's MCP surface configured by the host.",
+    "longDescription": "The portable core-role layer of an o-MATIC factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, tool-discovery, and barnacle-cleanup skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the o-MATIC Server's MCP surface configured by the host.",
     "developerName": "LucidIT, LLC",
     "category": "Productivity",
     "capabilities": [

@@ -14,8 +14,8 @@
       "name": "agency",
       "displayName": "o-MATIC Agency",
       "source": "./agency",
-      "version": "1.9.0",
-      "description": "The constitutive operating layer of an o-MATIC factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current. Ships no MCP server, so it installs on hosts that cannot spawn one.",
+      "version": "1.10.0",
+      "description": "The constitutive operating layer of an o-MATIC factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current; barnacle cleanup proposes one current instruction set and writes nothing until the operator approves the exact text. Ships no MCP server, so it installs on hosts that cannot spawn one.",
       "author": {
         "name": "James Walker",
         "url": "https://o-matic.ai"
