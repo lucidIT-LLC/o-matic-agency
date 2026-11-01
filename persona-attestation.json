@@ -58,6 +58,19 @@
    "builds": 3
   },
   {
+   "skill": "factory-barnacle-cleanup",
+   "agent_name": "probot",
+   "version": 1,
+   "review_status": "published",
+   "identity_signature": "a5502af84ec0ada9bc1f3642e5c4f280",
+   "declares_identity": false,
+   "verdict": "PASS",
+   "source_skill_version": "14.2.0",
+   "character_bible": 1,
+   "dimensions": 8,
+   "builds": 3
+  },
+  {
    "skill": "factory-governance-repair",
    "agent_name": "probot",
    "version": 1,

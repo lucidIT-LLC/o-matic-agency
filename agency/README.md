@@ -12,6 +12,10 @@ Skills only. No MCP server, no tools, no credentials, nothing that executes.
 - **`factory-governance-repair`** — Blueprint-backed remediation for a proven
   governance finding. Probot routes it only after an audit finding and operator
   authorization.
+- **`factory-barnacle-cleanup`** — Probot. After many revisions, sweeps SOPs,
+  rules, agents, and markdown and proposes one current instruction set. Writes
+  nothing until the operator approves the exact text. Stale-corpus hunting
+  stays with `factory-staleness-audit`.
 
 Database access is the o-MATIC Server's own MCP surface, configured by the host.
 See the marketplace `README.md` for how the two fit together.

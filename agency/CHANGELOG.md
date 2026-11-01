@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.10.0 — 2026-11-01
+
+Probot ships `factory-barnacle-cleanup` 1.1.0. After many revisions it sweeps SOPs, rules, agents, and markdown, proposes one current instruction set, and writes nothing until the operator approves the exact text. Stale-corpus hunting stays with `factory-staleness-audit`.
+
+- **Skill:** `skills/factory-barnacle-cleanup/` — the approved 1.1.0 text, the OpenAI interface, and the Probot icon. Attested as a Probot lane that declares no identity of its own. `probot-orchestrator` 18.11.0 → 18.12.0 adds the anchor `clean up the instructions`.
+- **Contract:** `core-role-runtime/1.2.0` → `1.2.1`. The runtime contract names `factory-barnacle-cleanup` beside `probot-tool-discovery`, `factory-staleness-audit`, and `probot-startup-optimization`. The conformance suite's `contract` field follows.
+- **Versions:** host manifests and `gemini-extension.json` move 1.9.0 → 1.10.0. Sibling packs are not sync-tooling-bumped.
+
 ## 1.9.0 — 2026-10-30
 
 Grok Bot is a defined host for Probot, Fred, and Data. Cursor, grok.com, and Grok Build stay separate. Claude PreToolUse paths are unchanged.
