@@ -6,8 +6,8 @@ Source packages only. SHA-256 of a zip is written to `dist/m365/CATALOG.md` by `
 
 | Role | Wave | Version | Tools | Icons |
 |---|---|---|---|---|
-| data | 2 | 1.11.0 | 6 | icon-pending |
-| fred | 2 | 1.11.0 | 6 | icon-pending |
-| probot | 1 | 1.11.0 | 8 | icon-pending |
+| data | 2 | 1.11.0 | 6 | color + outline |
+| fred | 2 | 1.11.0 | 6 | color + outline |
+| probot | 1 | 1.11.0 | 8 | color + outline |
 
-Store listing (org catalog, then the public Agent Store) waits on SSO, the read-only Foundry login, privacy and terms pages, and the outline icons.
+Store listing (org catalog, then the public Agent Store) waits on SSO, the read-only Foundry login, and privacy and terms pages.

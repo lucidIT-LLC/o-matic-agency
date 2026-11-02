@@ -8,7 +8,7 @@ Microsoft 365 Copilot app packages for Probot, Fred, and Data. Source and build 
 - **Instructions:** condensed from each role skill, persona lines unchanged, under 8,000 characters. Conversation starters are titled and deduplicated. Probot's repeated "start the factory" starter is gone.
 - **Host skills:** `m365-probot` 1.0.0, `m365-fred` 1.0.0, `m365-data` 1.0.0. Attested as lanes that declare no identity of their own. The first factory they may read is o-MATIC Foundry, read-only.
 - **Roles:** `probot-orchestrator` 18.12.0 → 18.13.0, `fred-storage` 12.3.0 → 12.4.0, `data-analyst` 7.6.0 → 7.7.0. Each names the Copilot package.
-- **Build:** `scripts/build-m365-packages.mjs` zips into gitignored `dist/m365/`. `scripts/verify-m365.mjs` checks the vendored Microsoft schemas and icon sizes. Missing outline icons are icon-pending (warn, not fail). `color.png` is the existing 192×192 avatar preview.
+- **Build:** `scripts/build-m365-packages.mjs` zips into gitignored `dist/m365/`. `scripts/verify-m365.mjs` checks the vendored Microsoft schemas and icon sizes. `color.png` is the 192×192 avatar. `outline.png` is the 32×32 white-on-transparent outline. A missing icon still warns and does not fail.
 - **Versions:** host manifests and `gemini-extension.json` move 1.10.0 → 1.11.0. Marketplace entries list the Copilot packages. Sibling packs are not sync-tooling-bumped.
 
 ## 1.10.0 — 2026-11-01

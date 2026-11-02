@@ -380,14 +380,16 @@ OMATIC_TERMS_URL=${TERMS_URL}
 `);
   const colorOnDisk = existsSync(join(root, pkg, "color.png"));
   const outlineOnDisk = existsSync(join(root, pkg, "outline.png"));
-  put(`${pluginDir}/adapters/m365/${id}/ICON-PENDING.md`, `# ${a.display_name} icon status
+  if (!colorOnDisk || !outlineOnDisk) {
+    const missing = [!colorOnDisk && "color.png", !outlineOnDisk && "outline.png"].filter(Boolean);
+    put(`${pluginDir}/adapters/m365/${id}/ICON-PENDING.md`, `# ${a.display_name} icon status
 
 - color.png: ${colorOnDisk ? "present (192x192 avatar preview)" : "pending — no avatar art in this package"}
 - outline.png: ${outlineOnDisk ? "present" : "pending — not invented here"}
 
-Outline icons are white-on-transparent 32x32 files. Fred is exporting that art.
-Until it lands, \`node scripts/verify-m365.mjs\` warns and does not fail.
+Missing: ${missing.join(", ")}. \`node scripts/verify-m365.mjs\` warns and does not fail while a file is absent.
 `);
+  }
   m365Rows.push({ id, display: a.display_name, wave: cfg.wave, tools: pinned, colorOnDisk, outlineOnDisk });
 
   // 6. ChatGPT custom GPT.
@@ -631,7 +633,9 @@ Privacy and terms URLs are marked TODO until the public pages exist. Developer n
 
 ## Icons
 
-\`color.png\` is the 192×192 avatar preview when the repo already has that art. \`outline.png\` (32×32, white on transparent) is not invented here. A missing icon is icon-pending: verify warns and does not fail. Fred is exporting the outline art for a follow-up.
+${m365Rows.every((r) => r.colorOnDisk && r.outlineOnDisk)
+  ? "`color.png` is the 192×192 avatar. `outline.png` is the 32×32 white-on-transparent outline. Each manifest references both files."
+  : "`color.png` is the 192×192 avatar preview when the repo already has that art. `outline.png` is the 32×32 white-on-transparent outline when it is in the package. A missing icon is icon-pending: verify warns and does not fail."}
 
 ## Host skills
 
@@ -648,7 +652,7 @@ Source packages only. SHA-256 of a zip is written to \`dist/m365/CATALOG.md\` by
 |---|---|---|---|---|
 ${m365Rows.map((r) => `| ${r.id} | ${r.wave ?? "—"} | ${plugin.version || "0.0.0"} | ${r.tools.length} | ${r.colorOnDisk && r.outlineOnDisk ? "color + outline" : "icon-pending"} |`).join("\n")}
 
-Store listing (org catalog, then the public Agent Store) waits on SSO, the read-only Foundry login, privacy and terms pages, and the outline icons.
+Store listing (org catalog, then the public Agent Store) waits on SSO, the read-only Foundry login, and privacy and terms pages.
 `);
 
 // Every skill's agents/openai.yaml names icons that exist (task #1024:
@@ -668,6 +672,9 @@ if (existsSync(skillsRoot)) {
 
 // The v1.6 file lived beside the package. It is retired; the app package replaces it.
 const retired = pack.agents.map((a) => `${pluginDir}/adapters/m365/${a.id}/declarativeAgent.json`);
+for (const row of m365Rows) {
+  if (row.colorOnDisk && row.outlineOnDisk) retired.push(`${pluginDir}/adapters/m365/${row.id}/ICON-PENDING.md`);
+}
 
 // Write or check.
 let drift = 0;
@@ -683,7 +690,10 @@ for (const rel of retired) {
   const p = join(root, rel);
   if (!existsSync(p)) continue;
   drift++;
-  if (check) console.log(`STALE: ${rel} (v1.6 path retired; the app package replaced it)`);
+  const why = rel.endsWith("ICON-PENDING.md")
+    ? "both icons are in the package"
+    : "v1.6 path retired; the app package replaced it";
+  if (check) console.log(`STALE: ${rel} (${why})`);
   else { rmSync(p); console.log(`removed ${rel}`); }
 }
 for (const x of problems) console.log(`  FAIL  ${x}`);

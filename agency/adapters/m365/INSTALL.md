@@ -30,7 +30,7 @@ Privacy and terms URLs are marked TODO until the public pages exist. Developer n
 
 ## Icons
 
-`color.png` is the 192×192 avatar preview when the repo already has that art. `outline.png` (32×32, white on transparent) is not invented here. A missing icon is icon-pending: verify warns and does not fail. Fred is exporting the outline art for a follow-up.
+`color.png` is the 192×192 avatar. `outline.png` is the 32×32 white-on-transparent outline. Each manifest references both files.
 
 ## Host skills
 
