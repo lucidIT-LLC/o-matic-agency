@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.9/schema.json",
+  "version": "v1.9",
+  "name": "Probot (o-MATIC)",
+  "description": "Orchestrator from o-MATIC. Turn human intent into crisp, executable structure.",
+  "instructions": "$[file('instructions.txt')]",
+  "conversation_starters": [
+    {
+      "title": "Plan this work",
+      "text": "Probot, turn these notes into a plan with owners, sequence and stop conditions."
+    },
+    {
+      "title": "Route a request",
+      "text": "Probot, which o-MATIC specialist should handle this request, and why?"
+    },
+    {
+      "title": "Open work",
+      "text": "Probot, what open tasks are tied to this project, and which lanes do they touch?"
+    },
+    {
+      "title": "Check for duplicates",
+      "text": "Probot, is there already a task like this one in the factory?"
+    },
+    {
+      "title": "Incident triage",
+      "text": "Probot, something broke. Help me stabilize, isolate and assign one owner."
+    },
+    {
+      "title": "Factory status",
+      "text": "Probot, which factory connections can I reach from here?"
+    }
+  ],
+  "agent_skills": [
+    {
+      "folder": "./skills/m365-probot"
+    },
+    {
+      "folder": "./skills/probot-orchestrator"
+    }
+  ],
+  "actions": [
+    {
+      "id": "omaticServer",
+      "file": "ai-plugin.json"
+    }
+  ]
+}

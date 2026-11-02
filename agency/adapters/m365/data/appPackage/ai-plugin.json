@@ -1,0 +1,82 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.4/schema.json",
+  "schema_version": "v2.4",
+  "name_for_human": "Data (o-MATIC)",
+  "description_for_human": "Read-only o-MATIC Server tools for Data.",
+  "namespace": "omaticdata",
+  "functions": [
+    {
+      "name": "connections_list",
+      "capabilities": {
+        "confirmation": {
+          "type": "None"
+        }
+      }
+    },
+    {
+      "name": "omatic_guide",
+      "capabilities": {
+        "confirmation": {
+          "type": "None"
+        }
+      }
+    },
+    {
+      "name": "search",
+      "capabilities": {
+        "confirmation": {
+          "type": "None"
+        }
+      }
+    },
+    {
+      "name": "db_health_snapshot",
+      "capabilities": {
+        "confirmation": {
+          "type": "None"
+        }
+      }
+    },
+    {
+      "name": "task_relationships",
+      "capabilities": {
+        "confirmation": {
+          "type": "None"
+        }
+      }
+    },
+    {
+      "name": "slate_entity_search",
+      "capabilities": {
+        "confirmation": {
+          "type": "None"
+        }
+      }
+    }
+  ],
+  "runtimes": [
+    {
+      "type": "RemoteMCPServer",
+      "auth": {
+        "type": "OAuthPluginVault",
+        "reference_id": "${{OMATIC_ENTRA_SSO_AUTH_ID}}"
+      },
+      "run_for_functions": [
+        "connections_list",
+        "omatic_guide",
+        "search",
+        "db_health_snapshot",
+        "task_relationships",
+        "slate_entity_search"
+      ],
+      "spec": {
+        "url": "${{OMATIC_MCP_URL}}",
+        "mcp_tool_description": {
+          "file": "mcp-tools.json"
+        }
+      }
+    }
+  ],
+  "privacy_policy_url": "https://TODO.example.invalid/privacy",
+  "legal_info_url": "https://TODO.example.invalid/terms"
+}

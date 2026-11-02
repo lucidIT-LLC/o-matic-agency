@@ -1,7 +1,7 @@
 {
   "name": "agency",
   "displayName": "o-MATIC Agency",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "The portable core roster of an o-MATIC factory — Probot, Fred, and Data with their full role skills, Probot-owned audit/startup/tool-discovery/barnacle-cleanup lanes, governance contract, and host adapters. Ships NO MCP server; database access is the o-MATIC Server MCP surface configured by the host.",
   "author": {
     "name": "LucidIT, LLC",
@@ -19,7 +19,9 @@
     "skill-only",
     "agent-runtime",
     "platform-portability",
-    "grok-bot"
+    "grok-bot",
+    "m365-copilot",
+    "github-copilot"
   ],
   "skills": "./skills/"
 }

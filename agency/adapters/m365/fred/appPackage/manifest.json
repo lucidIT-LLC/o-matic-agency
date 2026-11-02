@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.30",
+  "version": "1.11.0",
+  "id": "${{TEAMS_APP_ID}}",
+  "developer": {
+    "name": "lucidIT, LLC (o-MATIC)",
+    "websiteUrl": "https://o-matic.ai",
+    "privacyUrl": "https://TODO.example.invalid/privacy",
+    "termsOfUseUrl": "https://TODO.example.invalid/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "Fred (o-MATIC)",
+    "full": "Fred, Workspace Manager from o-MATIC"
+  },
+  "description": {
+    "short": "Workspace manager. Finds, lists and organizes files.",
+    "full": "Workspace Manager from o-MATIC. Always glad to be of service."
+  },
+  "accentColor": "#00B5AD",
+  "copilotAgents": {
+    "declarativeAgents": [
+      {
+        "id": "fredAgent",
+        "file": "declarativeAgent.json"
+      }
+    ]
+  },
+  "permissions": [
+    "identity"
+  ],
+  "validDomains": []
+}

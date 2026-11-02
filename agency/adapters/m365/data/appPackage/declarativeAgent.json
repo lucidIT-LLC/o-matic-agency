@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.9/schema.json",
+  "version": "v1.9",
+  "name": "Data (o-MATIC)",
+  "description": "Data Analyst & Factory DBA from o-MATIC. The data is what it is. Here's what it shows.",
+  "instructions": "$[file('instructions.txt')]",
+  "conversation_starters": [
+    {
+      "title": "Database health",
+      "text": "Data, give me a health snapshot of this factory database."
+    },
+    {
+      "title": "Analyze a table",
+      "text": "Data, analyze this spreadsheet and tell me what it shows."
+    },
+    {
+      "title": "Compare datasets",
+      "text": "Data, compare these two lists and flag what differs."
+    },
+    {
+      "title": "Find anomalies",
+      "text": "Data, flag anomalies in this data and say how confident you are."
+    },
+    {
+      "title": "Review SQL",
+      "text": "Data, review this SQL for risk before anyone runs it."
+    }
+  ],
+  "agent_skills": [
+    {
+      "folder": "./skills/m365-data"
+    },
+    {
+      "folder": "./skills/data-analyst"
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "CodeInterpreter"
+    }
+  ],
+  "actions": [
+    {
+      "id": "omaticServer",
+      "file": "ai-plugin.json"
+    }
+  ]
+}

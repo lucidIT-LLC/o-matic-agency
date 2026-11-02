@@ -43,6 +43,12 @@ jobs:
           set -e
           node scripts/test-build-host-adapters.mjs
           node scripts/build-host-adapters.mjs . --check
+      - name: Microsoft 365 Copilot packages (schemas, icons, pinned tools)
+        run: |
+          set -e
+          node scripts/verify-m365.mjs .
+          node scripts/build-m365-packages.mjs .
+          node scripts/verify-m365.mjs . --dist
       - name: Hook fixture suites
         run: |
           set -e

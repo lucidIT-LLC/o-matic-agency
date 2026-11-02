@@ -37,7 +37,7 @@ teammate message. Connect the o-MATIC Server connector on the account when
 factory memory is needed. See `adapters/grok-bot/INSTALL.md`. Factory READY
 comes only from `startup`.
 
-## Copilot
+## GitHub Copilot
 
 Copy `adapters/copilot/.github/` into the target repository's `.github/`. That
 directory is a **self-contained payload**: `.github/omatic/` carries the role
@@ -51,6 +51,16 @@ files under `adapters/` and `contracts/`, then run
 `node scripts/sync-copilot-payload.mjs`. `--check` fails if a copy has drifted.
 Copy the `skills/` roster in as well only if you want the full role skills in
 that repository; the agent files do not depend on it.
+
+## Microsoft 365 Copilot
+
+One app per role, under `adapters/m365/<role>/appPackage/`. These are sources.
+`node scripts/build-m365-packages.mjs` writes zip files into `dist/m365/`
+(gitignored). Do not sideload or publish them until SSO and the read-only
+database login exist. The first factory they may read is o-MATIC Foundry,
+read-only. The MCP URL and the Teams app id in `env/.env.sample` are TODO
+placeholders, not a tenant and not a private host. Privacy and terms URLs
+are marked TODO. See `adapters/m365/INSTALL.md`.
 
 ## Gemini
 

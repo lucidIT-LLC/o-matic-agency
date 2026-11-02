@@ -10,7 +10,8 @@ tool discovery, the core-role conformance suite, and a retained trace.
 | OpenAI | Agents SDK Agent + o-MATIC Server MCP | Probot is the manager. Fred and Data are bounded specialist Agents-as-tools; direct handoff only when the specialist must own the conversation. | design verified | MCP tool filter, approval policy, manager/specialist trace, conformance results |
 | Codex | Codex plugin skills for L1; separate agent harness for L2 | The same canonical contract is loaded through a Codex adapter. Do not call a skill an autonomous deployment. | design verified | installed package digest, live tool discovery, L1 trace; L2 harness and evaluation trace |
 | Claude | Skill adapter for L1; explicit subagent or SDK harness for L2 | Skill files remain a host adapter, while MCP is the common o-MATIC Server path. | design verified | project MCP approval, tool discovery, L1 trace; autonomous trigger and permission policy for L2 |
-| Copilot | Custom `.agent.md` plus focused skills | Create one custom agent per core role; select only host-verified tools because tool names differ by Copilot surface. | design verified | actual Copilot-surface tool inventory, MCP connection, skill discovery, conformance trace |
+| GitHub Copilot | Custom `.agent.md` plus focused skills | Create one custom agent per core role; select only host-verified tools because tool names differ by Copilot surface. | design verified | actual Copilot-surface tool inventory, MCP connection, skill discovery, conformance trace |
+| Microsoft 365 Copilot | One declarative-agent app per role under `adapters/m365/<role>/appPackage/` | Probot, Fred, and Data. Instructions from the role skill. At most 8 pinned read-only tools. `factory_query`, `startup`, and writes stay out. First read is o-MATIC Foundry, read-only. | design verified, source only | SSO, read-only database login, outline icons, privacy and terms pages, then sideload. Not deployed from 1.11.0 |
 | Gemini | Managed/custom agent with skills and o-MATIC Server MCP | Use a custom Agent configuration with skills. Keep credentials least-privileged and network access allowlisted. | design verified | agent config, restricted egress, MCP/tool discovery, human-oversight check, conformance trace |
 | Grok Bot | One Bot per core role, plus `skills/grok-{probot,fred,data}/` and `adapters/grok-bot/<role>.md` | Probot, Fred, and Data are separate Bots. Probot routes by teammate message. Writes wait for the operator's approval of the exact content. | design verified | live tool discovery recorded against this pack, conformance trace, approval-policy trace |
 
@@ -26,9 +27,12 @@ tool discovery, the core-role conformance suite, and a retained trace.
 - **Claude:** MCP is the host-neutral external-systems interface. Project MCP
   configuration requires user approval; autonomous execution must never inherit
   an unbounded permission mode merely because a role is eligible for L2.
-- **Copilot:** Microsoft documents custom agents as `.agent.md` files and
+- **GitHub Copilot:** Microsoft documents custom agents as `.agent.md` files and
   reusable skills separately. It warns that tool names vary by Copilot host, so
   adapters must discover and test their actual tool list.
+- **Microsoft 365 Copilot:** One app per declarative agent (schema v1.9, app
+  manifest 1.30). The package pins read-only tools and leaves the server URL
+  as a placeholder. A zip in `dist/` is a build artifact, not a deployment.
 - **Gemini:** Gemini supports managed custom agents extended with instructions,
   skills, data, and MCP. Its current guidance requires trusted tools,
   least-privilege credentials, restricted network access, and human oversight;

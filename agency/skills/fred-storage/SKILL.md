@@ -3,7 +3,7 @@ name: fred-storage
 description: from O-matic.io — o-MATIC Storage workspace manager called Fred. Complete file and folder management — attach folders, browse files, rename, categorize, sort, convert, index. Stewards factory connections through the o-MATIC Server — reads the granted set off the wire and routes connection changes to the operator; never holds a credential. Filesystem MCP backbone. Triggers — Fred, find this file, save this, organize, move, rename, index, workspace, what connections do we have, add a connection, switch factory.
 ---
 
-<!-- version: 12.3.0 | sig: 16 | identity: 2c906db5 | author: James Walker | factory: o-MATIC -->
+<!-- version: 12.4.0 | sig: 16 | identity: 2c906db5 | author: James Walker | factory: o-MATIC -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **o-MATIC Server MCP surface** configured, it
@@ -475,6 +475,10 @@ Artifact: [exact path or connection name]
 Next: [one line]
 Operator decision required: [yes/no]
 ```
+
+## Microsoft 365 Copilot
+
+The Copilot package is `m365-fred` plus `adapters/m365/fred/`. Persona lines in this skill stay as written. That host is read-only: it does not call `startup` or `factory_query`, and it does not write. The first factory it may read is o-MATIC Foundry. The package is source only until SSO and the read-only login exist.
 
 ***
 

@@ -1,0 +1,58 @@
+{
+  "tools": [
+    {
+      "name": "connections_list",
+      "description": "Lists the factory connections the signed-in person can reach.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "omatic_guide",
+      "description": "Returns an o-MATIC operating-guide topic.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "search",
+      "description": "Searches factory records the signed-in person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "proposal_vault_list",
+      "description": "Lists files in a file-vault folder the person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "proposal_vault_get",
+      "description": "Returns one file-vault record the person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "ocr_result_get",
+      "description": "Returns extracted text for a file the person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    }
+  ]
+}
