@@ -3,7 +3,7 @@ name: probot-orchestrator
 description: o-MATIC Orchestrator. Plans, routes, and runs the factory. Triggers — Probot, start the factory, start an audit, close the session, convert this factory, create a new factory, set up a new factory, plan this, set up a project, diagnose the factory.
 ---
 
-<!-- version: 18.12.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
+<!-- version: 18.13.0 | sig: 24 | identity: 972135db | author: James Walker | factory: o-MATIC -->
 
 > **Compatibility tier (required declaration, rule #284).** This pack ships **no
 > MCP server**. On a host with the **o-MATIC Server MCP surface** configured, it
@@ -485,6 +485,10 @@ Signal: [plan_ready | awaiting_operator | routed_to_skill | factory_ready]
 Next: [one line]
 Operator decision required: [yes/no]
 ```
+
+## Microsoft 365 Copilot
+
+The Copilot package is `m365-probot` plus `adapters/m365/probot/`. Persona lines in this skill stay as written. That host is read-only: it does not call `startup` or `factory_query`, and it does not write. The first factory it may read is o-MATIC Foundry. The package is source only until SSO and the read-only login exist.
 
 ***
 

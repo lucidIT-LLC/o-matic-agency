@@ -1,0 +1,43 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.9/schema.json",
+  "version": "v1.9",
+  "name": "Fred (o-MATIC)",
+  "description": "Workspace Manager from o-MATIC. Always glad to be of service.",
+  "instructions": "$[file('instructions.txt')]",
+  "conversation_starters": [
+    {
+      "title": "Find a file",
+      "text": "Fred, find the latest version of this document in the file vault."
+    },
+    {
+      "title": "List a packet",
+      "text": "Fred, list the files in this packet with their sizes."
+    },
+    {
+      "title": "Read OCR text",
+      "text": "Fred, show me the extracted text from this scanned file."
+    },
+    {
+      "title": "Folder plan",
+      "text": "Fred, propose a folder structure for these project files."
+    },
+    {
+      "title": "Naming check",
+      "text": "Fred, suggest consistent names for this set of files."
+    }
+  ],
+  "agent_skills": [
+    {
+      "folder": "./skills/m365-fred"
+    },
+    {
+      "folder": "./skills/fred-storage"
+    }
+  ],
+  "actions": [
+    {
+      "id": "omaticServer",
+      "file": "ai-plugin.json"
+    }
+  ]
+}

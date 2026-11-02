@@ -1,0 +1,76 @@
+{
+  "tools": [
+    {
+      "name": "connections_list",
+      "description": "Lists the factory connections the signed-in person can reach.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "omatic_guide",
+      "description": "Returns an o-MATIC operating-guide topic.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "search",
+      "description": "Searches factory records the signed-in person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "task_relationships",
+      "description": "Lists tasks related to one task the person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "task_duplicate_check",
+      "description": "Reports whether a similar task already exists.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "slate_entity_search",
+      "description": "Searches slate entities the signed-in person can read.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "slate_entity_verify",
+      "description": "Checks one slate entity against the readable record.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    },
+    {
+      "name": "module_status",
+      "description": "Reports which add-on modules are installed.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Read-only arguments. The live server schema is the authority."
+      }
+    }
+  ]
+}

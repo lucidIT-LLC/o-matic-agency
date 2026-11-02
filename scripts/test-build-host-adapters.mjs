@@ -28,15 +28,16 @@ const check = (label, ok, detail = "") => {
   if (!ok) failed++;
 };
 
-function pack({ body = "Role guide.\n\nSee [reference/detail.md](reference/detail.md).\n", refs = { "reference/detail.md": "# Detail\n\nMore.\n" } } = {}) {
+function pack({ body = "Role guide.\n\nSee [reference/detail.md](reference/detail.md).\n", refs = { "reference/detail.md": "# Detail\n\nMore.\n" }, agent = {} } = {}) {
   const root = mkdtempSync(join(tmpdir(), "hostadapters-"));
   const w = (rel, text) => { mkdirSync(dirname(join(root, rel)), { recursive: true }); writeFileSync(join(root, rel), text); };
   w(".claude-plugin/marketplace.json", JSON.stringify({ plugins: [{ source: "./demo" }] }));
-  w("demo/.claude-plugin/plugin.json", JSON.stringify({ name: "demo", displayName: "Demo" }));
+  w("demo/.claude-plugin/plugin.json", JSON.stringify({ name: "demo", displayName: "Demo", version: "0.0.1" }));
   w("agent-pack.json", JSON.stringify({ agents: [{
     id: "tess", display_name: "Tess", role: "Tester", one_liner: "Tests things.",
     canonical_skill: "demo/skills/tess-testing/SKILL.md", triggers: ["test this"],
     archetypes: [], identity: { tone_of_record: "Plain.", primary_domain: "testing", drift_anchor: "Tests, never guesses." },
+    ...agent,
   }] }));
   w("demo/skills/tess-testing/SKILL.md", `---\nname: tess-testing\ndescription: Tests things. Use when asked to test.\n---\n${body}`);
   for (const [rel, text] of Object.entries(refs)) w(`demo/skills/tess-testing/${rel}`, text);
@@ -125,6 +126,54 @@ for (const [label, opts, want] of cases) {
     return readFileSync(p, "utf8").includes(banned);
   });
   check("shipped files no longer say Grok Bot is undefined", hits.length === 0, hits.join("\n"));
+}
+
+// 5. Microsoft 365 packages are v1.9, starters are unique and titled, and
+//    factory_query cannot be pinned.
+{
+  const root = pack();
+  const y = join(root, "demo/skills/tess-testing/agents/openai.yaml");
+  mkdirSync(dirname(y), { recursive: true });
+  writeFileSync(y, 'interface:\n  default_prompt: "Tess, test this."\n');
+  const r = run(root);
+  check("M365 package builds when the default prompt repeats a trigger", r.status === 0, r.stdout + r.stderr);
+  const daPath = join(root, "demo/adapters/m365/tess/appPackage/declarativeAgent.json");
+  const da = existsSync(daPath) ? JSON.parse(readFileSync(daPath, "utf8")) : {};
+  const texts = (da.conversation_starters || []).map((s) => s.text);
+  check("declarative agent is schema v1.9 with a file instruction",
+    da.version === "v1.9" && da.instructions === "$[file('instructions.txt')]",
+    JSON.stringify(da).slice(0, 240));
+  check("starters are titled and the duplicated prompt was dropped",
+    texts.length === 1 && da.conversation_starters[0].title && new Set(texts).size === texts.length,
+    texts.join(" | "));
+  check("a role with no tools ships no plugin", !existsSync(join(root, "demo/adapters/m365/tess/appPackage/ai-plugin.json")));
+  const manifest = JSON.parse(readFileSync(join(root, "demo/adapters/m365/tess/appPackage/manifest.json"), "utf8"));
+  check("app manifest keeps the app id and privacy URL as placeholders",
+    manifest.manifestVersion === "1.30" && manifest.id === "${{TEAMS_APP_ID}}" && String(manifest.developer.privacyUrl).includes("TODO"),
+    manifest.id);
+  rmSync(root, { recursive: true, force: true });
+}
+{
+  const root = pack({ agent: { targets: { m365: { tools: ["search", "factory_query"], wave: 1 } } } });
+  const r = run(root);
+  check("pinning factory_query fails the build", r.status === 1 && /factory_query/.test(r.stdout), r.stdout.slice(0, 400));
+  const pluginPath = join(root, "demo/adapters/m365/tess/appPackage/ai-plugin.json");
+  const plugin = existsSync(pluginPath) ? readFileSync(pluginPath, "utf8") : "";
+  check("factory_query is not written into the plugin", !plugin.includes("factory_query"), plugin.slice(0, 200));
+  rmSync(root, { recursive: true, force: true });
+}
+{
+  const repo = join(dirname(BUILDER), "..");
+  const daPath = join(repo, "agency/adapters/m365/probot/appPackage/declarativeAgent.json");
+  const da = existsSync(daPath) ? JSON.parse(readFileSync(daPath, "utf8")) : null;
+  const texts = (da?.conversation_starters || []).map((s) => s.text);
+  check("shipped Probot starters are unique and titled",
+    !!da && da.version === "v1.9" && texts.length >= 3 && new Set(texts).size === texts.length && da.conversation_starters.every((s) => s.title),
+    texts.join(" | ") || "missing declarative agent");
+  const pluginPath = join(repo, "agency/adapters/m365/probot/appPackage/ai-plugin.json");
+  const plugin = existsSync(pluginPath) ? readFileSync(pluginPath, "utf8") : "";
+  check("shipped Probot plugin does not name factory_query or startup",
+    plugin.length > 0 && !plugin.includes("factory_query") && !/"startup"/.test(plugin));
 }
 
 console.log(failed ? `\n${failed} check(s) failed` : "\nall checks passed");

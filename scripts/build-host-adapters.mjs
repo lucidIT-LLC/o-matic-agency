@@ -22,10 +22,11 @@
 //   GitHub Copilot agent   adapters/copilot/.github/agents/<role>.agent.md,
 //                          description required, prompt <= 30,000 chars
 //                          (docs.github.com custom-agents-configuration)
-//   M365 Copilot agent     adapters/m365/<role>/declarativeAgent.json, schema v1.6:
-//                          name <= 100, description <= 1,000, instructions <= 8,000,
-//                          conversation_starters <= 6 (learn.microsoft.com
-//                          declarative-agent-manifest-1.6)
+//   M365 Copilot agent     adapters/m365/<role>/appPackage/, declarative agent
+//                          schema v1.9 and Teams app manifest 1.30. Instructions
+//                          <= 8,000, name <= 100, description <= 1,000, app short
+//                          name <= 30, at most 8 pinned read-only tools.
+//                          (learn.microsoft.com declarative-agent-manifest-1.9)
 //   ChatGPT custom GPT     adapters/chatgpt/<role>/instructions.md <= 8,000 chars,
 //                          knowledge = the role's SKILL.md (<= 20 files per GPT)
 //   Grok custom agent      adapters/grok/<role>.md, instructions <= 4,000 chars
@@ -43,6 +44,11 @@
 // limit is exceeded. CANONICAL SOURCE: o-matic-studio/scripts/.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync, cpSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
+import {
+  m365Config, isDeniedTool, toolRecord, MAX_TOOLS, ACCENT, DEVELOPER_NAME,
+  WEBSITE_URL, PRIVACY_URL, TERMS_URL, MCP_URL_PLACEHOLDER, APP_ID_PLACEHOLDER,
+  AUTH_ID_PLACEHOLDER, SCHEMA_VERSION, APP_MANIFEST_VERSION, PLUGIN_SCHEMA_VERSION,
+} from "./m365-common.mjs";
 
 const root = resolve(process.argv[2] || ".");
 const check = process.argv.includes("--check");
@@ -144,15 +150,75 @@ function skillRules(a, s) {
 const starters = (a) => {
   const y = join(dirname(join(root, a.canonical_skill)), "agents", "openai.yaml");
   const prompts = [];
+  const seen = new Set();
+  const add = (p) => {
+    const key = String(p || "").trim().toLowerCase();
+    if (!key || seen.has(key) || prompts.length >= 6) return;
+    seen.add(key);
+    prompts.push(String(p).trim());
+  };
   if (existsSync(y)) {
     const m = readFileSync(y, "utf8").match(/default_prompt:\s*"([^"]+)"/);
-    if (m) prompts.push(m[1]);
+    if (m) add(m[1]);
   }
-  for (const t of a.triggers.slice(0, 6)) if (prompts.length < 6 && !/^[A-Z][a-z]+$/.test(t)) prompts.push(`${a.display_name}, ${t}.`);
+  for (const t of a.triggers) {
+    if (/^[A-Z][a-z]+$/.test(t)) continue;
+    add(`${a.display_name}, ${t}.`);
+  }
   return prompts.slice(0, 6);
 };
 
+// Microsoft 365 instructions keep every gold-record persona line and replace the
+// generic "look for a server" bullet with Copilot host rules. The first factory
+// this host may read is o-MATIC Foundry, and only read-only.
+function m365Instructions(a) {
+  const L = [];
+  const arche = parseArchetypes(a.archetypes);
+  L.push(`You are ${a.display_name}, ${a.role} from o-MATIC. ${a.one_liner}`);
+  L.push("");
+  L.push(`Voice: ${a.identity.tone_of_record} Begin every reply with "${a.display_name}:". Write in US English.`);
+  if (arche.length) {
+    L.push("");
+    L.push("Who you are, layer by layer:");
+    for (const x of arche) L.push(`- ${x.name}: ${x.description}`);
+  }
+  L.push("");
+  L.push(`People call on you with: ${a.triggers.join(", ")}.`);
+  L.push("");
+  L.push("How you work:");
+  L.push(`- Stay in your lane (${a.identity.primary_domain}). Name the right teammate when a request belongs to someone else.`);
+  L.push("- Be honest about capability. Never claim data, tools or results you do not have, and say whether a statement is measured, inferred or reported.");
+  L.push(`- Drift check: ${a.identity.drift_anchor}`);
+  L.push("");
+  L.push("Microsoft 365 Copilot host rules (these win over any looser line above):");
+  L.push(`- You run as a declarative agent in Microsoft 365 Copilot, in Copilot Chat, Teams, Outlook and Word. Begin every reply with "${a.display_name}:".`);
+  L.push("- When the o-MATIC Server actions are connected, use them read-only for factory memory, tasks and decisions. They return only what the signed-in user is granted.");
+  L.push("- You cannot change factory records, files, databases, sites or servers from this host. When work needs a change, write the exact change and say the operator approves and applies it in an o-MATIC host that supports writes.");
+  L.push("- Use only the actions this agent declares, by the names Copilot shows. Name the result you rely on, and say whether a statement is measured, inferred or reported.");
+  L.push("- If an action fails or asks you to sign in, say the o-MATIC factory is unreachable from here and continue from the conversation. Never report a factory as ready unless an action result says so.");
+  L.push("- Emails and messages you write are drafts for the user to review and send.");
+  L.push(`- Stay in your lane (${a.identity.primary_domain}). Name the o-MATIC teammate who owns other work instead of doing it.`);
+  L.push("- Read only. The first factory this agent may read is o-MATIC Foundry. Take the connection name from connections_list. Do not open any other factory.");
+  const text = L.join("\n");
+  if (text.length > LIMITS.m365) problems.push(`${a.id}: M365 instructions ${text.length} > ${LIMITS.m365}`);
+  return text;
+}
+
+function m365Starters(a, cfg) {
+  if (Array.isArray(cfg.starters) && cfg.starters.length) {
+    return cfg.starters.map(([title, text]) => ({ title, text }));
+  }
+  return starters(a).map((text) => {
+    const bare = text.replace(new RegExp(`^${a.display_name},\\s*`, "i"), "").replace(/\.$/, "");
+    const title = (bare.slice(0, 1).toUpperCase() + bare.slice(1)).slice(0, 40);
+    return { title, text };
+  });
+}
+
+if ([...DEVELOPER_NAME].length > 32) problems.push(`M365 developer name is ${[...DEVELOPER_NAME].length} characters (max 32)`);
+
 const shortDesc = (a) => `${a.role} from o-MATIC. ${a.one_liner}`.slice(0, 1000);
+const m365Rows = [];
 
 for (const a of pack.agents) {
   const s = skillOf(a);
@@ -213,17 +279,118 @@ description: ${JSON.stringify(shortDesc(a))}
 ${cop}
 `);
 
-  // 5. Microsoft 365 Copilot declarative agent (schema v1.6).
-  const m365 = condensed(a, { knowledgeFile: null, limit: LIMITS.m365 });
+  // 5. Microsoft 365 Copilot app (one app per role). Declarative agent v1.9,
+  // Teams manifest 1.30, and a pinned read-only plugin when this role has tools.
+  const m365 = m365Instructions(a);
+  const cfg = m365Config(a);
+  const pinned = [];
+  for (const name of cfg.tools || []) {
+    if (isDeniedTool(name)) {
+      problems.push(`${id}: M365 tool ${name} is denied (no factory_query, startup, or write tools)`);
+      continue;
+    }
+    if (!pinned.includes(name)) pinned.push(name);
+  }
+  if ((cfg.tools || []).length > MAX_TOOLS) problems.push(`${id}: ${(cfg.tools || []).length} M365 tools > ${MAX_TOOLS}`);
+  const agentName = `${a.display_name} (o-MATIC)`;
+  if ([...agentName].length > 30) problems.push(`${id}: M365 short name ${[...agentName].length} > 30`);
+  const fullName = `${a.display_name}, ${a.role} from o-MATIC`;
+  if ([...fullName].length > LIMITS.m365_name) problems.push(`${id}: M365 full name ${[...fullName].length} > ${LIMITS.m365_name}`);
+  const agentDescription = shortDesc(a).slice(0, LIMITS.m365_desc);
+  const shortApp = (cfg.short || a.one_liner || agentDescription).slice(0, 80);
+  if ((cfg.short || "").length > 80) problems.push(`${id}: M365 short description ${cfg.short.length} > 80`);
+  const starterObjs = m365Starters(a, cfg).slice(0, 6);
+  const starterTexts = new Set();
+  for (const s of starterObjs) {
+    const key = s.text.trim().toLowerCase();
+    if (starterTexts.has(key)) problems.push(`${id}: duplicated M365 starter "${s.text}"`);
+    starterTexts.add(key);
+    if (!s.title) problems.push(`${id}: M365 starter has no title`);
+  }
+  const pkg = `${pluginDir}/adapters/m365/${id}/appPackage`;
+  const agentSkills = [];
+  if (existsSync(join(root, pluginDir, "skills", `m365-${id}`))) agentSkills.push({ folder: `./skills/m365-${id}` });
+  if (s.name) agentSkills.push({ folder: `./skills/${s.name}` });
   const da = {
-    $schema: "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.6/schema.json",
-    version: "v1.6",
-    name: `${a.display_name} (o-MATIC)`.slice(0, LIMITS.m365_name),
-    description: shortDesc(a).slice(0, LIMITS.m365_desc),
-    instructions: m365,
-    conversation_starters: starters(a).map((t) => ({ text: t })),
+    $schema: "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.9/schema.json",
+    version: SCHEMA_VERSION,
+    name: agentName.slice(0, LIMITS.m365_name),
+    description: agentDescription,
+    instructions: "$[file('instructions.txt')]",
+    conversation_starters: starterObjs,
   };
-  put(`${pluginDir}/adapters/m365/${id}/declarativeAgent.json`, JSON.stringify(da, null, 2));
+  if (agentSkills.length) da.agent_skills = agentSkills;
+  if ((cfg.capabilities || []).length) da.capabilities = cfg.capabilities.map((name) => ({ name }));
+  if (pinned.length) da.actions = [{ id: "omaticServer", file: "ai-plugin.json" }];
+  put(`${pkg}/declarativeAgent.json`, JSON.stringify(da, null, 2));
+  put(`${pkg}/instructions.txt`, m365);
+  const manifest = {
+    $schema: "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
+    manifestVersion: APP_MANIFEST_VERSION,
+    version: plugin.version || "0.0.0",
+    id: APP_ID_PLACEHOLDER,
+    developer: {
+      name: DEVELOPER_NAME,
+      websiteUrl: WEBSITE_URL,
+      privacyUrl: PRIVACY_URL,
+      termsOfUseUrl: TERMS_URL,
+    },
+    icons: { color: "color.png", outline: "outline.png" },
+    name: { short: agentName, full: fullName },
+    description: { short: shortApp, full: agentDescription },
+    accentColor: ACCENT,
+    copilotAgents: { declarativeAgents: [{ id: `${id}Agent`, file: "declarativeAgent.json" }] },
+    permissions: ["identity"],
+    validDomains: [],
+  };
+  put(`${pkg}/manifest.json`, JSON.stringify(manifest, null, 2));
+  if (pinned.length) {
+    const fn = (name) => ({ name, capabilities: { confirmation: { type: "None" } } });
+    const pluginManifest = {
+      $schema: "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.4/schema.json",
+      schema_version: PLUGIN_SCHEMA_VERSION,
+      name_for_human: agentName,
+      description_for_human: `Read-only o-MATIC Server tools for ${a.display_name}.`,
+      namespace: `omatic${id}`.replace(/[^A-Za-z0-9-]/g, ""),
+      functions: pinned.map(fn),
+      runtimes: [{
+        type: "RemoteMCPServer",
+        auth: { type: "OAuthPluginVault", reference_id: AUTH_ID_PLACEHOLDER },
+        run_for_functions: pinned,
+        spec: { url: MCP_URL_PLACEHOLDER, mcp_tool_description: { file: "mcp-tools.json" } },
+      }],
+      privacy_policy_url: PRIVACY_URL,
+      legal_info_url: TERMS_URL,
+    };
+    put(`${pkg}/ai-plugin.json`, JSON.stringify(pluginManifest, null, 2));
+    put(`${pkg}/mcp-tools.json`, JSON.stringify({ tools: pinned.map(toolRecord) }, null, 2));
+  }
+  const nil = { probot: "00000000-0000-4000-8000-000000000001", fred: "00000000-0000-4000-8000-000000000002", data: "00000000-0000-4000-8000-000000000003" }[id]
+    || "00000000-0000-4000-8000-000000000009";
+  put(`${pluginDir}/adapters/m365/${id}/env/.env.sample`, `# TODO values for a local zip. Not a tenant id, not a secret, and not a host to call.
+# Replace every TODO value at deploy time. Nothing in this package is deployed from the repo.
+OMATIC_MCP_URL=https://TODO.example.invalid/mcp
+OMATIC_ENTRA_SSO_AUTH_ID=TODO-entra-sso-auth-id
+TEAMS_APP_ID=${nil}
+PACK_VERSION=${plugin.version || "0.0.0"}
+OMATIC_ACCENT_HEX=${ACCENT}
+OMATIC_WEBSITE_URL=${WEBSITE_URL}
+OMATIC_PRIVACY_URL=${PRIVACY_URL}
+OMATIC_TERMS_URL=${TERMS_URL}
+`);
+  const colorOnDisk = existsSync(join(root, pkg, "color.png"));
+  const outlineOnDisk = existsSync(join(root, pkg, "outline.png"));
+  if (!colorOnDisk || !outlineOnDisk) {
+    const missing = [!colorOnDisk && "color.png", !outlineOnDisk && "outline.png"].filter(Boolean);
+    put(`${pluginDir}/adapters/m365/${id}/ICON-PENDING.md`, `# ${a.display_name} icon status
+
+- color.png: ${colorOnDisk ? "present (192x192 avatar preview)" : "pending — no avatar art in this package"}
+- outline.png: ${outlineOnDisk ? "present" : "pending — not invented here"}
+
+Missing: ${missing.join(", ")}. \`node scripts/verify-m365.mjs\` warns and does not fail while a file is absent.
+`);
+  }
+  m365Rows.push({ id, display: a.display_name, wave: cfg.wave, tools: pinned, colorOnDisk, outlineOnDisk });
 
   // 6. ChatGPT custom GPT.
   const gptKnowledge = `${s.name}.md`;
@@ -377,14 +544,15 @@ on that host, and is recorded in the o-MATIC factory, not in this file.
 | Codex | agent | \`adapters/codex/agents/<role>.toml\` + plugin skills | install the plugin; copy the .toml files to \`~/.codex/agents/\` |
 | Gemini CLI | agent | repo-root \`gemini-extension.json\`, \`agents/\`, \`skills/\` | \`gemini extensions install https://github.com/lucidIT-LLC/<this repo>\` |
 | GitHub Copilot | agent | \`adapters/copilot/.github/agents/<role>.agent.md\` | copy into your repository's \`.github/agents/\` |
-| Microsoft 365 Copilot | chat | \`adapters/m365/<role>/declarativeAgent.json\` | package with the Microsoft 365 Agents Toolkit |
+| Microsoft 365 Copilot | one app per role | \`adapters/m365/<role>/appPackage/\` (manifest ${APP_MANIFEST_VERSION}, declarative agent ${SCHEMA_VERSION}, pinned read-only plugin) | \`node scripts/build-m365-packages.mjs\` writes gitignored \`dist/\` zips. Not deployed. See \`adapters/m365/INSTALL.md\`. |
 | ChatGPT | chat | \`adapters/chatgpt/<role>/\` instructions + SETUP | create a custom GPT; upload the role guide as knowledge |
 | Grok (grok.com) | chat | \`adapters/grok/<role>.md\` | paste into a Custom Agent's instructions. This is not Grok Bot. |
 | Cursor 4.7 | skills + method cards | \`.cursor-plugin\` + \`skills/cursor-{probot,fred,data}/\` + \`adapters/cursor/<role>.md\` | add this repo as a Cursor marketplace / install \`agency\`; see \`adapters/cursor/INSTALL.md\`. Status: design verified until skill discovery is measured on the host. |
 | Grok Bot | separate bots + host skills | \`skills/grok-{probot,fred,data}/\` + \`adapters/grok-bot/<role>.md\` | create one Bot per role, paste the description, enable \`grok-<role>\` by name. See \`adapters/grok-bot/INSTALL.md\`. Status: host defined. Factory READY only from \`startup\`. |
 
 Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
-Grok <= 4,000, Copilot <= 30,000, M365 name <= 100 and description <= 1,000.
+Grok <= 4,000, Copilot <= 30,000, M365 name <= 100 and description <= 1,000,
+M365 app short name <= 30, short description <= 80, and at most ${MAX_TOOLS} pinned read-only tools.
 `);
 
 // Cursor install note (regenerated with the matrix).
@@ -435,6 +603,58 @@ Chat-form Grok (grok.com) remains \`adapters/grok/<role>.md\` (4,000 characters)
 Factory READY comes only from \`startup\`. Do not claim it because this host exists.
 `);
 
+put(`${pluginDir}/adapters/m365/INSTALL.md`, `# Microsoft 365 Copilot — Probot, Fred, and Data
+
+${HEADER({ canonical_skill: "each role's SKILL.md" })}
+
+One app per role. Each package is a declarative agent (schema ${SCHEMA_VERSION}) plus a Teams app manifest (${APP_MANIFEST_VERSION}). Tool-using roles also ship a plugin (schema ${PLUGIN_SCHEMA_VERSION}) that pins at most ${MAX_TOOLS} read-only o-MATIC tools. \`factory_query\`, \`startup\`, and every write tool stay out of the pin list.
+
+Nothing in this directory is deployed. SSO is not live, and the read-only database login is not live. Do not sideload, upload to an org catalog, or attach these zips to a release from this change.
+
+## Build
+
+\`\`\`
+node scripts/build-m365-packages.mjs .
+node scripts/verify-m365.mjs .
+node scripts/verify-m365.mjs . --dist
+\`\`\`
+
+The zip lands in \`dist/m365/\`, which is gitignored. The build fills \`${APP_ID_PLACEHOLDER}\` and \`${MCP_URL_PLACEHOLDER}\` from \`adapters/m365/<role>/env/.env.sample\`. Those values are TODO placeholders. They are not a tenant id and not a private host.
+
+## What each package contains
+
+| Role | Path | Tools |
+|---|---|---|
+${m365Rows.map((r) => `| ${r.display} | \`adapters/m365/${r.id}/appPackage/\` | ${r.tools.length ? r.tools.join(", ") : "none"} |`).join("\n")}
+
+The first factory these agents may read is o-MATIC Foundry, read-only. The connection name is read from \`connections_list\` at runtime. theNest and About Jimmy stay out.
+
+Privacy and terms URLs are marked TODO until the public pages exist. Developer name and website are filled. Persona lines are the gold-record lines, unchanged.
+
+## Icons
+
+${m365Rows.every((r) => r.colorOnDisk && r.outlineOnDisk)
+  ? "`color.png` is the 192×192 avatar. `outline.png` is the 32×32 white-on-transparent outline. Each manifest references both files."
+  : "`color.png` is the 192×192 avatar preview when the repo already has that art. `outline.png` is the 32×32 white-on-transparent outline when it is in the package. A missing icon is icon-pending: verify warns and does not fail."}
+
+## Host skills
+
+Enable \`m365-probot\`, \`m365-fred\`, or \`m365-data\` beside the canonical skill (\`probot-orchestrator\`, \`fred-storage\`, \`data-analyst\`). The canonical skill is the lane. The host skill is the Copilot limit: read-only, pinned tools, drafts for anything the user would send.
+`);
+
+put(`${pluginDir}/adapters/m365/CATALOG.md`, `# Microsoft 365 Copilot catalog
+
+${HEADER({ canonical_skill: "each role's SKILL.md" })}
+
+Source packages only. SHA-256 of a zip is written to \`dist/m365/CATALOG.md\` by \`scripts/build-m365-packages.mjs\` and is not committed.
+
+| Role | Wave | Version | Tools | Icons |
+|---|---|---|---|---|
+${m365Rows.map((r) => `| ${r.id} | ${r.wave ?? "—"} | ${plugin.version || "0.0.0"} | ${r.tools.length} | ${r.colorOnDisk && r.outlineOnDisk ? "color + outline" : "icon-pending"} |`).join("\n")}
+
+Store listing (org catalog, then the public Agent Store) waits on SSO, the read-only Foundry login, and privacy and terms pages.
+`);
+
 // Every skill's agents/openai.yaml names icons that exist (task #1024:
 // jo-release-journal shipped "./assets/jo.svg" with no such file, so the
 // OpenAI surfaces showed that skill without an icon).
@@ -450,6 +670,12 @@ if (existsSync(skillsRoot)) {
   }
 }
 
+// The v1.6 file lived beside the package. It is retired; the app package replaces it.
+const retired = pack.agents.map((a) => `${pluginDir}/adapters/m365/${a.id}/declarativeAgent.json`);
+for (const row of m365Rows) {
+  if (row.colorOnDisk && row.outlineOnDisk) retired.push(`${pluginDir}/adapters/m365/${row.id}/ICON-PENDING.md`);
+}
+
 // Write or check.
 let drift = 0;
 for (const [rel, text] of out) {
@@ -459,6 +685,16 @@ for (const [rel, text] of out) {
     drift++;
     if (!check) { mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, text); }
   }
+}
+for (const rel of retired) {
+  const p = join(root, rel);
+  if (!existsSync(p)) continue;
+  drift++;
+  const why = rel.endsWith("ICON-PENDING.md")
+    ? "both icons are in the package"
+    : "v1.6 path retired; the app package replaced it";
+  if (check) console.log(`STALE: ${rel} (${why})`);
+  else { rmSync(p); console.log(`removed ${rel}`); }
 }
 for (const x of problems) console.log(`  FAIL  ${x}`);
 console.log(`${check ? "checked" : "wrote"} ${out.size} files for ${pack.agents.length} roles (${drift} ${check ? "out of date" : "changed"})`);

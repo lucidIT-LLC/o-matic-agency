@@ -1,6 +1,20 @@
 {
   "name": "o-matic-agency",
-  "description": "o-MATIC Agency \u2014 where an o-MATIC factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and the server operating guide.",
+  "description": "o-MATIC Agency — where an o-MATIC factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and the server operating guide. Microsoft 365 Copilot app packages for Probot, Fred, and Data are source-only under agency/adapters/m365/.",
+  "metadata": {
+    "hosts": {
+      "github-copilot": "agency/adapters/copilot/.github/agents",
+      "m365-copilot": {
+        "status": "source-only",
+        "version": "1.11.0",
+        "packages": [
+          "agency/adapters/m365/probot/appPackage",
+          "agency/adapters/m365/fred/appPackage",
+          "agency/adapters/m365/data/appPackage"
+        ]
+      }
+    }
+  },
   "plugins": [
     {
       "name": "agency",

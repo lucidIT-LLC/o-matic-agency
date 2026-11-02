@@ -1,5 +1,16 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.11.0 — 2026-11-02
+
+Microsoft 365 Copilot app packages for Probot, Fred, and Data. Source and build tooling only. Nothing is deployed, released, or pointed at a tenant.
+
+- **Packages:** `adapters/m365/<role>/appPackage/` replaces the v1.6 `declarativeAgent.json`. Declarative agent schema v1.9, Teams app manifest 1.30, and a plugin (schema 2.4) that pins the plan's read-only tools (8, 6, and 6). `factory_query`, `startup`, and write tools are not pinned. The server URL and the Teams app id stay placeholders. Privacy and terms URLs are marked TODO.
+- **Instructions:** condensed from each role skill, persona lines unchanged, under 8,000 characters. Conversation starters are titled and deduplicated. Probot's repeated "start the factory" starter is gone.
+- **Host skills:** `m365-probot` 1.0.0, `m365-fred` 1.0.0, `m365-data` 1.0.0. Attested as lanes that declare no identity of their own. The first factory they may read is o-MATIC Foundry, read-only.
+- **Roles:** `probot-orchestrator` 18.12.0 → 18.13.0, `fred-storage` 12.3.0 → 12.4.0, `data-analyst` 7.6.0 → 7.7.0. Each names the Copilot package.
+- **Build:** `scripts/build-m365-packages.mjs` zips into gitignored `dist/m365/`. `scripts/verify-m365.mjs` checks the vendored Microsoft schemas and icon sizes. `color.png` is the 192×192 avatar. `outline.png` is the 32×32 white-on-transparent outline. A missing icon still warns and does not fail.
+- **Versions:** host manifests and `gemini-extension.json` move 1.10.0 → 1.11.0. Marketplace entries list the Copilot packages. Sibling packs are not sync-tooling-bumped.
+
 ## 1.10.0 — 2026-11-01
 
 Probot ships `factory-barnacle-cleanup` 1.1.0. After many revisions it sweeps SOPs, rules, agents, and markdown, proposes one current instruction set, and writes nothing until the operator approves the exact text. Stale-corpus hunting stays with `factory-staleness-audit`.

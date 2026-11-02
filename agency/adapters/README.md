@@ -15,11 +15,12 @@ on that host, and is recorded in the o-MATIC factory, not in this file.
 | Codex | agent | `adapters/codex/agents/<role>.toml` + plugin skills | install the plugin; copy the .toml files to `~/.codex/agents/` |
 | Gemini CLI | agent | repo-root `gemini-extension.json`, `agents/`, `skills/` | `gemini extensions install https://github.com/lucidIT-LLC/<this repo>` |
 | GitHub Copilot | agent | `adapters/copilot/.github/agents/<role>.agent.md` | copy into your repository's `.github/agents/` |
-| Microsoft 365 Copilot | chat | `adapters/m365/<role>/declarativeAgent.json` | package with the Microsoft 365 Agents Toolkit |
+| Microsoft 365 Copilot | one app per role | `adapters/m365/<role>/appPackage/` (manifest 1.30, declarative agent v1.9, pinned read-only plugin) | `node scripts/build-m365-packages.mjs` writes gitignored `dist/` zips. Not deployed. See `adapters/m365/INSTALL.md`. |
 | ChatGPT | chat | `adapters/chatgpt/<role>/` instructions + SETUP | create a custom GPT; upload the role guide as knowledge |
 | Grok (grok.com) | chat | `adapters/grok/<role>.md` | paste into a Custom Agent's instructions. This is not Grok Bot. |
 | Cursor 4.7 | skills + method cards | `.cursor-plugin` + `skills/cursor-{probot,fred,data}/` + `adapters/cursor/<role>.md` | add this repo as a Cursor marketplace / install `agency`; see `adapters/cursor/INSTALL.md`. Status: design verified until skill discovery is measured on the host. |
 | Grok Bot | separate bots + host skills | `skills/grok-{probot,fred,data}/` + `adapters/grok-bot/<role>.md` | create one Bot per role, paste the description, enable `grok-<role>` by name. See `adapters/grok-bot/INSTALL.md`. Status: host defined. Factory READY only from `startup`. |
 
 Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
-Grok <= 4,000, Copilot <= 30,000, M365 name <= 100 and description <= 1,000.
+Grok <= 4,000, Copilot <= 30,000, M365 name <= 100 and description <= 1,000,
+M365 app short name <= 30, short description <= 80, and at most 8 pinned read-only tools.

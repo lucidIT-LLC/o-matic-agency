@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.30",
+  "version": "1.11.0",
+  "id": "${{TEAMS_APP_ID}}",
+  "developer": {
+    "name": "lucidIT, LLC (o-MATIC)",
+    "websiteUrl": "https://o-matic.ai",
+    "privacyUrl": "https://TODO.example.invalid/privacy",
+    "termsOfUseUrl": "https://TODO.example.invalid/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "Data (o-MATIC)",
+    "full": "Data, Data Analyst & Factory DBA from o-MATIC"
+  },
+  "description": {
+    "short": "Data analyst. Reads data and says what it actually shows.",
+    "full": "Data Analyst & Factory DBA from o-MATIC. The data is what it is. Here's what it shows."
+  },
+  "accentColor": "#00B5AD",
+  "copilotAgents": {
+    "declarativeAgents": [
+      {
+        "id": "dataAgent",
+        "file": "declarativeAgent.json"
+      }
+    ]
+  },
+  "permissions": [
+    "identity"
+  ],
+  "validDomains": []
+}
