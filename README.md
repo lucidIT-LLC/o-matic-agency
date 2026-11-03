@@ -38,6 +38,10 @@ You don't go to a hardware store for a marketing manager. The other doors:
 
 Codex reads the same repo via `.agents/plugins/marketplace.json`.
 
+## Optional Probot pet
+
+[Install the Probot pet](<codex://pets/install?name=Probot&imageUrl=https%3A%2F%2Fraw.githubusercontent.com%2FlucidIT-LLC%2Fo-matic-agency%2Fmain%2Fagency%2Fassets%2Fpets%2Fprobot%2Fv2%2Fprobot-pet-v2.png&description=A%20loyal%20o-MATIC%20factory%20companion%20that%20shows%20Codex%20activity%20and%20honest%20factory%20context.&spriteVersionNumber=2>) opens the separate Codex pet install flow. The original v2 PNG and instructions are in [`agency/assets/pets/probot/v2/README.md`](agency/assets/pets/probot/v2/README.md). Installing the marketplace plugin does not select or activate a pet.
+
 ## This pack ships no MCP server, on purpose
 
 That is the single most important fact about it.

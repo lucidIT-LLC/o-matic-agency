@@ -1,0 +1,24 @@
+{
+  "name": "Probot",
+  "description": "A loyal o-MATIC factory companion that shows Codex activity and honest factory context.",
+  "spriteVersionNumber": 2,
+  "spritesheet": "probot-pet-v2.png",
+  "width": 1536,
+  "height": 2288,
+  "cellWidth": 192,
+  "cellHeight": 208,
+  "framesPerRow": [
+    6,
+    8,
+    8,
+    4,
+    5,
+    8,
+    6,
+    6,
+    6,
+    8,
+    8
+  ],
+  "mimeType": "image/png"
+}
