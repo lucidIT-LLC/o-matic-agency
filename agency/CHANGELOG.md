@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+
+## 1.11.1 — 2026-11-03
+
+Original animated pet art is now included with straightforward export and installation guidance. Installing the plugin does not select a pet, and the artwork does not change persona behavior.
+
+- **Pet asset:** Probot v2 sprite, metadata, and install instructions under `agency/assets/pets/probot/v2/`.
+- **Versions:** host manifests and `gemini-extension.json` move 1.11.0 → 1.11.1 in lockstep.
+
 ## 1.11.0 — 2026-11-02
 
 Microsoft 365 Copilot app packages for Probot, Fred, and Data. Source and build tooling only. Nothing is deployed, released, or pointed at a tenant.
