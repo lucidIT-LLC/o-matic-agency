@@ -50,7 +50,7 @@ not being asked to win it a fourth.
 ╭─ 🏠 O-Matic · an o-MATIC factory
 │ State       🟢 READY · all database-measured fields ok
 │ Generation  system-7 governance · release 7.2.0
-│ Connection  o-MATIC Foundry · o-matic · 8 granted
+│ Connection  Example Factory · example · 8 granted
 │ Retrieval   🟢 vector · telemetry live
 │ Corpus      🟢 1,540 / 1,540 embedded · 0 stale · 0 unembedded
 │ Roster      11/11 · 15 rules · 13 SOPs
@@ -106,7 +106,7 @@ returns `corpus_stale_total` and `corpus_unembedded_total` as **strings**, so
 before comparing, never test the raw field.
 
 **Add-on module state is not on the card.** The Capabilities row lists the server's
-built-in capabilities; whether the o-MATIC Reader, Insight or MoM module is installed
+built-in capabilities; whether an add-on module is installed
 and running comes from the `module_status` tool. A host with no module is a normal state.
 The three added rows are the server's own words (`value · condition label`); never
 recompute them. A `running_code` state other than CURRENT is reported in the prose

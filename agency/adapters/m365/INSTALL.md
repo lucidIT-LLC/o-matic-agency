@@ -24,7 +24,7 @@ The zip lands in `dist/m365/`, which is gitignored. The build fills `${{TEAMS_AP
 | Fred | `adapters/m365/fred/appPackage/` | connections_list, omatic_guide, search, proposal_vault_list, proposal_vault_get, ocr_result_get |
 | Probot | `adapters/m365/probot/appPackage/` | connections_list, omatic_guide, search, task_relationships, task_duplicate_check, slate_entity_search, slate_entity_verify, module_status |
 
-The first factory these agents may read is o-MATIC Foundry, read-only. The connection name is read from `connections_list` at runtime. theNest and About Jimmy stay out.
+The first factory these agents may read is the first one granted to the app, read-only. The connection name is read from `connections_list` at runtime.
 
 Privacy and terms URLs are marked TODO until the public pages exist. Developer name and website are filled. Persona lines are the gold-record lines, unchanged.
 

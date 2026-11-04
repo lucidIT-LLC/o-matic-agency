@@ -6,10 +6,10 @@
   ],
   "retired": [
     {
-      "name": "tim",
+      "name_sha256": "c0d19e4483571ff07cb01a4d3f5484102d7f333c4cafa64a2821f55031ea6041",
       "replaced_by": "probot-tool-discovery, probot-capability-optimization, probot-startup-optimization",
       "decision": "task #655",
-      "reason": "Tim's factory tool-inventory and optimization lanes were split into three bounded Probot lanes; the agent-pack was regenerated to drop retired agent Tim (task #655). No standing persona named Tim ships from this pack."
+      "reason": "The factory tool-inventory and optimization lanes were split into three bounded Probot lanes; the agent-pack was regenerated to drop the retired agent (task #655). No standing persona by that name ships from this pack."
     }
   ]
 }

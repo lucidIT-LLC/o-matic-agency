@@ -148,8 +148,8 @@ for (const [label, opts, want] of cases) {
     texts.join(" | "));
   check("a role with no tools ships no plugin", !existsSync(join(root, "demo/adapters/m365/tess/appPackage/ai-plugin.json")));
   const manifest = JSON.parse(readFileSync(join(root, "demo/adapters/m365/tess/appPackage/manifest.json"), "utf8"));
-  check("app manifest keeps the app id and privacy URL as placeholders",
-    manifest.manifestVersion === "1.30" && manifest.id === "${{TEAMS_APP_ID}}" && String(manifest.developer.privacyUrl).includes("TODO"),
+  check("app manifest keeps the app id as a placeholder and points privacy at the public page",
+    manifest.manifestVersion === "1.30" && manifest.id === "${{TEAMS_APP_ID}}" && manifest.developer.privacyUrl === "https://www.o-matic.ai/privacy-policy/",
     manifest.id);
   rmSync(root, { recursive: true, force: true });
 }

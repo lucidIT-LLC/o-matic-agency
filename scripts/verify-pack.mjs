@@ -256,11 +256,12 @@ if (!skillDirs.length) {
 }
 
 
-// 5. RETIRED PERSONA NAME DETECTOR (task #777). A persona rename — Pixel ->
-// Andy (decision #538), Rimmer -> Smith (decision #416) — must be caught by a
-// gate, not by the operator reading a diff by hand. scripts/retired-persona-
-// allowlist.json lists {name, replaced_by, decision, reason} for every retired
-// persona name relevant to THIS pack.
+// 5. RETIRED PERSONA NAME DETECTOR (task #777). Retired roles (hashed list)
+// must be caught by a gate, not by the operator reading a diff by hand.
+// scripts/retired-persona-allowlist.json lists {name_sha256, replaced_by,
+// decision, reason}. name_sha256 is the sha256 of the lowercase persona name.
+// The comparison hashes folder segments and capitalized prose tokens. The
+// name is not stored in this file.
 //
 // Scope, deliberately narrow: only files a host actually LOADS as instruction
 // or routing metadata — SKILL.md, and anything under adapters/ or contracts/.
@@ -294,31 +295,31 @@ const PERSONA_EXEMPT = new RegExp(EXEMPT.source + "|replac|successor|former |is 
     let ra;
     try { ra = JSON.parse(readFileSync(raPath, "utf8")); OK("retired-persona-allowlist.json parses"); }
     catch (e) { FAIL(`retired-persona-allowlist.json invalid JSON: ${e.message}`); }
+    const sha256 = (s) => createHash("sha256").update(s).digest("hex");
     const retired = (ra?.retired ?? []).filter(r => {
-      if (!r.name || !r.replaced_by || !r.reason) {
-        FAIL(`retired-persona-allowlist.json entry missing name/replaced_by/reason: ${JSON.stringify(r)}`);
+      if (!r.name_sha256 || !r.replaced_by || !r.reason) {
+        FAIL(`retired-persona-allowlist.json entry missing name_sha256/replaced_by/reason: ${JSON.stringify(r)}`);
         return false;
       }
       return true;
     });
     if (ra && !retired.length) OK("retired-persona-allowlist.json declares no retired names for this pack");
-    const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
     // case-INsensitive, whole-token match against a directory's hyphen/underscore
     // segments — a narrow, deliberate context, not free prose, so the common-word
     // collision risk that rules out case-insensitivity below does not apply here.
-    const dirHasSegment = (dir, name) =>
-      dir.split(/[-_]/).some(seg => seg.toLowerCase() === name.toLowerCase());
-    // case-SENSITIVE on the capitalized proper-noun form for prose scanning.
-    const proseRe = (n) => new RegExp(`\\b${escape(cap(n))}\\b`);
+    const dirHasSegment = (dir, hash) =>
+      dir.split(/[-_]/).some(seg => sha256(seg.toLowerCase()) === hash);
+    // case-SENSITIVE on the capitalized proper-noun form, compared as a hash
+    // of the lowercased token so the list never spells the name.
+    const proseHashes = (block) => (block.match(/\b[A-Z][a-z]{2,}\b/g) || []).map((w) => sha256(w.toLowerCase()));
 
     // a) a skill's own identity must never BE a retired name — no context
     //    exempts a skill from naming itself after a persona that no longer exists.
     for (const dir of skillDirs) {
       checks++;
       for (const r of retired)
-        if (dirHasSegment(dir, r.name))
-          FAIL(`${dir}: skill directory IS a retired persona name ('${r.name}', replaced by '${r.replaced_by}' — ${r.decision})`);
+        if (dirHasSegment(dir, r.name_sha256))
+          FAIL(`${dir}: skill directory IS a retired persona (hashed list; replaced by '${r.replaced_by}' — ${r.decision})`);
     }
 
     // b) SKILL.md / adapters / contracts, whole paragraph at a time.
@@ -333,9 +334,10 @@ const PERSONA_EXEMPT = new RegExp(EXEMPT.source + "|replac|successor|former |is 
           if (!para.length) return;
           const block = para.join("\n");
           if (!PERSONA_EXEMPT.test(block)) {
+            const hashes = new Set(proseHashes(block));
             for (const r of retired)
-              if (proseRe(r.name).test(block))
-                FAIL(`${rel}:${startLine}: names retired persona '${r.name}' as a live reference — replaced by '${r.replaced_by}' (${r.decision})`);
+              if (hashes.has(r.name_sha256))
+                FAIL(`${rel}:${startLine}: names a retired persona as a live reference — replaced by '${r.replaced_by}' (${r.decision})`);
           }
           para = [];
         };

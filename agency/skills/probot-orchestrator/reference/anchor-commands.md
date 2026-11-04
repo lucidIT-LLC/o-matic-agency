@@ -28,12 +28,12 @@ Operator authorizes a repair after Smith, Data, or a governed health check has
 produced a specific finding.
 
 **Route to the `factory-governance-repair` skill. Do not repair from the audit
-summary alone.** It retrieves the current Commons authority set first,
+summary alone.** It retrieves the current released authority set first,
 distinguishes a real control from a good-looking record, and requires a
 normal-role behavior test plus a fresh startup card before closure. When a
 durable control changes, it also reconciles the Blueprint, Stuff You Should
 Know, and Stuff You Should Forget in their distinct roles and proves the
-amended Commons text is serving. Owner-only DDL remains an explicit emergency
+amended released text is serving. Owner-only DDL remains an explicit emergency
 boundary; this route does not grant it.
 
 ### audit for staleness
@@ -48,7 +48,7 @@ that separate a real defect from a prohibition or a historical record.
 The distinction from `start an audit`: that one asks whether the factory is
 *working*. This one asks whether what it is serving is *true*. A factory reports
 READY while handing every session instructions built on retired systems, and the
-startup card cannot see it — measured 2026-08-28 on Commons, which was serving
+startup card cannot see it — measured on one factory, which was serving
 41% of its corpus from documents marked `retired` or `archive`.
 
 Findings that need an SOP or doctrine rewrite route on to Smith. Deletions and

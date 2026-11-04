@@ -3,7 +3,7 @@
   "name": "o-matic-agency",
   "owner": {
     "name": "LucidIT, LLC",
-    "email": "lucideye@icloud.com"
+    "email": "info@lucidit.io"
   },
   "metadata": {
     "description": "o-MATIC Agency — where an o-MATIC factory is staffed. The constitutive operating roster: Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), the factory staleness audit, and the server operating guide.",
@@ -14,10 +14,10 @@
       "name": "agency",
       "displayName": "o-MATIC Agency",
       "source": "./agency",
-      "version": "1.11.0",
+      "version": "1.12.0",
       "description": "The constitutive operating layer of an o-MATIC factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current; barnacle cleanup proposes one current instruction set and writes nothing until the operator approves the exact text. Ships no MCP server, so it installs on hosts that cannot spawn one.",
       "author": {
-        "name": "James Walker",
+        "name": "LucidIT, LLC",
         "url": "https://o-matic.ai"
       },
       "homepage": "https://o-matic.ai",
@@ -47,7 +47,7 @@
             "form": "declarative-agent-app",
             "status": "source-only",
             "notDeployed": true,
-            "version": "1.11.0",
+            "version": "1.12.0",
             "packages": [
               { "role": "probot", "path": "agency/adapters/m365/probot/appPackage", "wave": 1 },
               { "role": "fred", "path": "agency/adapters/m365/fred/appPackage", "wave": 2 },

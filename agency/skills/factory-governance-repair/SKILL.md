@@ -3,7 +3,11 @@ name: factory-governance-repair
 description: Repair a proven o-MATIC governance defect after an audit. Use for session-lifecycle, tenant-isolation, readiness, SOP/Policy conflict, or governance-retrieval repairs; not for ordinary startup or broad redesign.
 ---
 
+<!-- version: 1.1.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
+
 # Factory Governance Repair
+
+Host notes: see `probot-orchestrator` → Host notes.
 
 Use when a live finding identifies a specific governance defect and the
 operator has authorized its repair. Preserve stronger working local controls.
@@ -14,7 +18,7 @@ operator has authorized its repair. Preserve stronger working local controls.
    factory identity, tenant, state, and verbatim state reason.
 2. Read `omatic_guide(topic="blueprint")`, then the relevant per-document
    topics it lists. The Blueprint shipped with the installed Server release
-   is authoritative (decision #708). Former Commons Blueprint copies are audit
+   is authoritative. Former shared-library Blueprint copies are audit
    history, even if their catalog rows still say active. A cached skill or
    legacy factory document does not override the released contract.
 3. Use the released Certification Authority and the target's live checklist
@@ -29,7 +33,7 @@ operator has authorized its repair. Preserve stronger working local controls.
    the normal-role refusal and legitimate-operation tests before mutation.
    Resolve conflicting authority before changing a durable control.
 
-Probot owns sequencing and the session record. Data owns factory database
+Probot owns sequencing. Data writes the session record and owns factory database
 repair and verification; Carver owns application and repository changes;
 Fred records custody. Route independent review where the current contract or
 operator requires it. Role names alone do not grant credentials or authority.
@@ -41,7 +45,7 @@ cosmetic Blueprint rewrite. Record why no contract amendment was necessary.
 
 If the contract itself must change, amend the Blueprint source repository,
 version the change, and ship it through the normal release process. Never edit
-an audit-only Commons copy as though it were the live Blueprint. Change any
+an audit-only library copy as though it were the live Blueprint. Change any
 applicable companion procedure or program record in its own documented role;
 do not duplicate Blueprint text across records. Preserve revision history.
 

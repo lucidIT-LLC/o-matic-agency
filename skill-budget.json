@@ -1,0 +1,22 @@
+{
+  "_comment": "Agency 1.12.0. chars is each non-variant skill's body cap (the spec target plus 3 percent, or the shipped body plus 3 percent when the spec figure was an estimate). lanes skip the Host notes heading test. check-skills.mjs reads this file.",
+  "chars": {
+    "probot-orchestrator": 15965,
+    "fred-storage": 14420,
+    "data-analyst": 13390,
+    "factory-staleness-audit": 11330,
+    "factory-barnacle-cleanup": 6180,
+    "factory-governance-repair": 5760,
+    "probot-tool-discovery": 2586,
+    "probot-capability-optimization": 1545,
+    "probot-startup-optimization": 1858
+  },
+  "lanes": [
+    "factory-staleness-audit",
+    "factory-barnacle-cleanup",
+    "factory-governance-repair",
+    "probot-tool-discovery",
+    "probot-capability-optimization",
+    "probot-startup-optimization"
+  ]
+}

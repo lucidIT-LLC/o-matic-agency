@@ -17,15 +17,15 @@ marketplace supplies the people who run one.
 | Skill | Role |
 |---|---|
 | `agency:probot-orchestrator` | Probot — plans, routes, runs startup and session close |
-| `agency:fred-storage` | Fred — files, folder custody, connections, the session log |
-| `agency:data-analyst` | Data — schema integrity, retrieval health, factory DBA work |
+| `agency:fred-storage` | Fred — files, folder custody, granted connections |
+| `agency:data-analyst` | Data — schema integrity, retrieval health, factory DBA work, the session record |
 | `agency:server-guide` | The o-MATIC Server operating guide |
 
 This is the **constitutive** layer. Without it a factory does not start.
 
 You don't go to a hardware store for a marketing manager. The other doors:
 
-- **o-MATIC Firm** — expertise you retain: Smith, Jake
+- **o-MATIC Firm** — expertise you retain: Smith, Jake, Jerry
 - **o-MATIC Studio** — people who design and build: Brandy, Carver, Monet, Jo, Pixel
 - **o-MATIC Supply** — tools, not people: the WordPress and Elementor connectors
 
@@ -40,7 +40,7 @@ Codex reads the same repo via `.agents/plugins/marketplace.json`.
 
 ## Optional Probot pet
 
-[Install the Probot pet](<codex://pets/install?name=Probot&imageUrl=https%3A%2F%2Fraw.githubusercontent.com%2FlucidIT-LLC%2Fo-matic-agency%2Fmain%2Fagency%2Fassets%2Fpets%2Fprobot%2Fv2%2Fprobot-pet-v2.png&description=A%20loyal%20o-MATIC%20factory%20companion%20that%20shows%20Codex%20activity%20and%20honest%20factory%20context.&spriteVersionNumber=2>) opens the separate Codex pet install flow. The original v2 PNG and instructions are in [`agency/assets/pets/probot/v2/README.md`](agency/assets/pets/probot/v2/README.md). Installing the marketplace plugin does not select or activate a pet.
+[Install the Probot pet](codex://pets/install?name=Probot&imageUrl=https%3A%2F%2Fraw.githubusercontent.com%2FlucidIT-LLC%2Fo-matic-agency%2Fmain%2Fagency%2Fassets%2Fpets%2Fprobot%2Fv2%2Fprobot-pet-v2.png&description=A%20loyal%20o-MATIC%20factory%20companion%20that%20shows%20Codex%20activity%20and%20honest%20factory%20context.&spriteVersionNumber=2) opens the separate Codex pet install flow. The original v2 PNG and instructions are in [`agency/assets/pets/probot/v2/README.md`](agency/assets/pets/probot/v2/README.md). Installing the marketplace plugin does not select or activate a pet.
 
 ## This pack ships no MCP server, on purpose
 
@@ -154,7 +154,7 @@ trust boundary is the o-MATIC Server.
 
 **Cursor:** This repository includes a Cursor plugin manifest. On Teams and Enterprise, a team admin can import this GitHub repository as a team marketplace from **Dashboard → Plugins & MCPs → Team Marketplaces → Add Marketplace → Import from Repo**, then install the `agency` plugin in Cursor Customize. Cursor requires public Marketplace plugins to be open source. This repository's current BUSL license explicitly is not open source, so it is not eligible for public Marketplace submission under the current license. LucidIT, LLC confirms that its intended public GitHub and Cursor Team Marketplace distribution route is authorized for this package. A fresh install has not yet been verified. See [Cursor's plugin guide](https://prod.cursor.com/docs/plugins) and [Marketplace submission page](https://cursor.com/marketplace/publish).
 
-**Microsoft 365 Copilot:** Source packages for Probot, Fred, and Data live in `agency/adapters/m365/<role>/appPackage/` (one app per role). Build zips with `node scripts/build-m365-packages.mjs` into gitignored `dist/`. They are not deployed. The first factory they may read is o-MATIC Foundry, read-only, after SSO and the database fixes. See `agency/adapters/m365/INSTALL.md`.
+**Microsoft 365 Copilot:** Source packages for Probot, Fred, and Data live in `agency/adapters/m365/<role>/appPackage/` (one app per role). Build zips with `node scripts/build-m365-packages.mjs` into gitignored `dist/`. They are not deployed. The first factory they may read is the first one granted to the app, read-only, after SSO and the database fixes. See `agency/adapters/m365/INSTALL.md`.
 
 **Grok Bot:** This repository does not install a Bot. It ships host skills `grok-probot`, `grok-fred`, and `grok-data` (enable each by name on its own Bot) and ready-to-paste descriptions in `agency/adapters/grok-bot/`. Connect the o-MATIC Server connector on the Grok Bot account when factory memory is needed; this pack still ships no MCP server. Chat-form Grok (grok.com) stays the short paste in `agency/adapters/grok/`. No public Bot template is published from this repo. See [xAI's Bot guide](https://docs.x.ai/grok-bot/bots) and `agency/adapters/grok-bot/INSTALL.md`.
 

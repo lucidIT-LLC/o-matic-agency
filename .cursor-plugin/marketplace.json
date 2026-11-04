@@ -5,12 +5,12 @@
   },
   "metadata": {
     "description": "o-MATIC Agency — where an o-MATIC factory is staffed. Probot, Fred, and Data. Ships no MCP server. Microsoft 365 Copilot packages are source-only under agency/adapters/m365/.",
-    "version": "1.11.0",
+    "version": "1.12.0",
     "hosts": {
       "github-copilot": "agency/adapters/copilot/.github/agents",
       "m365-copilot": {
         "status": "source-only",
-        "version": "1.11.0",
+        "version": "1.12.0",
         "packages": [
           "agency/adapters/m365/probot/appPackage",
           "agency/adapters/m365/fred/appPackage",
@@ -24,7 +24,7 @@
       "name": "agency",
       "source": "./agency",
       "description": "o-MATIC Agency portable core roster — Probot, Fred, and Data. Ships no MCP server.",
-      "version": "1.11.0",
+      "version": "1.12.0",
       "keywords": ["m365-copilot", "github-copilot"],
       "displayName": "o-MATIC Agency",
       "logo": "agency/assets/logo.png",

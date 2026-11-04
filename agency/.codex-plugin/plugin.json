@@ -1,6 +1,6 @@
 {
   "name": "agency",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "The portable core-role layer of an o-MATIC factory — Probot (orchestrator), Fred (storage and custody), Data (analyst and factory DBA), and Probot-owned audit, startup-optimization, tool-discovery, and barnacle-cleanup skills. Hosts may render the same contracts as skills or Agents. Ships NO MCP server by design; database access is the o-MATIC Server's MCP surface configured by the host.",
   "author": {
     "name": "LucidIT, LLC",

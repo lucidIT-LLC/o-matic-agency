@@ -57,10 +57,10 @@ that repository; the agent files do not depend on it.
 One app per role, under `adapters/m365/<role>/appPackage/`. These are sources.
 `node scripts/build-m365-packages.mjs` writes zip files into `dist/m365/`
 (gitignored). Do not sideload or publish them until SSO and the read-only
-database login exist. The first factory they may read is o-MATIC Foundry,
-read-only. The MCP URL and the Teams app id in `env/.env.sample` are TODO
-placeholders, not a tenant and not a private host. Privacy and terms URLs
-are marked TODO. See `adapters/m365/INSTALL.md`.
+database login exist. The first factory they may read is the first one granted
+to the app, read-only. The MCP URL and the Teams app id in `env/.env.sample` are
+placeholders, not a tenant and not a private host. Privacy and terms URLs point
+at the public pages and are pending legal review. See `adapters/m365/INSTALL.md`.
 
 ## Gemini
 
