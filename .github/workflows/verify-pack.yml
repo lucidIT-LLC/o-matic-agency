@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -43,12 +45,12 @@ jobs:
           set -e
           node scripts/test-build-host-adapters.mjs
           node scripts/build-host-adapters.mjs . --check
-      - name: Microsoft 365 Copilot packages (schemas, icons, pinned tools)
+      - name: Microsoft 365 Copilot packages (schemas, icons, zip)
         run: |
           set -e
-          node scripts/verify-m365.mjs .
-          node scripts/build-m365-packages.mjs .
-          node scripts/verify-m365.mjs . --dist
+          npm install --prefix /tmp/m365-ajv ajv@8.17.1 ajv-draft-04@1.0.0 pngjs@7.0.0
+          NODE_PATH=/tmp/m365-ajv/node_modules node scripts/verify-m365.mjs .
+          node scripts/build-m365-packages.mjs . --check
       - name: Hook fixture suites
         run: |
           set -e
@@ -60,3 +62,17 @@ jobs:
             python3 "$suite"
           done
           [ "$found" = 1 ] || echo "no hook fixture suites in this pack"
+      - name: Skill shape and size
+        run: node scripts/check-skills.mjs
+      - name: Version bump on content change
+        if: github.event_name == 'pull_request'
+        run: node scripts/check-version-bump.mjs --base "origin/${{ github.base_ref }}"
+      - name: Public-readiness gate
+        run: |
+          python3 -m unittest discover -s scripts/public-gate/tests
+          python3 scripts/public-gate/check-public-package.py --profile skills-pack \
+            --denylist .github/public-gate/denylist.tsv --allowlist .github/public-gate/allowlist.tsv \
+            --hashed .github/public-gate/hashed-terms.json .
+      - name: Conformance (fixture mode, offline)
+        if: hashFiles('*/evals/run-conformance.mjs') != ''
+        run: cd "$(dirname "$(ls */evals/run-conformance.mjs | head -1)")" && npm ci && node run-conformance.mjs

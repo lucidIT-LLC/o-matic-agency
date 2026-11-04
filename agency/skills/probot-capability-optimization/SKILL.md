@@ -1,9 +1,13 @@
 ---
 name: probot-capability-optimization
-description: Probot's governed capability-optimization lane. Scopes the live tool surface to the work, inspects live schemas, identifies publication gaps, and recommends only bounded, evidence-backed changes. Replaces Tim's former optimization route.
+description: Probot's governed capability-optimization lane. Scopes the live tool surface to the work, inspects live schemas, identifies publication gaps, and recommends only bounded, evidence-backed changes.
 ---
 
+<!-- version: 1.1.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
+
 # Probot Capability Optimization
+
+Host notes: see `probot-orchestrator` → Host notes.
 
 Use after `probot-tool-discovery`, never from a static catalog. This is a
 Probot skill, not a separate agent.

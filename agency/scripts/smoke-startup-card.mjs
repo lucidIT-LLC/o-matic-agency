@@ -9,7 +9,7 @@ import { formatFactoryFooter, formatStartupCard } from './format-startup-card.mj
  * 15 rules rendered as 0, and every factory rendered under a hardcoded name.
  * A fixture built from the code's assumptions cannot fail. */
 const omatic = {
-  connection: 'o-MATIC Foundry',
+  connection: 'Example Factory',
   grantedCount: 8,
   card: {
     card_version: '2.0.0', factory_id: 'omatic', factory_name: 'O-Matic',
@@ -60,7 +60,7 @@ assert.match(card, /1,540 \/ 1,540 embedded · 0 stale · 0 unembedded/);
 assert.match(card, /Corpus      🟢/, 'a clean corpus is green even when the counts arrive as strings');
 assert.match(card, /11\/11 · 15 rules · 13 SOPs/);
 assert.match(card, /🟢 READY · all database-measured fields ok/);
-assert.match(card, /o-MATIC Foundry · o-matic · 8 granted/);
+assert.match(card, /Example Factory · o-matic · 8 granted/);
 assert.match(card, /🟢 all reported/);
 
 // 2.5.0 rows, in the server's own words.

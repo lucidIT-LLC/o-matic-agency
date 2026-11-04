@@ -170,7 +170,7 @@ const starters = (a) => {
 
 // Microsoft 365 instructions keep every gold-record persona line and replace the
 // generic "look for a server" bullet with Copilot host rules. The first factory
-// this host may read is o-MATIC Foundry, and only read-only.
+// this host may read is the first factory granted to the app, and only read-only.
 function m365Instructions(a) {
   const L = [];
   const arche = parseArchetypes(a.archetypes);
@@ -198,7 +198,7 @@ function m365Instructions(a) {
   L.push("- If an action fails or asks you to sign in, say the o-MATIC factory is unreachable from here and continue from the conversation. Never report a factory as ready unless an action result says so.");
   L.push("- Emails and messages you write are drafts for the user to review and send.");
   L.push(`- Stay in your lane (${a.identity.primary_domain}). Name the o-MATIC teammate who owns other work instead of doing it.`);
-  L.push("- Read only. The first factory this agent may read is o-MATIC Foundry. Take the connection name from connections_list. Do not open any other factory.");
+  L.push("- Read only. The first factory this agent may read is the first one granted to this app. Take the connection name from connections_list. Do not open any other factory.");
   const text = L.join("\n");
   if (text.length > LIMITS.m365) problems.push(`${a.id}: M365 instructions ${text.length} > ${LIMITS.m365}`);
   return text;
@@ -369,7 +369,7 @@ ${cop}
     || "00000000-0000-4000-8000-000000000009";
   put(`${pluginDir}/adapters/m365/${id}/env/.env.sample`, `# TODO values for a local zip. Not a tenant id, not a secret, and not a host to call.
 # Replace every TODO value at deploy time. Nothing in this package is deployed from the repo.
-OMATIC_MCP_URL=https://TODO.example.invalid/mcp
+OMATIC_MCP_URL=https://replace-at-deploy.invalid/mcp
 OMATIC_ENTRA_SSO_AUTH_ID=TODO-entra-sso-auth-id
 TEAMS_APP_ID=${nil}
 PACK_VERSION=${plugin.version || "0.0.0"}
@@ -490,7 +490,7 @@ ${grokBotBody.trimEnd()}
 
 - Prefer \`cursor-${id}\` when present (Cursor host skill), then the installed \`${s.name}\` skill for full lane depth. Companion Probot skills load from the same skills path. Grok Bot is a separate host: use \`grok-${id}\` there.
 - Discover tools live on this host before naming them. Use Cursor tools that exist here (for example Read, Write, StrReplace, Glob, Grep, Shell, Task) or MCP tool names returned by the live server. Never invent Claude Code tool names (Edit, NotebookEdit, and the like).
-- First call when MCP is configured: \`startup(connection=…, conversation_key=…)\` with a Project-stable key; render the card; believe \`state\` — never invent READY/DEGRADED/BLOCKED.
+- First call when MCP is configured: \`startup(connection=…, conversation_key=…)\` with a key minted once for this conversation, never one key for the whole Project; render the card; believe \`state\` — never invent READY/DEGRADED/BLOCKED.
 - Then \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` as appropriate; Probot owns the plan. Copy Probot's \`conversation_key\` into every \`kernel_*\` call — never mint a second key.
 - Decision 694: at most three specialists in flight for one ask; prefer the resident kernel trio before stacking Firm/Studio overlays; name owners and stop conditions.
 - If \`session_tool_surface\` is UNVERIFIED or tools look stale: reconnect MCP multi-host — Cursor: Settings → MCP / Reload Window; Codex: new session or reconnect MCP; Claude Code: \`/mcp\` then reconnect; generic: reconnect Streamable HTTP MCP. Never Claude-only; do not restart the MCP service from this card.
@@ -577,7 +577,7 @@ Measured gap on some Cursor 4.7 sessions: the marketplace cache can exist while 
 
 ## Prompt substitutes (Claude hooks are absent on Cursor)
 
-Pack-shipped \`skills/cursor-{probot,fred,data}/\` and every \`adapters/cursor/<role>.md\` card mandate: first-call \`startup\` + Project-stable \`conversation_key\`, believe card \`state\`, \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` (Probot owns plan), Decision 694 ≤3 specialists, multi-host MCP reconnect (Cursor / Codex / Claude \`/mcp\` / generic — never Claude-only), \`omatic_guide\` before unsure capability claims. Project preferences alone are not enough.
+Pack-shipped \`skills/cursor-{probot,fred,data}/\` are deprecated stubs. The canonical skills' Host notes are the Cursor path: first-call \`startup\`, one \`conversation_key\` per conversation (never one key for the whole Project), believe card \`state\`, \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` (Probot owns plan), at most three specialists, multi-host MCP reconnect (Cursor / Codex / Claude \`/mcp\` / generic — never Claude-only), \`omatic_guide\` before unsure capability claims. Project preferences alone are not enough.
 
 Grok Bot is a separate defined host. Use \`skills/grok-{probot,fred,data}/\` and \`adapters/grok-bot/\` there. Do not reuse a Cursor binding or principal as Grok Bot.
 `);
@@ -627,7 +627,7 @@ The zip lands in \`dist/m365/\`, which is gitignored. The build fills \`${APP_ID
 |---|---|---|
 ${m365Rows.map((r) => `| ${r.display} | \`adapters/m365/${r.id}/appPackage/\` | ${r.tools.length ? r.tools.join(", ") : "none"} |`).join("\n")}
 
-The first factory these agents may read is o-MATIC Foundry, read-only. The connection name is read from \`connections_list\` at runtime. theNest and About Jimmy stay out.
+The first factory these agents may read is the first one granted to the app, read-only. The connection name is read from \`connections_list\` at runtime.
 
 Privacy and terms URLs are marked TODO until the public pages exist. Developer name and website are filled. Persona lines are the gold-record lines, unchanged.
 
@@ -652,7 +652,7 @@ Source packages only. SHA-256 of a zip is written to \`dist/m365/CATALOG.md\` by
 |---|---|---|---|---|
 ${m365Rows.map((r) => `| ${r.id} | ${r.wave ?? "—"} | ${plugin.version || "0.0.0"} | ${r.tools.length} | ${r.colorOnDisk && r.outlineOnDisk ? "color + outline" : "icon-pending"} |`).join("\n")}
 
-Store listing (org catalog, then the public Agent Store) waits on SSO, the read-only Foundry login, and privacy and terms pages.
+Store listing (org catalog, then the public Agent Store) waits on SSO and a read-only login. Privacy and terms point at the public pages and are pending legal review.
 `);
 
 // Every skill's agents/openai.yaml names icons that exist (task #1024:

@@ -37,7 +37,7 @@ why, and name what is still open by name.
 
 **Founding evidence (2026-09-26) — the count that makes this a method, not a
 slogan.** On a 122-row open backlog, three real intersections were named and
-counted before dispatch: Commons ladder-parity; nine governance tickets
+counted before dispatch: doctrine-ladder parity; nine governance tickets
 sharing one gap — a gate that claims enforcement with no step_key/trigger/proof
 wiring it to a real check (5 fully collapsed, 3 partial, 1 did not collapse —
 `fn_governance_approval_gate` is real and wired, its defect is evidentiary, not
@@ -46,7 +46,7 @@ paths and export targets against what is actually installed (3 closed, 1
 routed to Data for a database-write decision). Fourteen tickets closed by three
 dispatches, not fourteen ad hoc fixes. The mandatory blast-radius pass (step 5)
 then surfaced roughly fourteen candidate cross-lane pairs across
-mom/o-matic-server/governance/commons/marketplace, filed as single-lane
+household/server/governance/doctrine/marketplace, filed as single-lane
 findings despite sharing a root cause with a task in a different lane — proof
 that stopping at the first lane a finding was noticed in is itself a real,
 countable, recurring defect, not a hypothetical one.

@@ -1,13 +1,17 @@
 ---
 name: probot-tool-discovery
-description: Probot's governed tool-discovery lane. Use before relying on an unfamiliar factory capability, when a required capability appears absent, or when documenting the live o-MATIC Server surface. It replaces Tim's factory tool-inventory lane; it does not manage connector credentials, registry CRUD, or host configuration.
+description: Probot's governed tool-discovery lane. Use before relying on an unfamiliar factory capability, when a required capability appears absent, or when documenting the live o-MATIC Server surface. It covers the factory tool-inventory lane; it does not manage connector credentials, registry CRUD, or host configuration.
 ---
+
+<!-- version: 1.1.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
 
 # Probot Tool Discovery
 
+Host notes: see `probot-orchestrator` → Host notes.
+
 This is a Probot skill, not a separate role. It establishes what a host or
 factory can actually do now from live evidence before work is routed to a tool.
-It replaces Tim's *factory tool-inventory and recommendation* lane only.
+It covers the factory tool-inventory and recommendation lane only.
 
 The o-MATIC Server remains the factory control plane. This skill never creates,
 edits, deletes, enables, disables, or reconfigures a connection.

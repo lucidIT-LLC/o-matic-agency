@@ -1,0 +1,11 @@
+{
+  "_comment": "SHA-256 of lowercase tokens and token bigrams. The gate reports the category, never the term. tims and rimmers were completed from the spec's prefixes. Track A's client and person denylist was not in this tree, so those tokens are not seeded. The two private-name rows are the existing PRIVATE_NAME_SHA256 values.",
+  "terms": [
+    {"sha256": "c0d19e4483571ff07cb01a4d3f5484102d7f333c4cafa64a2821f55031ea6041", "category": "retired-role"},
+    {"sha256": "d6f1bfc6296a9faca282a57cb925854f6b1bea2025cbe829ab0d68d52a591d8e", "category": "retired-role"},
+    {"sha256": "61d6f281634e5c7f9fd06a1e9115d2b587f2f57403b7c99c5ea542008a6c7a0b", "category": "retired-role"},
+    {"sha256": "2e1b304dd82d3bb47e5a8e0076622d476aca3ac97b6c4f9facf3b6ebe5ddb43b", "category": "retired-role"},
+    {"sha256": "9274d49c27b7583a60a06420b820077e38c6ad785f6df54b667d42aa9a5b325c", "category": "private-name"},
+    {"sha256": "9731971c9b2dfb957a786ef661835fc1fb1d12886a9c290d1933545aa600c44d", "category": "private-name"}
+  ]
+}

@@ -3,7 +3,11 @@ name: probot-startup-optimization
 description: Probot's startup-contract optimization lane. Use to measure and reduce unnecessary startup work without weakening the o-MATIC Server startup card, grant resolution, retrieval reporting, or audit trail.
 ---
 
+<!-- version: 1.0.1 | author: LucidIT, LLC | package: o-MATIC Agency -->
+
 # Probot Startup Optimization
+
+Host notes: see `probot-orchestrator` → Host notes.
 
 This Probot skill examines startup cost and contract drift after the live
 startup card has been obtained. It does not replace startup and never declares

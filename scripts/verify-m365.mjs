@@ -75,7 +75,7 @@ function readJson(path) {
 function envFor(roleDir, role) {
   const sample = join(roleDir, "env", ".env.sample");
   const env = {
-    OMATIC_MCP_URL: "https://TODO.example.invalid/mcp",
+    OMATIC_MCP_URL: "https://replace-at-deploy.invalid/mcp",
     OMATIC_ENTRA_SSO_AUTH_ID: "TODO-entra-sso-auth-id",
     TEAMS_APP_ID: `00000000-0000-4000-8000-${String(role.length).padStart(12, "0")}`,
     PACK_VERSION: "0.0.0",
@@ -140,8 +140,10 @@ function checkPackage(dir, role, { zipped = false } = {}) {
   }
 
   const env = envFor(join(dir, ".."), role);
-  if (!String(env.OMATIC_PRIVACY_URL || PRIVACY_URL).includes("TODO") && !zipped) {
-    FAIL(`${role}: privacy URL is not marked TODO`);
+  const privacyExpected = "https://www.o-matic.ai/privacy-policy/";
+  const termsExpected = "https://www.o-matic.ai/terms-of-service/";
+  if (!zipped && String(env.OMATIC_PRIVACY_URL || PRIVACY_URL) !== privacyExpected) {
+    FAIL(`${role}: privacy URL is not the public placeholder page`);
   }
   let manifest = subst(JSON.parse(manifestRaw), env);
   let agent = subst(JSON.parse(agentRaw), env);
@@ -176,10 +178,10 @@ function checkPackage(dir, role, { zipped = false } = {}) {
 
   const privacy = manifest.developer?.privacyUrl || "";
   const terms = manifest.developer?.termsOfUseUrl || "";
-  if (!privacy.includes("TODO")) FAIL(`${role}: privacy URL is not clearly marked TODO`);
-  else OK(`${role}: privacy URL is marked TODO`);
-  if (!terms.includes("TODO")) FAIL(`${role}: terms URL is not clearly marked TODO`);
-  else OK(`${role}: terms URL is marked TODO`);
+  if (privacy !== privacyExpected) FAIL(`${role}: privacy URL is not https://www.o-matic.ai/privacy-policy/`);
+  else OK(`${role}: privacy URL is the public page (pending legal review)`);
+  if (terms !== termsExpected) FAIL(`${role}: terms URL is not https://www.o-matic.ai/terms-of-service/`);
+  else OK(`${role}: terms URL is the public page (pending legal review)`);
   if (!manifest.developer?.name || !manifest.developer?.websiteUrl) FAIL(`${role}: developer name or website is missing`);
   else OK(`${role}: developer info is present (${manifest.developer.name})`);
 
@@ -241,11 +243,13 @@ function checkPackage(dir, role, { zipped = false } = {}) {
       if (listed.join(",") !== pinned.join(",")) FAIL(`${role}: mcp-tools.json names do not match the pin list`);
       else OK(`${role}: mcp-tools.json lists the same ${listed.length} tools`);
     }
-    if (runtime.spec?.url && !String(runtime.spec.url).includes("TODO") && !zipped) {
-      FAIL(`${role}: resolved MCP url is not a TODO placeholder`);
+    const mcpUrl = String(runtime.spec?.url || "");
+    const mcpPlaceholder = mcpUrl.includes("TODO") || mcpUrl.includes("replace-at-deploy.invalid");
+    if (runtime.spec?.url && !mcpPlaceholder && !zipped) {
+      FAIL(`${role}: resolved MCP url is not a deploy placeholder`);
     }
-    if (zipped && runtime.spec?.url && !String(runtime.spec.url).includes("TODO")) {
-      FAIL(`${role}: packaged MCP url is not a TODO placeholder`);
+    if (zipped && runtime.spec?.url && !mcpPlaceholder) {
+      FAIL(`${role}: packaged MCP url is not a deploy placeholder`);
     }
   }
 

@@ -6,7 +6,7 @@
       "github-copilot": "agency/adapters/copilot/.github/agents",
       "m365-copilot": {
         "status": "source-only",
-        "version": "1.11.0",
+        "version": "1.12.0",
         "packages": [
           "agency/adapters/m365/probot/appPackage",
           "agency/adapters/m365/fred/appPackage",

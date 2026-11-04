@@ -26,8 +26,8 @@ retrieval, never duplicated across every role.
 | Agency | Data | active remediation | Remove duplicate System 5 block and stale direct-query/runtime detail; retain read-side analysis only. |
 | Agency | Server Guide | retired | This was a non-roster documentation artifact, not a role. Removed; live o-MATIC Server protocol and Probot own the behavior. |
 | Agency | Staleness / Governance Repair | review pending | Retain governed procedure; remove host-specific assumptions after live doctrine read. |
-| Firm | Smith / Rimmer / Jake | active remediation | Remove Tim references and stale shared doctrine; preserve critique, evaluation, and coaching lanes. |
-| Studio | Brandy / Jo / Monet / Pixel | active remediation | Remove Tim references and enforce role-to-Probot routing; retain specialty only. |
+| Firm | Smith / Jake | active remediation | Remove stale shared doctrine; preserve critique, evaluation, and coaching lanes. |
+| Studio | Brandy / Jo / Monet / Pixel | active remediation | Enforce role-to-Probot routing; retain specialty only. |
 | Studio | Carver | rebuilt | Verified builder contract; re-test against the final shared canonical contract. |
 
 ## Release gate

@@ -5,7 +5,7 @@
 This is a pre-production audit of Probot, Fred, and Data. It is a durable
 evidence record, not a certification. The audit compares the installed Agency
 package, the workspace candidate, live o-MATIC Server roster state, current
-Commons doctrine, and current official host documentation.
+shared doctrine, and current official host documentation.
 
 **Overall result: BLOCKED for new-host production deployment.** The canonical
 runtime redesign is `design verified`; no platform adapter is yet
@@ -16,7 +16,7 @@ runtime redesign is `design verified`; no platform adapter is yet
 | Audit area | Standard or source checked | Measured result | Status | Required next evidence |
 | --- | --- | --- | --- | --- |
 | Roster agreement coverage | o-MATIC `public.v_agent_agreement`, 2026-09-04 | Probot: 13 loaded Policies; Fred: 10; Data: 10. All three are `READY`, `halt_on_missing`, with no missing rule types. | pass | Re-run after role-contract migration and retirement changes. |
-| Canonical role portability | Commons KB-0432 v6.7.1, retrieved 2026-09-04 | Doctrine requires durable behavior as logic/data independent of a host and treats host instructions as adapters. It also rejects moving the whole operating layer into an unscoped database prompt. | partial | Bind the database declaration to one canonical role contract and host adapters; do not make the database the only text carrier. |
+| Canonical role portability | Portability doctrine, retrieved 2026-09-04 | Doctrine requires durable behavior as logic/data independent of a host and treats host instructions as adapters. It also rejects moving the whole operating layer into an unscoped database prompt. | partial | Bind the database declaration to one canonical role contract and host adapters; do not make the database the only text carrier. |
 | Role source/release alignment | Installed Agency `1.1.4`; workspace Agency manifest `1.1.0`; local role files, 2026-09-04 | Installed and workspace artifacts differ. Workspace marketplace has pre-existing uncommitted changes. | fail | Establish a tracked release manifest, artifact digest, and install/readback check. |
 | Fred authority boundary | Installed `fred-storage/SKILL.md`, 2026-09-04 | The definition alternately calls Fred connection-CRUD owner, says CRUD is forbidden, gives retired CRUD instructions, and claims full CRUD capability. | fail | Replace with one rule: Fred routes a desired server-side grant/connection change to the authorized operator; no CRUD claim. |
 | Retired-runtime hygiene | Installed Probot/Fred/Data definitions and live o-MATIC Server protocol, 2026-09-04 | Fred and Data still give present-tense Conductor drain/embedding instructions. The live server contract is the replacement. | fail | Remove present-tense retired-runtime procedure from role adapters; retain history only in a named historical reference. |
@@ -33,7 +33,6 @@ runtime redesign is `design verified`; no platform adapter is yet
 
 | Prior lane | Going-forward owner | Canonical artifact | Boundary checked | Result |
 | --- | --- | --- | --- | --- |
-| Tim factory tool inventory / recommendations | Probot | `skills/probot-tool-discovery/SKILL.md` | No connector CRUD, credentials, registry writes, or invented fallbacks | Pass in source review; host deployment pending |
 | Factory staleness audit | Probot | `skills/factory-staleness-audit/SKILL.md` | Separate evidence-based audit; doctrine rewrites route to Smith | Existing artifact retained; ownership formalized |
 | Startup drift / optimization | Probot | `skills/probot-startup-optimization/SKILL.md` | Fresh server card remains mandatory; only redundant follow-on work may be reduced | Pass in source review; host deployment pending |
 

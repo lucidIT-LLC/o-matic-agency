@@ -1,11 +1,11 @@
 ---
 name: factory-barnacle-cleanup
-description: Probot-owned cleanup of an o-MATIC factory after many revisions. Sweeps every instruction surface (SOPs, rules, agents, and all markdown files, including .md, .mdc, .mdx and .markdown) for buildup, strips superseded, contradicted, duplicated and abandoned content, and leaves one clean, current set per factory that reflects how it actually runs, preserving everything still in effect. Tuned for the o-MATIC Server factories (theNest, Server Home, About Jimmy, lucidIT Corp, MoM, Commons, Practically Adventist, o-MATIC Foundry). Use when the operator says "clean up the instructions", "scrape the barnacles", "barnacle cleanup", "the instructions are a mess", or after a long run of revisions. Proposes; never rewrites live instructions without the operator's explicit approval of the exact text. Stale corpus and retired-mechanism hunting belong to factory-staleness-audit; run it first when retrieval may be serving retired documents.
+description: Probot-owned cleanup of an o-MATIC factory after many revisions. Sweeps SOPs, rules, agents, and markdown for buildup, strips what is superseded or duplicated, and leaves one current set that matches how the factory runs. Proposes only. Writes nothing until the operator approves the exact text. Triggers — clean up the instructions, scrape the barnacles, barnacle cleanup, the instructions are a mess. Stale-corpus hunting belongs to factory-staleness-audit.
 ---
 
 **Locale — US English, always.**
 
-> **Compatibility tier (required declaration, rule #284).** This pack ships **no
+> **Compatibility.** This pack ships **no
 > MCP server**. With the **o-MATIC Server MCP surface** configured it runs fully:
 > startup, governed reads of the factory's instructions, rules, SOPs and
 > decisions, and approved writes routed to Data. On a **prompt-only host** it is
@@ -15,13 +15,9 @@ description: Probot-owned cleanup of an o-MATIC factory after many revisions. Sw
 
 # Factory Barnacle Cleanup
 
-<!-- version: 1.1.0 | author: James Walker | package: o-MATIC Agency -->
+<!-- version: 1.2.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
 
-> **What this fixes.** Every revision adds a layer. Old steps stay after their
-> replacement lands, a rule and its reversal both survive, half-finished
-> changes linger, and the same instruction appears three ways. Sessions then
-> follow whichever layer they read first. This skill produces one current,
-> internally consistent set and a ledger of everything removed and why.
+Host notes: see `probot-orchestrator` → Host notes.
 
 ## The prompt (post this to Probot)
 
@@ -35,9 +31,9 @@ description: Probot-owned cleanup of an o-MATIC factory after many revisions. Sw
 
 ## Rules
 
-1. **Start the factory first.** Run the About Jimmy startup, then `startup` on
-   the target factory. Report its state honestly; a DEGRADED or BLOCKED card is
-   stated, not worked around.
+1. **Start the factory first.** Call `startup` and use the connection the server
+   returns. Report its state honestly; a DEGRADED or BLOCKED card is stated,
+   not worked around.
 2. **Read-only until approved.** Nothing in the live factory changes until the
    operator approves the exact new text and the exact rows to retire, in their
    own chat message or widget tap. Voice relays never count as approval.
@@ -55,9 +51,9 @@ description: Probot-owned cleanup of an o-MATIC factory after many revisions. Sw
 ## Phases
 
 ### 1. Inventory: sweep every surface
-Run this per factory. On "all factories", do them one at a time in this order:
-theNest, Server Home, About Jimmy, lucidIT Corp, MoM, Commons, Practically
-Adventist, o-MATIC Foundry. Discover the schema live for each one; the same
+Run this per factory. On "all factories", walk the granted connections from
+the server, one at a time, names read off the wire. Discover the schema live
+for each one; the same
 concept lives in different tables per factory, and a view must be resolved to
 its base table. Collect from all four surfaces:
 
@@ -72,8 +68,7 @@ its base table. Collect from all four surfaces:
 - **Markdown**: every markdown variant (`.md`, `.mdc`, `.mdx`, `.markdown`)
   that feeds the factory: instruction and project-instruction docs, SKILL.md,
   README, AGENTS.md, CLAUDE.md, Cursor rules, adapter paste cards, and markdown
-  stored in the retrieval corpus. Read file-side copies through Fred; never
-  pull a checkout onto Jimmy's computers.
+  stored in the retrieval corpus. Read file-side copies through Fred.
 
 Record each item's id or path, surface, source, date, version and current
 status. A surface that cannot be reached is reported as unmeasured, not clean.
@@ -125,6 +120,4 @@ summary.
 
 ## Output
 
-Lead with the outcome: how many items were kept, retired and left Unclear,
-followed by the clean set and the ledger. Use plain words, keep it terse, and
-name no item as removed until it actually has been.
+Lead with how many items were kept, retired, and left Unclear, then the clean set and the ledger. Name nothing removed until it is.

@@ -240,7 +240,7 @@ cases:
       retained_unpublished, unavailable — and only verified_live is routed work.
     stimulus: |
       Run tool discovery over these four capabilities and tell me which I can
-      route work to today: Slack messaging, semantic retrieval over Commons, the
+      route work to today: Slack messaging, semantic retrieval over the shared doctrine corpus, the
       factory-staleness-audit skill, and governed SQL.
     observable: response_text
     grader:
@@ -252,7 +252,7 @@ cases:
         - "(probably|should be|likely) (works|available|fine)"
     pass_fixture:
       transcript: |
-        Slack: unavailable. Semantic retrieval over Commons: verified_live — live search
+        Slack: unavailable. Semantic retrieval over the shared doctrine corpus: verified_live — live search
         returned hybrid retrieval, vectorRows 3, weights_status verified, embedding_stale
         false. factory-staleness-audit: retained_unpublished — present in the pack, absent
         from the host skill list. Governed SQL: verified_live — current_database o-matic,

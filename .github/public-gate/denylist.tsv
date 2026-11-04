@@ -1,0 +1,6 @@
+# Public-readiness denylist. Terms here are category words, not private names.
+# Private names and retired-role names are only in hashed-terms.json.
+# category	term
+factory-name	Commons
+factory-name	o-MATIC Foundry
+factory-name	MoM

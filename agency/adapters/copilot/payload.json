@@ -16,8 +16,8 @@
    "name": "ROLE-RUNTIME-CONTRACT.md",
    "rewrites": [
     [
-     "[CORE-KERNEL-CONTRACT.md](CORE-KERNEL-CONTRACT.md)",
-     "[CORE-KERNEL-CONTRACT.md](./CORE-KERNEL-CONTRACT.md)"
+     "[CORE-KERNEL-CONTRACT.md](CORE-KERNEL-CONTRACT.md\u0029",
+     "[CORE-KERNEL-CONTRACT.md](./CORE-KERNEL-CONTRACT.md\u0029"
     ]
    ]
   },

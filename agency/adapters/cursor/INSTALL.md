@@ -19,6 +19,6 @@ Measured gap on some Cursor 4.7 sessions: the marketplace cache can exist while 
 
 ## Prompt substitutes (Claude hooks are absent on Cursor)
 
-Pack-shipped `skills/cursor-{probot,fred,data}/` and every `adapters/cursor/<role>.md` card mandate: first-call `startup` + Project-stable `conversation_key`, believe card `state`, `kernel_plan_update` / `kernel_delegate` / `kernel_return` (Probot owns plan), Decision 694 ≤3 specialists, multi-host MCP reconnect (Cursor / Codex / Claude `/mcp` / generic — never Claude-only), `omatic_guide` before unsure capability claims. Project preferences alone are not enough.
+Pack-shipped `skills/cursor-{probot,fred,data}/` are deprecated stubs. The canonical skills' Host notes are the Cursor path: first-call `startup`, one `conversation_key` per conversation (never one key for the whole Project), believe card `state`, `kernel_plan_update` / `kernel_delegate` / `kernel_return` (Probot owns plan), at most three specialists, multi-host MCP reconnect (Cursor / Codex / Claude `/mcp` / generic — never Claude-only), `omatic_guide` before unsure capability claims. Project preferences alone are not enough.
 
 Grok Bot is a separate defined host. Use `skills/grok-{probot,fred,data}/` and `adapters/grok-bot/` there. Do not reuse a Cursor binding or principal as Grok Bot.
