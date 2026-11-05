@@ -32,9 +32,6 @@
   ],
   "agent_skills": [
     {
-      "folder": "./skills/m365-probot"
-    },
-    {
       "folder": "./skills/probot-orchestrator"
     }
   ],

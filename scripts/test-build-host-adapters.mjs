@@ -101,7 +101,7 @@ for (const [label, opts, want] of cases) {
   const bot = existsSync(join(root, "demo/adapters/grok-bot/tess.md")) ? readFileSync(join(root, "demo/adapters/grok-bot/tess.md"), "utf8") : "";
   const about = (bot.match(/^> (.+)$/m) || [])[1] || "";
   check("Grok Bot paste description names the skill, approval, and drafts",
-    /grok-tess/.test(bot) && /operator's own explicit approval/.test(bot) && /drafts for the operator/.test(bot),
+    /tess-testing/.test(bot) && /operator's own explicit approval/.test(bot) && /drafts for the operator/.test(bot) && !/grok-tess/.test(bot),
     bot.slice(0, 300));
   check("Grok Bot About line is at most 140 characters", about.length > 0 && [...about].length <= 140, `${[...about].length}: ${about}`);
   const matrix = existsSync(join(root, "demo/adapters/README.md")) ? readFileSync(join(root, "demo/adapters/README.md"), "utf8") : "";

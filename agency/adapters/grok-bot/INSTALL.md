@@ -8,10 +8,10 @@ Grok Bot is a defined host. Each role is its own Bot. This pack does not install
 
 1. Create a Bot named Probot, Fred, or Data. Do not add or replace robot avatar art from this pack.
 2. Paste the Description block from `adapters/grok-bot/<role>.md`, or ask the Bot to remember it. A shared Bot also gets the About line (140 characters or fewer).
-3. Enable the host skill by name: `grok-probot`, `grok-fred`, or `grok-data`. Enable the canonical skill beside it (`probot-orchestrator`, `fred-storage`, `data-analyst`) for lane depth.
+3. Enable the canonical skill by name (`probot-orchestrator`, `fred-storage`, or `data-analyst`) and follow its Host notes → Grok Bot. The old `grok-*` host stubs live under `agency/retired/` and are not on the live skills path.
 4. When factory memory is needed, connect the o-MATIC Server connector on the Grok Bot account. This pack ships no MCP server and no credentials. Read the connection name from the live tool list.
 5. Probot routes file work to the Fred bot and database mutations to the Data bot by teammate message. Writes wait for the operator's own explicit approval of the exact content. Outgoing messages stay drafts for the operator.
 
-Chat-form Grok (grok.com) remains `adapters/grok/<role>.md` (4,000 characters). Cursor remains `skills/cursor-*` and `adapters/cursor/`. Do not reuse a Cursor binding as Grok Bot.
+Chat-form Grok (grok.com) remains `adapters/grok/<role>.md` (4,000 characters). Cursor remains agents `probot`/`fred`/`data`, canonical skills, and `adapters/cursor/`. Do not reuse a Cursor binding as Grok Bot.
 
 Factory READY comes only from `startup`. Do not claim it because this host exists.

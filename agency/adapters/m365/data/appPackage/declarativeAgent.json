@@ -28,9 +28,6 @@
   ],
   "agent_skills": [
     {
-      "folder": "./skills/m365-data"
-    },
-    {
       "folder": "./skills/data-analyst"
     }
   ],

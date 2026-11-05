@@ -6,8 +6,8 @@ Source packages only. SHA-256 of a zip is written to `dist/m365/CATALOG.md` by `
 
 | Role | Wave | Version | Tools | Icons |
 |---|---|---|---|---|
-| data | 2 | 1.12.1 | 6 | color + outline |
-| fred | 2 | 1.12.1 | 6 | color + outline |
-| probot | 1 | 1.12.1 | 8 | color + outline |
+| data | 2 | 1.12.2 | 6 | color + outline |
+| fred | 2 | 1.12.2 | 6 | color + outline |
+| probot | 1 | 1.12.2 | 8 | color + outline |
 
 Store listing (org catalog, then the public Agent Store) waits on SSO and a read-only login. Privacy and terms point at the public pages and are pending legal review.

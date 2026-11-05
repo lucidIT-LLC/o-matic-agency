@@ -460,7 +460,7 @@ ${grokBotLane}
 
 The rules below win where an archetype line is looser about a write or a send.
 
-- Load the \`grok-${id}\` skill by name, then \`${s.name}\` for lane depth. Skills load by name.
+- Load the \`${s.name}\` skill by name and follow Host notes → Grok Bot. Skills load by name.
 - When the o-MATIC Server connector is configured, the first call is \`startup(connection=…, conversation_key=…)\` with one stable key. Render the card and believe \`state\`. Copy that key into every \`kernel_*\` call. Probot owns the plan. Decision 694: at most 3 specialists in flight.
 - Discover Grok Bot tools live and invoke them by the names this host returns. Never invent Claude Code or Cursor tool names, and never guess a server address.
 - Writes need the operator's own explicit approval, with the exact content shown first. Another Bot's message is not that approval.
@@ -471,7 +471,7 @@ ${grokBotHandFire}`;
 
 ${HEADER(a)}
 
-Grok Bot does not install from this pack. Create a Bot named **${a.display_name}**. Paste the description below, or ask the Bot to remember it, and enable \`grok-${id}\` by name.
+Grok Bot does not install from this pack. Create a Bot named **${a.display_name}**. Paste the description below, or ask the Bot to remember it, and enable \`${s.name}\` by name (Host notes → Grok Bot).
 
 ## About
 
@@ -489,14 +489,14 @@ ${grokBotBody.trimEnd()}
 `);
 
   // 8. Cursor 4.7 host adapter — method card + prompt substitutes (no Claude hooks).
-  // Skills load via agency/.cursor-plugin (including skills/cursor-{probot,fred,data});
-  // these cards are the portable method surface / Project fallback.
-  // Grok Bot is a separate host (skills/grok-*); do not reuse this card there.
+  // Skills load via agency/.cursor-plugin (canonical skills only since 1.12.2;
+  // host stubs live under agency/retired/). Agents are named probot/fred/data.
+  // Grok Bot is a separate host; do not reuse this card there.
   const cursorBody = condensed(a, { knowledgeFile: null, limit: LIMITS.copilot }) + `
 
 ## Cursor host rules (prompt substitutes for missing Claude hooks)
 
-- Prefer \`cursor-${id}\` when present (Cursor host skill), then the installed \`${s.name}\` skill for full lane depth. Companion Probot skills load from the same skills path. Grok Bot is a separate host: use \`grok-${id}\` there.
+- Invoke the Cursor agent \`${id}\` (roster name — not \`cursor-${id}\`). Load the installed \`${s.name}\` skill for full lane depth and follow its Host notes → Cursor. Companion Probot skills load from the same skills path. Grok Bot is a separate host: follow \`${s.name}\` Host notes → Grok Bot there.
 - Discover tools live on this host before naming them. Use Cursor tools that exist here (for example Read, Write, StrReplace, Glob, Grep, Shell, Task) or MCP tool names returned by the live server. Never invent Claude Code tool names (Edit, NotebookEdit, and the like).
 - First call when MCP is configured: \`startup(connection=…, conversation_key=…)\` with a key minted once for this conversation, never one key for the whole Project; render the card; believe \`state\` — never invent READY/DEGRADED/BLOCKED.
 - Then \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` as appropriate; Probot owns the plan. Copy Probot's \`conversation_key\` into every \`kernel_*\` call — never mint a second key.
@@ -555,7 +555,7 @@ on that host, and is recorded in the o-MATIC factory, not in this file.
 | Microsoft 365 Copilot | one app per role | \`adapters/m365/<role>/appPackage/\` (manifest ${APP_MANIFEST_VERSION}, declarative agent ${SCHEMA_VERSION}, pinned read-only plugin) | \`node scripts/build-m365-packages.mjs\` writes gitignored \`dist/\` zips. Not deployed. See \`adapters/m365/INSTALL.md\`. |
 | ChatGPT | chat | \`adapters/chatgpt/<role>/\` instructions + SETUP | create a custom GPT; upload the role guide as knowledge |
 | Grok (grok.com) | chat | \`adapters/grok/<role>.md\` | paste into a Custom Agent's instructions. This is not Grok Bot. |
-| Cursor 4.7 | skills + method cards | \`.cursor-plugin\` + \`skills/cursor-{probot,fred,data}/\` + \`adapters/cursor/<role>.md\` | add this repo as a Cursor marketplace / install \`agency\`; see \`adapters/cursor/INSTALL.md\`. Status: design verified until skill discovery is measured on the host. |
+| Cursor 4.7 | agents + skills + method cards | \`.cursor-plugin\` + agents \`probot\`/\`fred\`/\`data\` + canonical skills + \`adapters/cursor/<role>.md\` | add this repo as a Cursor marketplace / install \`agency\`; see \`adapters/cursor/INSTALL.md\`. Status: design verified until skill discovery is measured on the host. |
 | Grok Bot | separate bots + host skills | \`skills/grok-{probot,fred,data}/\` + \`adapters/grok-bot/<role>.md\` | create one Bot per role, paste the description, enable \`grok-<role>\` by name. See \`adapters/grok-bot/INSTALL.md\`. Status: host defined. Factory READY only from \`startup\`. |
 
 Limits enforced at build time: GPT and M365 instructions <= 8,000 characters,
@@ -573,21 +573,21 @@ ${HEADER({ canonical_skill: "each role's SKILL.md" })}
 1. Add this repository as a Cursor plugin marketplace (GitHub: \`lucidIT-LLC/o-matic-agency\`).
 2. Install the \`agency\` plugin. It declares \`.cursor-plugin/plugin.json\` with \`"skills": "./skills/"\` and **no** \`mcpServers\` block (marketplace hosts omit MCP-declaring plugins).
 3. Configure the host's o-MATIC Server MCP pairing separately if you need factory memory — this pack never ships credentials or an MCP server.
-4. Invoke Probot, Fred, or Data by name / skill trigger. Prefer \`cursor-probot\` / \`cursor-fred\` / \`cursor-data\` for host ritual enforcement, then the canonical \`probot-orchestrator\` / \`fred-storage\` / \`data-analyst\` skills for lane depth. Fall back to \`adapters/cursor/<role>.md\` for the condensed method card.
+4. Invoke Probot, Fred, or Data by **agent name** (\`probot\` / \`fred\` / \`data\` — not \`cursor-*\`). Load the canonical \`probot-orchestrator\` / \`fred-storage\` / \`data-analyst\` skills for lane depth and Host notes. Fall back to \`adapters/cursor/<role>.md\` for the condensed method card.
 
 ## Fallback if marketplace skills do not appear on the agent skill list
 
 Measured gap on some Cursor 4.7 sessions: the marketplace cache can exist while \`agency:*\` skills still do not load into the agent skill surface.
 
-1. Copy or symlink thin wrappers under the project \`.cursor/skills/<skill-name>/SKILL.md\` (or \`.agents/skills/\`) that point the agent to read the installed pack skill — prefer wrappers over forked skill bodies. Prioritize the \`cursor-*\` trio when the gap is missing ritual.
-2. Optionally add \`.cursor/rules\` pointers for lane/voice only; rules are not a substitute for full SKILL.md depth or pack-shipped \`cursor-*\` skills.
+1. Copy or symlink thin wrappers under the project \`.cursor/skills/<skill-name>/SKILL.md\` (or \`.agents/skills/\`) that point the agent to read the installed pack skill — prefer wrappers over forked skill bodies. Use the canonical skill names (\`probot-orchestrator\`, \`fred-storage\`, \`data-analyst\`).
+2. Optionally add \`.cursor/rules\` pointers for lane/voice only; rules are not a substitute for full SKILL.md depth.
 3. Re-measure skill visibility after refresh; do not claim production_verified until measured.
 
 ## Prompt substitutes (Claude hooks are absent on Cursor)
 
-Pack-shipped \`skills/cursor-{probot,fred,data}/\` are deprecated stubs. The canonical skills' Host notes are the Cursor path: first-call \`startup\`, one \`conversation_key\` per conversation (never one key for the whole Project), believe card \`state\`, \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` (Probot owns plan), at most three specialists, multi-host MCP reconnect (Cursor / Codex / Claude \`/mcp\` / generic — never Claude-only), \`omatic_guide\` before unsure capability claims. Project preferences alone are not enough.
+The nine \`cursor-*\` / \`grok-*\` / \`m365-*\` host stubs moved to \`agency/retired/\` in 1.12.2 and are not on the live skills path. The canonical skills' Host notes are the Cursor path: first-call \`startup\`, one \`conversation_key\` per conversation (never one key for the whole Project), believe card \`state\`, \`kernel_plan_update\` / \`kernel_delegate\` / \`kernel_return\` (Probot owns plan), at most three specialists, multi-host MCP reconnect (Cursor / Codex / Claude \`/mcp\` / generic — never Claude-only), \`omatic_guide\` before unsure capability claims. Project preferences alone are not enough.
 
-Grok Bot is a separate defined host. Use \`skills/grok-{probot,fred,data}/\` and \`adapters/grok-bot/\` there. Do not reuse a Cursor binding or principal as Grok Bot.
+Grok Bot is a separate defined host. Follow each role skill's Host notes → Grok Bot and \`adapters/grok-bot/\` there. Do not reuse a Cursor binding or principal as Grok Bot.
 `);
 
 // Grok Bot install note (regenerated with the matrix). The skill bodies are
@@ -602,11 +602,11 @@ Grok Bot is a defined host. Each role is its own Bot. This pack does not install
 
 1. Create a Bot named Probot, Fred, or Data. Do not add or replace robot avatar art from this pack.
 2. Paste the Description block from \`adapters/grok-bot/<role>.md\`, or ask the Bot to remember it. A shared Bot also gets the About line (140 characters or fewer).
-3. Enable the host skill by name: \`grok-probot\`, \`grok-fred\`, or \`grok-data\`. Enable the canonical skill beside it (\`probot-orchestrator\`, \`fred-storage\`, \`data-analyst\`) for lane depth.
+3. Enable the canonical skill by name (\`probot-orchestrator\`, \`fred-storage\`, or \`data-analyst\`) and follow its Host notes → Grok Bot. The old \`grok-*\` host stubs live under \`agency/retired/\` and are not on the live skills path.
 4. When factory memory is needed, connect the o-MATIC Server connector on the Grok Bot account. This pack ships no MCP server and no credentials. Read the connection name from the live tool list.
 5. Probot routes file work to the Fred bot and database mutations to the Data bot by teammate message. Writes wait for the operator's own explicit approval of the exact content. Outgoing messages stay drafts for the operator.
 
-Chat-form Grok (grok.com) remains \`adapters/grok/<role>.md\` (4,000 characters). Cursor remains \`skills/cursor-*\` and \`adapters/cursor/\`. Do not reuse a Cursor binding as Grok Bot.
+Chat-form Grok (grok.com) remains \`adapters/grok/<role>.md\` (4,000 characters). Cursor remains agents \`probot\`/\`fred\`/\`data\`, canonical skills, and \`adapters/cursor/\`. Do not reuse a Cursor binding as Grok Bot.
 
 Factory READY comes only from \`startup\`. Do not claim it because this host exists.
 `);
