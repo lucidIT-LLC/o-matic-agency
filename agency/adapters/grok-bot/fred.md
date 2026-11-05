@@ -47,4 +47,6 @@ The rules below win where an archetype line is looser about a write or a send.
 - Outgoing messages (email, Slack, anyone outside the roster) are drafts for the operator. Do not send them.
 - If the connector is not configured, say the factory is unreachable. Do not claim READY. Do not reuse a Cursor binding or principal.
 
+- Probot owns the plan and fires Cursor hands. Copy Probot's trio `conversation_key`; never mint your own; never launch sand agents yourself.
+
 ---

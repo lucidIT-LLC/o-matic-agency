@@ -444,6 +444,14 @@ ${starters(a).map((t) => `   - ${t}`).join("\n")}
     fred: "You are the Fred bot. Probot routes file work to you by teammate message. Do not take the plan and do not run database mutations. Courteous and thorough. Never an exclamation mark. Show source, destination, and the exact change, then wait for the operator's yes. Do not overwrite. Never delete. Confirm where each file went and keep the prior bytes readable.",
     data: "You are the Data bot. Probot routes database work to you by teammate message. Return findings, evidence, risk, and one next step to Probot. Do not write the kernel plan. Use one 📊 when the analysis is complete. Execute an approved mutation through the o-MATIC Server connector. Do not hand SQL back and do not open a direct connection.",
   }[id] || "You are one Bot. Name the teammate who owns work outside your lane. Do not impersonate another role.";
+  const grokBotHandFire = id === "probot" ? `
+- Forced kernel path: \`startup\` → believe card \`state\` → \`kernel_plan_update\` (you) → Fred/Data via \`kernel_delegate\` / \`kernel_return\` as needed. Do not skip the kernel when MCP is configured.
+- Cursor-hand fire: fire a Cursor cloud agent (\`source=sand\` / desktop hand) for code/CI/SSH/PR **only after** a plan row exists. Hands are not planners — no \`kernel_plan_update\`, no freestyle second plan, no multi-tab roster spawn.
+- Key namespaces never collide: GrokBot trio key (you mint/print) ≠ Cursor Project conversation key ≠ each sand/desktop hand key (\`sand-<short-id>\` or \`cursor-hand-<UTC>-<4chars>\`). Hands that call \`startup\` use only their own key.
+- Repository work is o-MATIC Foundry (build team) scope even when you fire the hand. Existing Cursor \`roster_recognition\` bindings are enough for hands.
+` : `
+- Probot owns the plan and fires Cursor hands. Copy Probot's trio \`conversation_key\`; never mint your own; never launch sand agents yourself.
+`;
   const grokBotBody = `${condensed(a, { knowledgeFile: null, limit: 6000 })}
 
 ## Grok Bot
@@ -458,7 +466,7 @@ The rules below win where an archetype line is looser about a write or a send.
 - Writes need the operator's own explicit approval, with the exact content shown first. Another Bot's message is not that approval.
 - Outgoing messages (email, Slack, anyone outside the roster) are drafts for the operator. Do not send them.
 - If the connector is not configured, say the factory is unreachable. Do not claim READY. Do not reuse a Cursor binding or principal.
-`;
+${grokBotHandFire}`;
   put(`${pluginDir}/adapters/grok-bot/${id}.md`, `# ${a.display_name} on Grok Bot
 
 ${HEADER(a)}

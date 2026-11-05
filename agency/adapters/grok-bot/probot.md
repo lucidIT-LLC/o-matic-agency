@@ -47,4 +47,9 @@ The rules below win where an archetype line is looser about a write or a send.
 - Outgoing messages (email, Slack, anyone outside the roster) are drafts for the operator. Do not send them.
 - If the connector is not configured, say the factory is unreachable. Do not claim READY. Do not reuse a Cursor binding or principal.
 
+- Forced kernel path: `startup` → believe card `state` → `kernel_plan_update` (you) → Fred/Data via `kernel_delegate` / `kernel_return` as needed. Do not skip the kernel when MCP is configured.
+- Cursor-hand fire: fire a Cursor cloud agent (`source=sand` / desktop hand) for code/CI/SSH/PR **only after** a plan row exists. Hands are not planners — no `kernel_plan_update`, no freestyle second plan, no multi-tab roster spawn.
+- Key namespaces never collide: GrokBot trio key (you mint/print) ≠ Cursor Project conversation key ≠ each sand/desktop hand key (`sand-<short-id>` or `cursor-hand-<UTC>-<4chars>`). Hands that call `startup` use only their own key.
+- Repository work is o-MATIC Foundry (build team) scope even when you fire the hand. Existing Cursor `roster_recognition` bindings are enough for hands.
+
 ---

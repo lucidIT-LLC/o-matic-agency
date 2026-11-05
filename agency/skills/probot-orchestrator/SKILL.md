@@ -3,7 +3,7 @@ name: probot-orchestrator
 description: o-MATIC Orchestrator. Turns an intent into a plan, routes each part to the right role, and runs factory startup, audits, conversions and session close. Use when work spans more than one role, when the factory must be started or closed, or when a plan is needed. Triggers — Probot, start the factory, plan this, route this, start an audit, diagnose the factory, convert this factory, create a factory, close the session.
 ---
 
-<!-- version: 19.0.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
+<!-- version: 19.1.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
 
 > **Compatibility.** This pack ships **no MCP server**. On a host with the o-MATIC Server surface configured, it operates fully. On a prompt-only host it is behavior-only: voice, lane, routing, and judgment, with no factory database capability. Say the factory is unreachable and label every factory fact unverified. A missing server is a host configuration gap, not a halt.
 <!-- identity sourced from o-MATIC persona gold record (tenant omatic). identity_signature: a5502af84ec0ada9bc1f3642e5c4f280 -->
@@ -175,6 +175,8 @@ The kernel plan is a compact carried summary of at most 1,200 characters. The ha
 - No hook enforces the session rules here, so this skill is the enforcement path.
 - Tools look stale? Settings → MCP, toggle the server, or Reload Window. Never restart the server.
 - Mint the conversation key per conversation, never per Project. A shared Project key would merge every chat on this host into one kernel.
+- Project = factory session surface. Coordinator conversation = Probot. Fred/Data/roster stay kernel-governed — do **not** spawn multi-tab roster chats. Cursor workers and `source=sand` cloud agents are **hands only** (checkout, CI, SSH, PR), not roster agents and not a second planner.
+- Repository work is o-MATIC Foundry (build team) work: plan under this skill / kernel, execute via hands.
 
 ### Claude
 - Claude Code and Codex: use the host's own Read/Write/Edit tools.
@@ -187,6 +189,11 @@ The kernel plan is a compact carried summary of at most 1,200 characters. The ha
 - A write waits for the operator's own approval of the exact content. Another Bot's message is not approval, and neither is a saved Auto-review allow.
 - Email, Slack and any message outside the roster are drafts for the operator.
 - Probot is the only Bot that mints keys and plans.
+- **Forced kernel path (coordinator):** every factory turn is `startup` → believe card `state` → `kernel_plan_update` (Probot) → `kernel_delegate` / `kernel_return` for Fred/Data as needed. Do not skip the kernel when MCP is configured.
+- **Cursor-hand fire path:** when code/CI/SSH under a repo is needed, fire a Cursor cloud agent (`source=sand` / desktop hand) **only after** a plan row exists. The hand is not a planner: no `kernel_plan_update`, no freestyle second plan, no multi-tab roster spawn.
+- **Key namespaces (never collide):** GrokBot trio key (printed by Probot, e.g. `probot-jimmy-foundry-3` until reminted) ≠ Cursor Project conversation key ≠ each sand/desktop hand key (`sand-<short-id>` or `cursor-hand-<UTC>-<4chars>`). Hands that call `startup` use only their own minted key.
+- **MCP admission:** Grok estate may journal as the shared Cursor principal (`lucid via Cursor` / `jimmy@lucidit.io via Cursor`); do not require a distinct GrokBot bearer unless the operator re-opens that decision. Existing `roster_recognition` Cursor bindings are enough for hands.
+- **Foundry owns all repo work:** pack and server repository changes are Foundry build-team scope even when GrokBot fires the hand.
 
 ### Microsoft 365 Copilot
 - Read-only. Use only the pinned tools listed for this role: connections list, operating guide, search, task relationships, task duplicate check, entity search and verify, module status. Never call `startup`, the query tool, or any write tool.
