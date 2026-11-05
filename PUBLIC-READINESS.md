@@ -13,4 +13,4 @@ This file is a checklist. It is not shipped as a skill. CI checks the boxes it c
 - [ ] Clean install verified on Cursor, Claude Code, Codex, Grok Bot and M365 (human step, not run in this PR)
 - [ ] M365: icons are in the package. SSO id is still a placeholder; no value was supplied. Privacy and terms use the public pages and are pending legal review.
 
-Agency 1.12.1 runs the skill-shape gate and the public gate in enforcing mode. The scripts are the Studio copies from `carver/universal-tooling` (PR #12, head 3a0277ce).
+Agency 1.12.2 runs the skill-shape gate and the public gate in enforcing mode. The scripts are the Studio copies from `carver/universal-tooling` (PR #12, head 3a0277ce).

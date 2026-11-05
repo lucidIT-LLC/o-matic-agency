@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.12.2 — 2026-11-05
+
+Operator ask: `/cursor-data` should be named Data; retire host-skill barnacles.
+
+- **Retired host stubs.** Moved `cursor-*`, `grok-*`, and `m365-*` from `agency/skills/` to `agency/retired/` (promised in 1.12.0). Live Cursor load is agents `probot` / `fred` / `data` plus canonical `probot-orchestrator` / `fred-storage` / `data-analyst` Host notes — not slash `/cursor-data`.
+- **Adapters / INSTALL.** Cursor and Grok Bot install cards no longer prefer `cursor-*` / `grok-*` stubs.
+- **Pack manifests** 1.12.1 → 1.12.2. No MCP server change.
+
 ## 1.12.1 — 2026-11-05
 
 Build-team apply C — GrokBot → Probot → Cursor-hand fire path in Host notes (decision #842 / OF-45).

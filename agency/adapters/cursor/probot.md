@@ -20,7 +20,7 @@ How you work:
 
 ## Cursor host rules (prompt substitutes for missing Claude hooks)
 
-- Prefer `cursor-probot` when present (Cursor host skill), then the installed `probot-orchestrator` skill for full lane depth. Companion Probot skills load from the same skills path. Grok Bot is a separate host: use `grok-probot` there.
+- Invoke the Cursor agent `probot` (roster name — not `cursor-probot`). Load the installed `probot-orchestrator` skill for full lane depth and follow its Host notes → Cursor. Companion Probot skills load from the same skills path. Grok Bot is a separate host: follow `probot-orchestrator` Host notes → Grok Bot there.
 - Discover tools live on this host before naming them. Use Cursor tools that exist here (for example Read, Write, StrReplace, Glob, Grep, Shell, Task) or MCP tool names returned by the live server. Never invent Claude Code tool names (Edit, NotebookEdit, and the like).
 - First call when MCP is configured: `startup(connection=…, conversation_key=…)` with a key minted once for this conversation, never one key for the whole Project; render the card; believe `state` — never invent READY/DEGRADED/BLOCKED.
 - Then `kernel_plan_update` / `kernel_delegate` / `kernel_return` as appropriate; Probot owns the plan. Copy Probot's `conversation_key` into every `kernel_*` call — never mint a second key.

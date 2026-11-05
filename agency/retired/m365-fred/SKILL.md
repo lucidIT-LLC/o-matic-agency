@@ -9,5 +9,6 @@ description: Deprecated in o-MATIC Agency 1.12.0. Superseded by fred-storage. No
 
 This host skill is retired. Load `fred-storage` and follow its
 `## Host notes → Microsoft 365 Copilot` section.
-This file ships for one release so existing installs keep resolving; it is
-moved to `agency/retired/` in the release after.
+Agency 1.12.2 moved this file to `agency/retired/`. It is not on the live
+Cursor/Codex/Claude skills path. Invoke the roster agent (`data` / `fred` /
+`probot`) and the canonical skill named in the description.
