@@ -1,7 +1,7 @@
 {
-  "_comment": "Agency 1.12.0. chars is each non-variant skill's body cap (the spec target plus 3 percent, or the shipped body plus 3 percent when the spec figure was an estimate). lanes skip the Host notes heading test. check-skills.mjs reads this file.",
+  "_comment": "Agency 1.12.1. chars is each non-variant skill's body cap (the spec target plus 3 percent, or the shipped body plus 3 percent when the spec figure was an estimate). lanes skip the Host notes heading test. check-skills.mjs reads this file.",
   "chars": {
-    "probot-orchestrator": 15965,
+    "probot-orchestrator": 17561,
     "fred-storage": 14420,
     "data-analyst": 13390,
     "factory-staleness-audit": 11330,

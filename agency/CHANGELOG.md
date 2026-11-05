@@ -1,5 +1,13 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.12.1 — 2026-11-05
+
+Build-team apply C — GrokBot → Probot → Cursor-hand fire path in Host notes (decision #842 / OF-45).
+
+- **`probot-orchestrator` 19.0.0 → 19.1.0.** Host notes → Cursor: one-conversation UX, workers/`source=sand` are hands only, build-team Project desk owns repo work. Host notes → Grok Bot: forced kernel path before firing Cursor hands; distinct conversation_key namespaces (trio ≠ Project ≠ sand-hand); no freestyle second planner; existing Cursor `roster_recognition` bindings suffice.
+- **Grok Bot paste adapters** regenerated: Probot paste carries the hand-fire contract; Fred/Data paste remind them not to mint keys or launch sand agents.
+- **Pack manifests** 1.12.0 → 1.12.1 (Claude/Codex/Cursor/Gemini/marketplace + M365 package versions). No MCP server; no live server MCP admission-config change in this release.
+
 ## 1.12.0 — 2026-11-04
 
 One canonical skill per role. Probot, Fred, and Data each carry Host notes for Cursor, Claude, Grok Bot, and Microsoft 365 Copilot. The nine host variants are trigger-less deprecated stubs for this release. History stays in this changelog.
