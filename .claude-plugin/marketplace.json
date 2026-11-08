@@ -14,7 +14,7 @@
       "name": "agency",
       "displayName": "o-MATIC Agency",
       "source": "./agency",
-      "version": "1.12.2",
+      "version": "1.13.0",
       "description": "The constitutive operating layer of an o-MATIC factory, as skills only. Probot plans, routes and runs startup; Fred handles storage, file custody and the session log; Data covers schema integrity, retrieval health and factory DBA work; the staleness audit catches retired doctrine still being served as current; barnacle cleanup proposes one current instruction set and writes nothing until the operator approves the exact text. Ships no MCP server, so it installs on hosts that cannot spawn one.",
       "author": {
         "name": "LucidIT, LLC",
@@ -47,7 +47,7 @@
             "form": "declarative-agent-app",
             "status": "source-only",
             "notDeployed": true,
-            "version": "1.12.2",
+            "version": "1.13.0",
             "packages": [
               { "role": "probot", "path": "agency/adapters/m365/probot/appPackage", "wave": 1 },
               { "role": "fred", "path": "agency/adapters/m365/fred/appPackage", "wave": 2 },

@@ -1,5 +1,15 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.13.0 — 2026-11-08
+
+Operator ask: uploadable Microsoft 365 Copilot agents for Probot, Fred, and Data on the o-MATIC Server MCP, with live tool discovery like the Supply connector 0.1.7.
+
+- **Deploy build.** New `scripts/build-m365-deploy.mjs` and `agency/adapters/m365-deploy/` (host rules per role, Probot starters, env sample, README). It reads the generated pinned packages and writes one zip per role: plugin 2.4 `RemoteMCPServer` with `functions: []` and `run_for_functions: ["*"]`, `OAuthPluginVault`, URL, SSO registration ID, and app IDs from an env file outside the repository. Public source keeps placeholders and the pinned read-only plugin.
+- **One app per agent.** The Microsoft 365 app manifest allows one declarative agent per app, so the three agents ship as three zips.
+- **Skill files.** The deploy build copies only Microsoft's supported skill file types. It drops `.svg` art and other-host `agents/` metadata.
+- **Host notes → Microsoft 365 Copilot.** `probot-orchestrator` 19.1.0 → 19.2.0, `fred-storage` 13.0.0 → 13.1.0, `data-analyst` 8.0.0 → 8.1.0. Each names two builds: pinned (read-only, unchanged) and deploy (live discovery; Probot runs fresh `startup` and owns the key and kernel plan; Fred and Data copy a pasted key; writes outside a lane's own kernel records wait for the user's yes to the exact change). The three agents are separate in Copilot and route by @mention.
+- **Pack manifests** 1.12.2 → 1.13.0. No MCP server change. The Studio-synced tooling (`build-host-adapters`, `build-m365-packages`, `verify-m365`, workflow) is unchanged.
+
 ## 1.12.2 — 2026-11-05
 
 Operator ask: `/cursor-data` should be named Data; retire host-skill barnacles.

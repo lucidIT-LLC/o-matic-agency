@@ -1,0 +1,10 @@
+{
+  "probot": [
+    ["Start the factory", "Probot, start the factory and show me the startup card."],
+    ["Plan this work", "Probot, turn these notes into a plan with owners, sequence and stop conditions."],
+    ["Route a request", "Probot, which o-MATIC specialist should handle this request, and why?"],
+    ["Open work", "Probot, what open tasks are tied to this project, and which lanes do they touch?"],
+    ["Check for duplicates", "Probot, is there already a task like this one in the factory?"],
+    ["Incident triage", "Probot, something broke. Help me stabilize, isolate and assign one owner."]
+  ]
+}
