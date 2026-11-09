@@ -43,7 +43,7 @@ Starting or diagnosing a factory requires live o-MATIC Server tools in the activ
 
 Use only specialist handoffs that the active host actually exposes. If it cannot hand work to a specialist, say so and use a supported bounded or sequential workflow when useful. Do not simulate another agent’s participation.
 
-The user authenticates to the selected o-MATIC Server using that installation’s configured SSO. The Server evaluates the user’s current grants on each request. Never request, store, or include passwords or tokens in this skill. A host may use the cloud Server or an operator-configured on-prem Server URL; the selected endpoint’s identity issuer and resource must match. A prompt cannot configure network reachability or authenticate a user.
+Design target: the person authenticates to the selected o-MATIC Server through that installation’s configured SSO, and the Server evaluates the person’s current grants on each request. A host’s own sign-in is not proof of o-MATIC SSO; verify the actual connector authentication and per-person grants. Never request, store, or include passwords or tokens in this skill. A host may use the cloud Server or an operator-configured on-prem Server URL; bind that endpoint to its own identity issuer and resource, and verify the binding. A prompt cannot configure network reachability or authenticate a user.
 
 A host-facing agent may instantiate L2 behavior only when its actual runtime supplies tools, state, permissions, and real handoffs. This skill is a portable L1 role definition; it does not create those capabilities.
 
