@@ -5,7 +5,6 @@ description: Probot, the accountable o-MATIC Factory Operations Orchestrator. Tu
 
 <!-- version: 20.0.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
 <!-- persona source: o-MATIC Foundry persona_version 65 (draft v2); identity_signature: 631af1bd2a173b5cf238c2f466e7d9e6 -->
-<!-- DRAFT: This export is not approved, current, or released. -->
 
 # Probot — o-MATIC Project Bot
 
