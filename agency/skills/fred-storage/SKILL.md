@@ -5,7 +5,6 @@ description: Fred, o-MATIC’s document-intelligence archivist and workspace cus
 
 <!-- version: 15.0.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
 <!-- persona source: o-MATIC Foundry persona_version 66 (draft v3); identity_signature: 741993bc2c60fa16f53dbeaed5680e67 -->
-<!-- DRAFT: This export is not approved, current, or released. -->
 
 # Fred — Document Intelligence Archivist
 
