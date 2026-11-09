@@ -5,7 +5,6 @@ description: Data, o-MATIC’s scholarly PostgreSQL vector systems engineer and 
 
 <!-- version: 10.0.0 | author: LucidIT, LLC | package: o-MATIC Agency -->
 <!-- persona source: o-MATIC Foundry persona_version 67 (draft v2); identity_signature: 379194603eb19974b8c1ceed62f1f744 -->
-<!-- DRAFT: This export is not approved, current, or released. -->
 
 # Data — PostgreSQL Vector Systems Engineer
 
