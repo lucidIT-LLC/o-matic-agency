@@ -39,12 +39,20 @@ export function formatStartupCard(packet) {
   const name = card.factory_name ?? card.factory_id ?? 'UNKNOWN';
   const subtitle = card.factory_subtitle ?? 'an o-MATIC factory';
 
-  // TWO LADDERS, one keystroke apart (SOP-022): System 7 is the GOVERNANCE
-  // model (decision #409, Objectives and Key Results); System 5.7.x is the
-  // RELEASE ladder. Printing only one number is how a System 7 factory reports
-  // itself as 5.7.1. Print both, labeled, always.
-  const governance = card.governance_contract_version ?? 'UNKNOWN';
-  const release = card.factory_version ?? 'UNKNOWN';
+  // Decisions #439 and #554 retired the two-ladder label. The card's
+  // factory_version is the coarser schema contract; use the independently
+  // recorded System version only when both sources agree.
+  const sources = card.version_sources ?? {};
+  const manifest = sources['factory_config.version.manifest'];
+  const kernel = sources['factory_config.product.kernel_version'];
+  const versionRe = /^\d+\.\d+\.\d+$/;
+  const measured = typeof manifest === 'string' && versionRe.test(manifest)
+    && typeof kernel === 'string' && versionRe.test(kernel);
+  const system = measured && manifest === kernel ? manifest : 'UNKNOWN';
+  const versionStatus = (measured && manifest !== kernel) || card.version_conflict
+    ? ' · ⚠ version conflict' : '';
+  const unmeasuredFields = Array.isArray(card.unmeasured) ? [...card.unmeasured] : [];
+  if (!measured) unmeasuredFields.push('system_version');
 
   const embedded = tierSum(card.corpus, 'embedded');
   const total = tierSum(card.corpus, 'total');
@@ -62,7 +70,7 @@ export function formatStartupCard(packet) {
   const lines = [
     `╭─ 🏠 ${name} · ${subtitle}`,
     `│ State       ${stateMark(card.state)} ${card.state} · ${card.state_reason}`,
-    `│ Generation  ${governance} governance · release ${release}${card.version_conflict ? ' ⚠ version conflict' : ''}`,
+    `│ System      ${system}${versionStatus}`,
     `│ Connection  ${connection} · ${card.connection_database ?? 'UNKNOWN'} · ${grantedCount} granted`,
     `│ Retrieval   ${card.retrieval_state === 'vector' ? '🟢' : '🟠'} ${card.retrieval_state ?? 'UNKNOWN'} · telemetry ${card.retrieval_telemetry_state ?? 'UNMEASURED'}`,
     `│ Corpus      ${corpusClean ? '🟢' : '🟠'} ${count(embedded)} / ${count(total)} embedded · ${count(stale)} stale · ${count(unembedded)} unembedded`,
@@ -71,7 +79,7 @@ export function formatStartupCard(packet) {
     ...(runningCode ? [`│ Running code ${runningCode}`] : []),
     ...(capabilities ? [`│ Capabilities ${capabilities}`] : []),
     ...(frontDoor ? [`│ Front door   ${frontDoor}`] : []),
-    `│ Signal      ${Array.isArray(card.unmeasured) && card.unmeasured.length ? `◌ ${card.unmeasured.join(', ')} unmeasured` : '🟢 all reported'}`,
+    `│ Signal      ${unmeasuredFields.length ? `◌ ${unmeasuredFields.join(', ')} unmeasured` : '🟢 all reported'}`,
     `╰─ Measured ${card.measured_at ?? 'UNKNOWN'}`,
   ];
   return `\`\`\`text\n${lines.join('\n')}\n\`\`\``;

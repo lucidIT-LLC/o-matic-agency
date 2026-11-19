@@ -43,7 +43,7 @@
 // --check rebuilds in memory and exits 1 if any generated file differs or any
 // limit is exceeded. CANONICAL SOURCE: o-matic-studio/scripts/.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync, cpSync } from "node:fs";
-import { join, dirname, resolve } from "node:path";
+import { join, dirname, resolve, basename, relative } from "node:path";
 import {
   m365Config, isDeniedTool, toolRecord, MAX_TOOLS, ACCENT, DEVELOPER_NAME,
   WEBSITE_URL, PRIVACY_URL, TERMS_URL, MCP_URL_PLACEHOLDER, APP_ID_PLACEHOLDER,
@@ -57,6 +57,11 @@ const mkt = JSON.parse(readFileSync(join(root, ".claude-plugin", "marketplace.js
 const pluginDir = mkt.plugins[0].source.replace(/^\.\//, "");
 const plugin = JSON.parse(readFileSync(join(root, pluginDir, ".claude-plugin", "plugin.json"), "utf8"));
 const packName = plugin.displayName || plugin.name;
+// In split layout, package skills are lean personas while root skills are
+// independently maintained host guides. Never generate over those guides.
+const layoutPath = join(root, 'host-adapter-layout.json');
+const splitHostSkills = existsSync(layoutPath) &&
+  JSON.parse(readFileSync(layoutPath, 'utf8')).distinct_root_host_skills === true;
 
 const LIMITS = { gpt: 8000, m365: 8000, grok: 4000, copilot: 30000, m365_desc: 1000, m365_name: 100 };
 const out = new Map();
@@ -116,7 +121,8 @@ const mdFiles = (dir, rel = "") => readdirSync(join(dir, rel), { withFileTypes: 
   e.isDirectory() ? mdFiles(dir, join(rel, e.name)) : e.name.endsWith(".md") ? [join(rel, e.name)] : []).sort();
 
 const skillOf = (a) => {
-  const p = join(root, a.canonical_skill);
+  const persona = join(root, a.canonical_skill);
+  const p = splitHostSkills ? join(root, 'skills', basename(dirname(persona)), 'SKILL.md') : persona;
   const text = readFileSync(p, "utf8");
   const dir = dirname(p);
   const files = mdFiles(dir).map((rel) => ({ rel, text: readFileSync(join(dir, rel), "utf8") }));
@@ -265,7 +271,7 @@ ${condensed(a, { knowledgeFile: null, limit: LIMITS.copilot })}
 
 Your full role guide is the \`${s.name}\` skill in this extension. Load it before substantive work.
 `);
-  for (const f of s.files) put(`skills/${s.name}/${f.rel}`, f.text);
+  if (!splitHostSkills) for (const f of s.files) put(`skills/${s.name}/${f.rel}`, f.text);
 
   // 4. GitHub Copilot custom agent.
   const cop = condensed(a, { knowledgeFile: null, limit: LIMITS.copilot });
@@ -396,7 +402,7 @@ Missing: ${missing.join(", ")}. \`node scripts/verify-m365.mjs\` warns and does 
   const gptKnowledge = `${s.name}.md`;
   const refs = s.files.filter((f) => f.rel !== "SKILL.md");
   if (refs.length + 1 > 20) problems.push(`${id}: ${refs.length + 1} knowledge files > 20 (custom GPT limit)`);
-  const skillRel = a.canonical_skill.replace(/^[^/]+\//, "");
+  const skillRel = splitHostSkills ? relative(root, s.path) : a.canonical_skill.replace(/^[^/]+\//, "");
   const knowledgeStep = "Under Knowledge, upload the role guide: `" + skillRel + "`, renamed to `" + gptKnowledge + "`" +
     (refs.length ? ", and its " + refs.length + " reference file(s), each under its own name:\n" +
       refs.map((f) => "   - `" + dirname(skillRel) + "/" + f.rel + "`").join("\n") : ".");

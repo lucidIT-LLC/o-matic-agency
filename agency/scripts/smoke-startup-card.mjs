@@ -15,6 +15,9 @@ const omatic = {
     card_version: '2.0.0', factory_id: 'omatic', factory_name: 'O-Matic',
     factory_subtitle: 'an o-MATIC factory',
     factory_version: '7.2.0', governance_contract_version: 'system-7',
+    version_sources: { 'factory_config.version.manifest': '7.2.2',
+      'factory_config.product.kernel_version': '7.2.2',
+      'factory_config.schema_contract': '7.2.0' },
     version_conflict: false,
     state: 'READY', state_reason: 'all database-measured fields ok',
     connection_database: 'o-matic',
@@ -51,9 +54,9 @@ const card = formatStartupCard(omatic);
 // The factory names itself.
 assert.match(card, /^```text\n╭─ 🏠 O-Matic · an o-MATIC factory/m);
 
-// BOTH ladders, labeled. System 7 is governance; 5.7.x is the release rung.
-// Printing one number is how a System 7 factory reports itself as a 5.x release.
-assert.match(card, /Generation  system-7 governance · release 7\.2\.0/);
+// Actual live shape: the System patch version differs from the schema contract.
+assert.match(card, /System      7\.2\.2/);
+assert.doesNotMatch(card, /Generation|release 7\.2\.0/);
 
 // Real counts, summed across every memory tier.
 assert.match(card, /1,540 \/ 1,540 embedded · 0 stale · 0 unembedded/);
@@ -92,6 +95,12 @@ assert.match(formatStartupCard(dirty), /Corpus      🟠/, 'unembedded rows must
 // A version conflict must be visible on the generation line.
 const conflicted = { ...omatic, card: { ...omatic.card, version_conflict: true } };
 assert.match(formatStartupCard(conflicted), /⚠ version conflict/);
+const disagree = { ...omatic, card: { ...omatic.card, version_sources: {
+  ...omatic.card.version_sources, 'factory_config.product.kernel_version': '7.2.1',
+} } };
+assert.match(formatStartupCard(disagree), /System      UNKNOWN · ⚠ version conflict/);
+const missing = { ...omatic, card: { ...omatic.card, version_sources: {} } };
+assert.match(formatStartupCard(missing), /System      UNKNOWN/);
 
 assert.match(formatFactoryFooter(other), /^⌂ thenest · READY · vector · connector readiness unmeasured$/);
 assert.throws(() => formatStartupCard({}), /startup card/);

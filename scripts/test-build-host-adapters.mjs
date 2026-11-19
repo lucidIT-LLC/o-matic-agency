@@ -59,6 +59,26 @@ const run = (root, ...args) => spawnSync(process.execPath, [BUILDER, root, ...ar
   rmSync(root, { recursive: true, force: true });
 }
 
+// A split pack must never overwrite its independently maintained host guide.
+{
+  const root = pack();
+  const hostDir = join(root, "skills/tess-testing");
+  mkdirSync(join(hostDir, "reference"), { recursive: true });
+  const host = "---\nname: tess-testing\ndescription: Host guide\n---\nDistinct host guidance. See [reference/detail.md](reference/detail.md).\n";
+  writeFileSync(join(root, "host-adapter-layout.json"), JSON.stringify({ distinct_root_host_skills: true }));
+  writeFileSync(join(hostDir, "SKILL.md"), host);
+  writeFileSync(join(hostDir, "reference/detail.md"), "# Host reference\n");
+  const r = run(root);
+  check("split layout builds without replacing the host guide", r.status === 0 && readFileSync(join(hostDir, "SKILL.md"), "utf8") === host, r.stdout);
+  check("split layout checks clean after generation", run(root, "--check").status === 0);
+  const setup = readFileSync(join(root, "demo/adapters/chatgpt/tess/SETUP.md"), "utf8");
+  check("split layout points ChatGPT at root host guide", setup.includes("skills/tess-testing/SKILL.md"));
+  writeFileSync(join(hostDir, "SKILL.md"), host + "[missing](reference/missing.md)\n");
+  const broken = run(root, "--check");
+  check("split layout still rejects broken host guide links", broken.status === 1 && /does not exist/.test(broken.stdout));
+  rmSync(root, { recursive: true, force: true });
+}
+
 // 2. Each vendor rule fails when broken.
 const cases = [
   ["body over 500 lines", { body: "x\n".repeat(501) + "See [reference/detail.md](reference/detail.md).\n" }, /body \d+ lines > 500/],
