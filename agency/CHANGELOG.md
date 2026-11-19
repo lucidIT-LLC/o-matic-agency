@@ -1,5 +1,11 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.12.3 — 2026-11-19
+
+- **Startup card:** show the agreed manifest and kernel System version, or UNKNOWN when either source is missing, invalid, or disagrees. Keep the schema contract separate.
+- **Host worker handoff:** record bounded assignments on the Server and use the active host’s native worker when available. The host supplies the model; a delegation record alone does not launch a worker or grant authority. This is a limited host-executed path, not a server-owned runtime.
+- **Skills:** Probot 20.0.0 → 20.0.1; Data 10.0.0 → 10.0.1; Fred 15.0.0 → 15.0.1. Pack and adapter manifests 1.12.2 → 1.12.3.
+
 ## 1.12.2 — 2026-11-05
 
 Operator ask: `/cursor-data` should be named Data; retire host-skill barnacles.

@@ -49,7 +49,7 @@ not being asked to win it a fourth.
 ```text
 ╭─ 🏠 O-Matic · an o-MATIC factory
 │ State       🟢 READY · all database-measured fields ok
-│ Generation  system-7 governance · release 7.2.0
+│ System      7.2.2
 │ Connection  Example Factory · example · 8 granted
 │ Retrieval   🟢 vector · telemetry live
 │ Corpus      🟢 1,540 / 1,540 embedded · 0 stale · 0 unembedded
@@ -70,13 +70,13 @@ followed the prose rendered a card no host could compare. Measured 2026-09-06:
 a Probot session rendered the prose shape while the shipped function rendered
 the box, in the same session.
 
-**The GENERATION row carries BOTH ladders, and that is the point.** System 7 is
-the GOVERNANCE model (decision #409 — Objectives and Key Results, not a count);
-System 5.7.x is the RELEASE ladder. SOP-022 calls them *"two ladders, one
-keystroke apart."* The old identity row printed `factory_id · factory_version ·
-state` — one number, the release rung — so a System 7 factory reported itself as
-5.7.1 on every host. Print both, labeled, always. `factory_version` alone is
-never the answer to "what system are we on."
+**The System row carries one version.** Decisions #439 and #554 retired the
+two-ladder labels. The System version comes from agreement between
+`version_sources.factory_config.version.manifest` and
+`version_sources.factory_config.product.kernel_version`. If either is absent
+or malformed, report UNKNOWN; if they disagree, report UNKNOWN and a conflict.
+The separate `factory_version` is the coarser schema contract, not the System
+patch version. The server package is separately identified as running code.
 
 **Column → row mapping, so there is nothing to interpret:**
 
@@ -84,7 +84,7 @@ never the answer to "what system are we on."
 |---|---|
 | header | `factory_name` · `factory_subtitle` — **from the card, never a literal.** This was hardcoded to one factory's name, so every factory rendered under it |
 | State | `state` · `state_reason` |
-| Generation | `governance_contract_version` governance · release `factory_version` · `⚠ version conflict` when `version_conflict` |
+| System | agreed manifest and kernel System version; UNKNOWN when missing or conflicting |
 | Connection | `connection` (wire) · `connection_database` · `grantedCount` granted |
 | Retrieval | `retrieval_state` · `retrieval_telemetry_state` |
 | Corpus | embedded/total **summed across every tier in `card.corpus`** · `corpus_stale_total` · `corpus_unembedded_total` |

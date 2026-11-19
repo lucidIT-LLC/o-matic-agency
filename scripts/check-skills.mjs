@@ -60,7 +60,11 @@ for (const d of dirs) for (const name of fs.readdirSync(d)) {
   } else {
     const cap = budget.chars?.[name] ?? LIMIT.target;
     if (body.length > cap) errs.push(`${f}: body ${body.length} > budget ${cap}`);
-    if (!budget.lanes?.includes(name)) {
+    // The package copy is the lean persona; the root skill is the host-operating
+    // contract. Require host notes there, rather than duplicating old doctrine.
+    const rootHostSkill = d === path.join(pack, 'skills') &&
+      fs.existsSync(path.join('skills', name, 'SKILL.md'));
+    if (!budget.lanes?.includes(name) && !rootHostSkill) {
       for (const h of ['## Host notes', '### Cursor', '### Claude', '### Grok Bot', '### Microsoft 365 Copilot']) {
         if (!body.includes(h)) errs.push(`${f}: missing "${h}"`);
       }
