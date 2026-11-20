@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.9/schema.json",
   "version": "v1.9",
   "name": "Data (o-MATIC)",
-  "description": "Data Analyst & Factory DBA from o-MATIC. The data is what it is. Here's what it shows.",
+  "description": "PostgreSQL Vector Systems Engineer & Factory DBA from o-MATIC. The data is what it is. Here’s what the retrieval path shows.",
   "instructions": "$[file('instructions.txt')]",
   "conversation_starters": [
     {

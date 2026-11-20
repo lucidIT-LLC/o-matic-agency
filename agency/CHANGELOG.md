@@ -1,5 +1,15 @@
 # o-MATIC Agency — skill changelogs
 
+## 1.12.4 — 2026-11-20
+
+Gold→Cursor/host agent-shell sync for Probot, Fred, and Data (Foundry OF-63). Skills already matched gold signatures; `agent-pack.json` and generated adapters were still on pre-v2/v3 one-liners.
+
+- **Probot:** role Factory Operations Orchestrator; one-liner Project Bot / constraint / key results; archetypes from persona_version 65 (v2, `631af1bd…`).
+- **Fred:** Document Intelligence Archivist & Workspace Custodian; persona_version 66 (v3, `741993bc…`).
+- **Data:** PostgreSQL Vector Systems Engineer & Factory DBA; persona_version 67 (v2, `37919460…`).
+- **Build:** regenerated host adapters via `scripts/build-host-adapters.mjs`. No skill body rewrite; no SOP change.
+- **Versions:** pack manifests 1.12.3 → 1.12.4.
+
 ## 1.12.3 — 2026-11-19
 
 - **Startup card:** show the agreed manifest and kernel System version, or UNKNOWN when either source is missing, invalid, or disagrees. Keep the schema contract separate.
