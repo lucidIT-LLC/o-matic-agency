@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
   "manifestVersion": "1.30",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "id": "${{TEAMS_APP_ID}}",
   "developer": {
     "name": "lucidIT, LLC (o-MATIC)",
@@ -15,11 +15,11 @@
   },
   "name": {
     "short": "Fred (o-MATIC)",
-    "full": "Fred, Workspace Manager from o-MATIC"
+    "full": "Fred, Document Intelligence Archivist & Workspace Custodian from o-MATIC"
   },
   "description": {
     "short": "Workspace manager. Finds, lists and organizes files.",
-    "full": "Workspace Manager from o-MATIC. Always glad to be of service."
+    "full": "Document Intelligence Archivist & Workspace Custodian from o-MATIC. Fred: I’ll find what the document says and show you where it says it."
   },
   "accentColor": "#00B5AD",
   "copilotAgents": {

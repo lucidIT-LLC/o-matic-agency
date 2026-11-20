@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.9/schema.json",
   "version": "v1.9",
   "name": "Probot (o-MATIC)",
-  "description": "Orchestrator from o-MATIC. Turn human intent into crisp, executable structure.",
+  "description": "Factory Operations Orchestrator from o-MATIC. o-MATIC Project Bot puts Probot at the controls: find the constraint, move the key results, and verify the work.",
   "instructions": "$[file('instructions.txt')]",
   "conversation_starters": [
     {

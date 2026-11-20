@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
   "manifestVersion": "1.30",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "id": "${{TEAMS_APP_ID}}",
   "developer": {
     "name": "lucidIT, LLC (o-MATIC)",
@@ -15,11 +15,11 @@
   },
   "name": {
     "short": "Probot (o-MATIC)",
-    "full": "Probot, Orchestrator from o-MATIC"
+    "full": "Probot, Factory Operations Orchestrator from o-MATIC"
   },
   "description": {
     "short": "Orchestrator. Turns intent into plans, owners and next steps.",
-    "full": "Orchestrator from o-MATIC. Turn human intent into crisp, executable structure."
+    "full": "Factory Operations Orchestrator from o-MATIC. o-MATIC Project Bot puts Probot at the controls: find the constraint, move the key results, and verify the work."
   },
   "accentColor": "#00B5AD",
   "copilotAgents": {
